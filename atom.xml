@@ -6,7 +6,7 @@
   <link href="https://micgo.top/atom.xml" rel="self"/>
   
   <link href="https://micgo.top/"/>
-  <updated>2023-03-28T13:42:40.045Z</updated>
+  <updated>2023-03-31T11:04:17.347Z</updated>
   <id>https://micgo.top/</id>
   
   <author>
@@ -15,6 +15,31 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>内网渗透体系建设——端口转发与代理</title>
+    <link href="https://micgo.top/%E5%86%85%E7%BD%91%E6%B8%97%E9%80%8F/%E5%86%85%E7%BD%91%E6%B8%97%E9%80%8F(3)/"/>
+    <id>https://micgo.top/%E5%86%85%E7%BD%91%E6%B8%97%E9%80%8F/%E5%86%85%E7%BD%91%E6%B8%97%E9%80%8F(3)/</id>
+    <published>2023-03-29T16:00:00.000Z</published>
+    <updated>2023-03-31T11:04:17.347Z</updated>
+    
+    
+      
+      
+        
+        
+    <summary type="html"></summary>
+        
+      
+    
+    
+    
+    <category term="内网渗透" scheme="https://micgo.top/categories/%E5%86%85%E7%BD%91%E6%B8%97%E9%80%8F/"/>
+    
+    
+    <category term="内网" scheme="https://micgo.top/tags/%E5%86%85%E7%BD%91/"/>
+    
+  </entry>
   
   <entry>
     <title>内网渗透体系建设——内网信息收集</title>
@@ -480,31 +505,6 @@
     
     
     <category term="文件上传" scheme="https://micgo.top/tags/%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>服务端模板注入(SSTI)</title>
-    <link href="https://micgo.top/CTF/%E6%9C%8D%E5%8A%A1%E7%AB%AF%E6%A8%A1%E6%9D%BF%E6%B3%A8%E5%85%A5%E6%94%BB%E5%87%BB(SSTI)/"/>
-    <id>https://micgo.top/CTF/%E6%9C%8D%E5%8A%A1%E7%AB%AF%E6%A8%A1%E6%9D%BF%E6%B3%A8%E5%85%A5%E6%94%BB%E5%87%BB(SSTI)/</id>
-    <published>2022-05-25T16:00:00.000Z</published>
-    <updated>2023-03-16T04:01:05.029Z</updated>
-    
-    
-      
-      
-        
-        
-    <summary type="html"></summary>
-        
-      
-    
-    
-    
-    <category term="CTF" scheme="https://micgo.top/categories/CTF/"/>
-    
-    
-    <category term="SSTI" scheme="https://micgo.top/tags/SSTI/"/>
     
   </entry>
   
