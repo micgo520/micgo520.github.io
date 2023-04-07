@@ -1,0 +1,234 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="dark"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"><title>内网渗透体系建设——Kerberos攻击专题 | micgo's blog</title><meta name="keywords" content="内网"><meta name="author" content="micgo"><meta name="copyright" content="micgo"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#0d0d0d"><meta name="description" content="Kerberos攻击专题Kerberos认证基础在内网渗透中，Kerberos认证协议是基于票据的一种认证方式，简单理解可以分为三部分：用户(Client)、服务器(Server)和KDC(Key Distribution Center, 密钥分发中心)。KDC包含AS(Authentication Server, 认证服务器)和TGS(Ticket Granting Server, 票据授权服务">
+<meta property="og:type" content="article">
+<meta property="og:title" content="内网渗透体系建设——Kerberos攻击专题">
+<meta property="og:url" content="https://micgo.top/%E5%86%85%E7%BD%91%E6%B8%97%E9%80%8F/%E5%86%85%E7%BD%91%E6%B8%97%E9%80%8F(7)/index.html">
+<meta property="og:site_name" content="micgo&#39;s blog">
+<meta property="og:description" content="Kerberos攻击专题Kerberos认证基础在内网渗透中，Kerberos认证协议是基于票据的一种认证方式，简单理解可以分为三部分：用户(Client)、服务器(Server)和KDC(Key Distribution Center, 密钥分发中心)。KDC包含AS(Authentication Server, 认证服务器)和TGS(Ticket Granting Server, 票据授权服务">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://my-blog-1309286065.cos.ap-guangzhou.myqcloud.com/img/20201009112151822.jpg">
+<meta property="article:published_time" content="2023-04-06T16:00:00.000Z">
+<meta property="article:modified_time" content="2023-04-07T03:35:31.098Z">
+<meta property="article:author" content="micgo">
+<meta property="article:tag" content="内网">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://my-blog-1309286065.cos.ap-guangzhou.myqcloud.com/img/20201009112151822.jpg"><link rel="shortcut icon" href="https://my-blog-1309286065.cos.ap-guangzhou.myqcloud.com/img/%E5%BE%AE%E4%BF%A1%E5%9B%BE%E7%89%87_20230225215514.jpg"><link rel="canonical" href="https://micgo.top/%E5%86%85%E7%BD%91%E6%B8%97%E9%80%8F/%E5%86%85%E7%BD%91%E6%B8%97%E9%80%8F(7)/"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  date_suffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  source: {
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '内网渗透体系建设——Kerberos攻击专题',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2023-04-07 11:35:31'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+    const detectApple = () => {
+      if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+    })(window)</script><meta name="generator" content="Hexo 6.3.0"><link rel="alternate" href="/atom.xml" title="micgo's blog" type="application/atom+xml">
+</head><body><div id="web_bg"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="https://my-blog-1309286065.cos.ap-guangzhou.myqcloud.com/img/%E5%BE%AE%E4%BF%A1%E5%9B%BE%E7%89%87_20230225215514.jpg" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">28</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">19</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">7</div></a></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url('https://my-blog-1309286065.cos.ap-guangzhou.myqcloud.com/img/20201009112151822.jpg')"><nav id="nav"><span id="blog_name"><a id="site-name" href="/">micgo's blog</a></span><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div><div id="toggle-menu"><a class="site-page"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">内网渗透体系建设——Kerberos攻击专题</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2023-04-06T16:00:00.000Z" title="发表于 2023-04-07 00:00:00">2023-04-07</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2023-04-07T03:35:31.098Z" title="更新于 2023-04-07 11:35:31">2023-04-07</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E5%86%85%E7%BD%91%E6%B8%97%E9%80%8F/">内网渗透</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="内网渗透体系建设——Kerberos攻击专题"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><h4 id="Kerberos攻击专题"><a href="#Kerberos攻击专题" class="headerlink" title="Kerberos攻击专题"></a>Kerberos攻击专题</h4><h5 id="Kerberos认证基础"><a href="#Kerberos认证基础" class="headerlink" title="Kerberos认证基础"></a>Kerberos认证基础</h5><p>在内网渗透中，Kerberos认证协议是基于票据的一种认证方式，简单理解可以分为三部分：<strong>用户</strong>(Client)、<strong>服务器</strong>(Server)和<strong>KDC</strong>(Key Distribution Center, 密钥分发中心)。KDC包含<strong>AS</strong>(Authentication Server, 认证服务器)和<strong>TGS</strong>(Ticket Granting Server, 票据授权服务器)</p>
+<h6 id="Kerberos基础认证流程"><a href="#Kerberos基础认证流程" class="headerlink" title="Kerberos基础认证流程"></a>Kerberos基础认证流程</h6><img src="https://my-blog-1309286065.cos.ap-guangzhou.myqcloud.com/img/image-20230406224035762.png" alt="image-20230406224035762" style="zoom:88%;" />
+
+<p>①AS_REQ。Client向AS发起AS_REQ，请求内容为通过Client的哈希加密的时间戳、ClientID等内容<br>②AS_REP。AS使用Client密码哈希值进行解密，如果解密正确，就返回用krbtgt的NTLM-hash加密的TGT(Ticket Granting Ticket, 票据授权凭证)票据。TGT包含PAC(Privilege Attribute Certificate, 特权属证书)，PAC包含Client的相关权限信息，如SID<br>及所在的组。简单理解，PAC就是用于验证用户权限，只有KDC能制作和查看PAC<br>③TGS_REQ。Client凭借TGT向TGS发起针对需要访问服务的TGS REQ请求<br>④TGS_REP。TGS使用krbtgt的NTLM-hash对TGT进行解密，如果结果正确，就返回用服务NTLM-hash加密的TGS票据（简称ST),并带上PAC。注意，在Kerberos认证过程中，不论用户有没有访问服务的权限，只要TGT正确，就会返回ST<br>⑤AP_REQ。Client利用ST去请求服务<br>⑥AP_REP。服务使用自己的NTLM-hash解密ST。如果解密正确，就会将其中的PAC给KDC解密，KDC由此判断Client是否访问服务的权限。如果没有设置PAC，就不会去KDC求证，这也是后文中白银票据成功的原因</p>
+<h6 id="Kerberos攻击分类"><a href="#Kerberos攻击分类" class="headerlink" title="Kerberos攻击分类"></a>Kerberos攻击分类</h6><p>Kerberos攻击其实可以归结为两个字：<strong>票据</strong>，即常说的票据传递攻击(Pass The Ticket, <strong>PTT</strong>)</p>
+<img src="https://my-blog-1309286065.cos.ap-guangzhou.myqcloud.com/img/image-20230406225127683.png" alt="image-20230406225127683" style="zoom:85%;" />
+
+
+
+<h5 id="AS-REQ-amp-AS-REP阶段攻击"><a href="#AS-REQ-amp-AS-REP阶段攻击" class="headerlink" title="AS_REQ&amp;AS_REP阶段攻击"></a>AS_REQ&amp;AS_REP阶段攻击</h5><p>1.域内用户枚举<br>当机器不在域中时，可以通过Kerberos的AS_REQ工作原理来进行枚举域内账号，由于用户名存在跟不存在的报错不一致，导致可以进行用户名相关枚举</p>
+<p>2.密码喷洒攻击<br>密码喷洒攻击是指对其他用户进行密码爆破，类似暴力破解</p>
+<p>3.AS_REP Roasting攻击<br>当被攻击账号设置“不需要Kerberos预身份验证”后，在AS REP过程中就可以任意伪造用户名请求票据，随后AS会将伪造请求的用户名NTLM Hash加密后返回，然后便可以进行爆破。由于该攻击方式的首要条件默认是不勾选的，这里不再赘述</p>
+<h6 id="4-黄金票据攻击"><a href="#4-黄金票据攻击" class="headerlink" title="4.黄金票据攻击"></a>4.黄金票据攻击</h6><p>在Kerberos认证中，每个用户的票据都是由krbtgt的NTLM哈希值加密生成的，获得krbtgt的哈希值，便可以伪造任意用户的票据，这种攻击方式被称为黄金票据（GoldenTicket)，有了黄金票据后，就跳过AS验证，不用验证账户和密码，所以也不用担心域管密码修改</p>
+<img src="https://my-blog-1309286065.cos.ap-guangzhou.myqcloud.com/img/image-20230406232833266.png" alt="image-20230406232833266" style="zoom:80%;" />
+
+<p>攻击需要以下信息：域名、域sid、krbtgt哈希值、伪造的用户<br>①在DC上用mimikatz执行如下命令</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mimikatz.exe &quot;Log&quot; &quot;Privilege::Debug&quot; &quot;lsadump::lsa /patch&quot; &quot;exit&quot;</span><br></pre></td></tr></table></figure>
+
+<img src="https://my-blog-1309286065.cos.ap-guangzhou.myqcloud.com/img/image-20230406233607958.png" alt="image-20230406233607958" style="zoom:88%;" />
+
+<p>②得到krbtgt的哈希值后，先在win2008上访问DC的CIFS服务，发现不可访问，再利用mimikarz生成黄金票据并导入</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">kerberos::golden /admin:Administrator /domain:hack-my.com /sid:S-1-5-21-752537975-3696201862-</span><br><span class="line">1060544381 /krbtgt:1fd539db0ac55db506018c72586bb3a6 /ticket:ticket.kirbi</span><br><span class="line">Kerberos::ptt ticket.kirbi</span><br></pre></td></tr></table></figure>
+
+<p>黄金票据防御</p>
+<ul>
+<li>限制域管理员登录到除域控制器和少数管理服务器以外的任何其他计算机（不要让其他管理员登录到这些服务器）将所有其他权限委派给自定义管理员组。这大大降低了攻击者访问域控制器的Active Directory的ntds.dit。如果攻击者无法访问AD数据库（ntds.dit文件），则无法获取到KRBTGT帐户密码</li>
+<li>禁用KRBTGT帐户，并保存当前的密码以及以前的密码。KRBTGT密码哈希用于在Kerberos票据上签署PAC并对TGT(身份验证票据)进行加密。如果使用不同的密钥(密码)对证书进行签名和加密，则DC(KDC)通过检查KRBTGT以前的密码来验证</li>
+</ul>
+<h5 id="TGS-REQ-amp-TGS-REP阶段攻击"><a href="#TGS-REQ-amp-TGS-REP阶段攻击" class="headerlink" title="TGS_REQ&amp;TGS_REP阶段攻击"></a>TGS_REQ&amp;TGS_REP阶段攻击</h5><h6 id="Kerberosast攻击"><a href="#Kerberosast攻击" class="headerlink" title="Kerberosast攻击"></a>Kerberosast攻击</h6><p>在介绍Kerberosast攻击方式前，先来了解SPN。SPN(Service Principal Name, 服务器主体名称)是服务器所运行服务的唯一标识，每个使用Kerberos认证的服务都必须正确配置相应的SPN，一个账户下可以有多个SPN。根据权限，SPN有两种注册方式，分别为：机器账户computers、域用户账户users。KDC查询SPN也按照账户方式进行查找<br>Kerberosast攻击主要利用了TGS_REP阶段使用服务的NTLM Hash返回的加密数据，对于域内的任何主机，都可以通过查询SPN，向域内的所有服务请求ST（因为KDC不会验证权限)，然后进行暴力破解，但只有域用户的SPN是可以利用的（这是因为机器账户的SPN每30天会更改随机128个字符密码导致无法被破解)，所以在实际过程中要注意攻击的是域用户。当然，如果该SPN没有注册在域用户下，就可以尝试进行注册再利用hashcat破解即可。实际上Kerberosast攻击方式的成功与否与密码字典直接相关，这里不再进行赘述</p>
+<h6 id="白银票据攻击"><a href="#白银票据攻击" class="headerlink" title="白银票据攻击"></a>白银票据攻击</h6><p>在Kerberos认证的第三步，Client带着ST和Authenticator3向Server上的某个服务进行请求，Server接收到Client的请求之后,通过自己的Master Key 解密ST,从而获得 Session Key。通过 Session Key 解密 Authenticator3,进而验证对方的身份,验证成功就让 Client 访问server上的指定服务了。所以我们只需要知道Server用户的Hash就可以伪造出一个ST,且不会经过KDC,但是伪造的门票只能访问特定服务器上的部分服务</p>
+<img src="https://my-blog-1309286065.cos.ap-guangzhou.myqcloud.com/img/image-20230406235117138.png" alt="image-20230406235117138" style="zoom:75%;" />
+
+
+
+<h6 id="黄金票据和白银票据的区别"><a href="#黄金票据和白银票据的区别" class="headerlink" title="黄金票据和白银票据的区别"></a>黄金票据和白银票据的区别</h6><ul>
+<li><p>获取的权限不同</p>
+<p>金票：伪造的TGT，可以获取任意Kerberos的访问权限<br>银票：伪造的ST，只能访问指定的服务，如CIFS</p>
+</li>
+<li><p>认证流程不同</p>
+<p>金票：同KDC交互，但不同AS交互，需要访问域控<br>银票：不同KDC交互，直接访问Server，不需要访问域控</p>
+</li>
+<li><p>加密方式不同</p>
+<p>金票：由krbtgt NTLM Hash 加密<br>银票：由服务账号 NTLM Hash 加密</p>
+</li>
+</ul>
+<h6 id="委派攻击"><a href="#委派攻击" class="headerlink" title="委派攻击"></a>委派攻击</h6><p>在现实情况下，往往多个服务不可能在一台机器中，那么如果用户在使用服务A时，这时候需要服务B上属于自已的数据，最简单的方式就是A代用户去请求B返回相应的信息，这个过程就是委派<br>委派攻击分为<strong>非约束委派、约束委派、基于资源的约束委派</strong>三种</p>
+<p>1.非约束委派攻击<br>非约束委派的请求过程如图所示。当service1的服务账户开启了非约束委派后，user访问service1时，servicel会将user的TGT保存在内存中，然后service1就可以利用TGT以user的身份去访问域中的任何user可以访问的服务。如果域管理员访问了某个开启了非约束委派的服务，那么该服务所在计算机会将域管理员的TGT保存至内存，那么获得其特权便可以获取域控权限</p>
+<img src="https://my-blog-1309286065.cos.ap-guangzhou.myqcloud.com/img/image-20230407111826899.png" alt="image-20230407111826899" style="zoom:53%;" />
+
+<p>2.约束委派攻击<br>由于非约束委派的不安全性，微软在Windows Server2003中引入了约束委派，对Kerberos协议进行了拓展，引入了S4U协议：S4U2Self和S4U2proxy。S4U2self用于生成本身服务TGS票据，S4U2porxy用于”代理”相关用户申请其他服务票据。约束委派<br>的请求过程如图所示。其中前4步是S4U2Self，后6步是S4U2proxy</p>
+<img src="https://my-blog-1309286065.cos.ap-guangzhou.myqcloud.com/img/image-20230407112121852.png" alt="image-20230407112121852" style="zoom:62%;" />
+
+<p>简单总结：S4U2self是service1代表用户请求的自身可转发ST，但是不能以该用户身份请求另外服务，意味着S4U2Self必须是在具有SPN的账户上操作，S4U2proxy则是service1以S4U2self阶段的可转发ST(其中包含用户的相关身份信息)代表用户去申请<br>请求service2的ST，而在S4U2proxy过程会通过判断msds-allowedtodelegateto里的SPN值来确定是否可以申请到service2的ST，所以这也是约束委派与非约束委派的最大区别，即只能访问特定的服务。注意，约束委派的前置条件服务自身需要通过KDC认证的TGT</p>
+<p>3.基于资源的约束委派<br>基于资源的约束委派(Resource Based Constrained Delegation,RBCD)是在WindowsServer 2012中加入的功能，与传统约束委派相比，不需要域管理员权限去设置相关属性，而是将设置委派的权限交给了服务机器。服务机器在自己账户上配置msDS-AllowedToActOnBehalfOfOtherIdentity属性，就可以进行基于资源的约束委派。可以将其理解为传统约束委派的反向过程。以A、B两个服务为例，前者通过需要在DC上设置A的msDS-AllowedToDelegateTo属性，后者则设置B的msDS-AllowedToActOnBehalfOf-OtherIdentity属性，即设置A的SID。注意，基于资源的约束委派的S4U2self阶段的ST是不可转发的</p>
+<p>可以发现，基于资源的约束委派的重点是msDS-AllowedToActOnBehalfOfOtherIdentity属性的设置，所以可以分为以下方式：</p>
+<ul>
+<li>如果可以修改服务B的该属性, 将其更新为可控制的SPN账户SD, 就可以伪造任意用户获得服务B的相关权限，实现变相提权</li>
+<li>利用realy攻击，首要条件是relay攻击</li>
+</ul>
+<h5 id="PAC攻击"><a href="#PAC攻击" class="headerlink" title="PAC攻击"></a>PAC攻击</h5><h6 id="1-MS14-068"><a href="#1-MS14-068" class="headerlink" title="1.MS14-068"></a>1.MS14-068</h6><p>MS14-068漏洞的原因是KDC无法正确检查PAC中的有效签名，由于其实现签名的加密允许所有的签名算法，只要客户端指定任意签名算法，KDC服务器就会使用指定的算法进行签名验证，因此可以利用不需要相关密钥的算法，如MD5，实现内容的任意更改，导致用户可以自己构造一张PAC，伪造用户的SID和所在的组。那么，可以通过伪造PAC，加入域管相关信息，访问域控服务，KDC会认为当前用户有权限，从而把这个用户当作域管组的成员，进而达到提升为域管理员的效果</p>
+<h6 id="2-CVE-2021-42278-amp-CVE-2021-42287-NoPac"><a href="#2-CVE-2021-42278-amp-CVE-2021-42287-NoPac" class="headerlink" title="2.CVE-2021-42278&amp;CVE-2021-42287(NoPac)"></a>2.CVE-2021-42278&amp;CVE-2021-42287(NoPac)</h6><p>CVE-2021-42278是一个安全绕过漏洞，允许通过修改机器账户的sAMAccountName属性来冒充域控制器。与标准用户账户相比，机器账户的名称末尾附加了“$”符号，但实际中，AD并没有验证域内机器账户中是否具有“$”，导致机器账户可以被假冒</p>
+<p>CVE-2021-42287是影响Kerberos特权属性证书(PAC)的安全绕过漏洞，允许通过假冒域控制器，使密钥分发中心(KDC)创建高权限票据</p>
+<p>根据认证Kerberos协议，在请求服务票证前需要先签发TGT(票据授权凭证)。但是，当为活动目录中不存在的账户请求服务票证时，密钥分发中心(KDC)将在该账户名上附加“$”符号进行搜索。将这一行为与CVE-2021-42278结合，测试人员可以实现域内权限提升，大致流程如下：<br>①创建一个机器账户，假设为HACKME$<br>②清除机器账户HACKME$的servicePrincipalName属性<br>③修改机器账户HACKME$的sAMAccountName属性，使其指向不带“$”符号的域控制器账户<br>④利用账户DC-1请求TGT<br>⑤将新建的机器账户的sAMAccountName属性恢复为其原始值(HACKME$)或其他任何值<br>⑥利用S4U代表域管理员请求对应服务的服务票据(ST)<br>⑦伪造域管理员账户获得相应服务的ST</p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="https://micgo.top">micgo</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="https://micgo.top/%E5%86%85%E7%BD%91%E6%B8%97%E9%80%8F/%E5%86%85%E7%BD%91%E6%B8%97%E9%80%8F(7)/">https://micgo.top/%E5%86%85%E7%BD%91%E6%B8%97%E9%80%8F/%E5%86%85%E7%BD%91%E6%B8%97%E9%80%8F(7)/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用<meta name="referrer" content="no-referrer"> <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="https://micgo.top" target="_blank">micgo's blog</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/%E5%86%85%E7%BD%91/">内网</a></div><div class="post_share"><div class="social-share" data-image="https://my-blog-1309286065.cos.ap-guangzhou.myqcloud.com/img/20201009112151822.jpg" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="next-post pull-full"><a href="/%E5%86%85%E7%BD%91%E6%B8%97%E9%80%8F/%E5%86%85%E7%BD%91%E6%B8%97%E9%80%8F(6)/"><img class="next-cover" src="https://my-blog-1309286065.cos.ap-guangzhou.myqcloud.com/img/20201009112151822.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">内网渗透体系建设——权限维持</div></div></a></div></nav><hr/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> 评论</span></div></div><div class="comment-wrap"><div><div class="vcomment" id="vcomment"></div></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src="https://my-blog-1309286065.cos.ap-guangzhou.myqcloud.com/img/%E5%BE%AE%E4%BF%A1%E5%9B%BE%E7%89%87_20230225215514.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">micgo</div><div class="author-info__description"></div></div><div class="card-info-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">28</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">19</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">7</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/micgo520"><i class="fab fa-github"></i><span>Follow Me</span></a></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content is-expand"><ol class="toc"><li class="toc-item toc-level-4"><a class="toc-link" href="#Kerberos%E6%94%BB%E5%87%BB%E4%B8%93%E9%A2%98"><span class="toc-number">1.</span> <span class="toc-text">Kerberos攻击专题</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#Kerberos%E8%AE%A4%E8%AF%81%E5%9F%BA%E7%A1%80"><span class="toc-number">1.1.</span> <span class="toc-text">Kerberos认证基础</span></a><ol class="toc-child"><li class="toc-item toc-level-6"><a class="toc-link" href="#Kerberos%E5%9F%BA%E7%A1%80%E8%AE%A4%E8%AF%81%E6%B5%81%E7%A8%8B"><span class="toc-number">1.1.1.</span> <span class="toc-text">Kerberos基础认证流程</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#Kerberos%E6%94%BB%E5%87%BB%E5%88%86%E7%B1%BB"><span class="toc-number">1.1.2.</span> <span class="toc-text">Kerberos攻击分类</span></a></li></ol></li><li class="toc-item toc-level-5"><a class="toc-link" href="#AS-REQ-amp-AS-REP%E9%98%B6%E6%AE%B5%E6%94%BB%E5%87%BB"><span class="toc-number">1.2.</span> <span class="toc-text">AS_REQ&amp;AS_REP阶段攻击</span></a><ol class="toc-child"><li class="toc-item toc-level-6"><a class="toc-link" href="#4-%E9%BB%84%E9%87%91%E7%A5%A8%E6%8D%AE%E6%94%BB%E5%87%BB"><span class="toc-number">1.2.1.</span> <span class="toc-text">4.黄金票据攻击</span></a></li></ol></li><li class="toc-item toc-level-5"><a class="toc-link" href="#TGS-REQ-amp-TGS-REP%E9%98%B6%E6%AE%B5%E6%94%BB%E5%87%BB"><span class="toc-number">1.3.</span> <span class="toc-text">TGS_REQ&amp;TGS_REP阶段攻击</span></a><ol class="toc-child"><li class="toc-item toc-level-6"><a class="toc-link" href="#Kerberosast%E6%94%BB%E5%87%BB"><span class="toc-number">1.3.1.</span> <span class="toc-text">Kerberosast攻击</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#%E7%99%BD%E9%93%B6%E7%A5%A8%E6%8D%AE%E6%94%BB%E5%87%BB"><span class="toc-number">1.3.2.</span> <span class="toc-text">白银票据攻击</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#%E9%BB%84%E9%87%91%E7%A5%A8%E6%8D%AE%E5%92%8C%E7%99%BD%E9%93%B6%E7%A5%A8%E6%8D%AE%E7%9A%84%E5%8C%BA%E5%88%AB"><span class="toc-number">1.3.3.</span> <span class="toc-text">黄金票据和白银票据的区别</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#%E5%A7%94%E6%B4%BE%E6%94%BB%E5%87%BB"><span class="toc-number">1.3.4.</span> <span class="toc-text">委派攻击</span></a></li></ol></li><li class="toc-item toc-level-5"><a class="toc-link" href="#PAC%E6%94%BB%E5%87%BB"><span class="toc-number">1.4.</span> <span class="toc-text">PAC攻击</span></a><ol class="toc-child"><li class="toc-item toc-level-6"><a class="toc-link" href="#1-MS14-068"><span class="toc-number">1.4.1.</span> <span class="toc-text">1.MS14-068</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#2-CVE-2021-42278-amp-CVE-2021-42287-NoPac"><span class="toc-number">1.4.2.</span> <span class="toc-text">2.CVE-2021-42278&amp;CVE-2021-42287(NoPac)</span></a></li></ol></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/%E5%86%85%E7%BD%91%E6%B8%97%E9%80%8F/%E5%86%85%E7%BD%91%E6%B8%97%E9%80%8F(7)/" title="内网渗透体系建设——Kerberos攻击专题">内网渗透体系建设——Kerberos攻击专题</a><time datetime="2023-04-06T16:00:00.000Z" title="发表于 2023-04-07 00:00:00">2023-04-07</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/%E5%86%85%E7%BD%91%E6%B8%97%E9%80%8F/%E5%86%85%E7%BD%91%E6%B8%97%E9%80%8F(6)/" title="内网渗透体系建设——权限维持">内网渗透体系建设——权限维持</a><time datetime="2023-04-04T16:00:00.000Z" title="发表于 2023-04-05 00:00:00">2023-04-05</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/%E5%86%85%E7%BD%91%E6%B8%97%E9%80%8F/%E5%86%85%E7%BD%91%E6%B8%97%E9%80%8F(5)/" title="内网渗透体系建设——横向移动">内网渗透体系建设——横向移动</a><time datetime="2023-04-03T16:00:00.000Z" title="发表于 2023-04-04 00:00:00">2023-04-04</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/%E5%86%85%E7%BD%91%E6%B8%97%E9%80%8F/%E5%86%85%E7%BD%91%E6%B8%97%E9%80%8F(4)/" title="内网渗透体系建设——权限提升">内网渗透体系建设——权限提升</a><time datetime="2023-04-01T16:00:00.000Z" title="发表于 2023-04-02 00:00:00">2023-04-02</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/%E5%86%85%E7%BD%91%E6%B8%97%E9%80%8F/%E5%86%85%E7%BD%91%E6%B8%97%E9%80%8F(3)/" title="内网渗透体系建设——端口转发与代理">内网渗透体系建设——端口转发与代理</a><time datetime="2023-03-29T16:00:00.000Z" title="发表于 2023-03-30 00:00:00">2023-03-30</time></div></div></div></div></div></div></main><footer id="footer" style="background-image: url('https://my-blog-1309286065.cos.ap-guangzhou.myqcloud.com/img/20201009112151822.jpg')"><div id="footer-wrap"><div class="copyright">&copy;2020 - 2023 By micgo</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><a id="to_comment" href="#post-comment" title="直达评论"><i class="fas fa-comments"></i></a><button id="go-up" type="button" title="回到顶部"><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox.umd.min.js"></script><div class="js-pjax"><script>function loadValine () {
+  function initValine () {
+    const valine = new Valine(Object.assign({
+      el: '#vcomment',
+      appId: '2t5fYJ95Y61Dyi4xHc3dWgxl-gzGzoHsz',
+      appKey: 'UNfGz5zfJGeNX6LS5OyiymLm',
+      avatar: 'monsterid',
+      serverURLs: 'https://2t5fyj95.lc-cn-n1-shared.com',
+      emojiMaps: "",
+      path: window.location.pathname,
+      visitor: false
+    }, null))
+  }
+
+  if (typeof Valine === 'function') initValine() 
+  else getScript('https://cdn.jsdelivr.net/npm/valine/dist/Valine.min.js').then(initValine)
+}
+
+if ('Valine' === 'Valine' || !false) {
+  if (false) btf.loadComment(document.getElementById('vcomment'),loadValine)
+  else setTimeout(loadValine, 0)
+} else {
+  function loadOtherComment () {
+    loadValine()
+  }
+}</script></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>
