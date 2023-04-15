@@ -6,7 +6,7 @@
   <link href="https://micgo.top/atom.xml" rel="self"/>
   
   <link href="https://micgo.top/"/>
-  <updated>2023-04-13T12:35:42.290Z</updated>
+  <updated>2023-04-15T13:12:31.450Z</updated>
   <id>https://micgo.top/</id>
   
   <author>
@@ -17,11 +17,36 @@
   <generator uri="https://hexo.io/">Hexo</generator>
   
   <entry>
+    <title>红日靶场一</title>
+    <link href="https://micgo.top/%E6%B8%97%E9%80%8F/%E7%BA%A2%E6%97%A5%E4%B8%80/"/>
+    <id>https://micgo.top/%E6%B8%97%E9%80%8F/%E7%BA%A2%E6%97%A5%E4%B8%80/</id>
+    <published>2023-04-14T16:00:00.000Z</published>
+    <updated>2023-04-15T13:12:31.450Z</updated>
+    
+    
+      
+      
+        
+        
+    <summary type="html"></summary>
+        
+      
+    
+    
+    
+    <category term="渗透" scheme="https://micgo.top/categories/%E6%B8%97%E9%80%8F/"/>
+    
+    
+    <category term="红日" scheme="https://micgo.top/tags/%E7%BA%A2%E6%97%A5/"/>
+    
+  </entry>
+  
+  <entry>
     <title>ctfshow终极考核</title>
     <link href="https://micgo.top/%E6%B8%97%E9%80%8F/ctfshow%E7%BB%88%E6%9E%81%E8%80%83%E6%A0%B8/"/>
     <id>https://micgo.top/%E6%B8%97%E9%80%8F/ctfshow%E7%BB%88%E6%9E%81%E8%80%83%E6%A0%B8/</id>
     <published>2023-04-12T16:00:00.000Z</published>
-    <updated>2023-04-13T12:35:42.290Z</updated>
+    <updated>2023-04-13T12:37:14.596Z</updated>
     
     
       
@@ -480,31 +505,6 @@
     
     
     <category term="log4j" scheme="https://micgo.top/tags/log4j/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>burp插件</title>
-    <link href="https://micgo.top/%E5%B7%A5%E5%85%B7%E4%BD%BF%E7%94%A8/burp%E6%8F%92%E4%BB%B6/"/>
-    <id>https://micgo.top/%E5%B7%A5%E5%85%B7%E4%BD%BF%E7%94%A8/burp%E6%8F%92%E4%BB%B6/</id>
-    <published>2023-02-25T16:00:00.000Z</published>
-    <updated>2023-02-26T07:36:20.054Z</updated>
-    
-    
-      
-      
-        
-        
-    <summary type="html"></summary>
-        
-      
-    
-    
-    
-    <category term="工具使用" scheme="https://micgo.top/categories/%E5%B7%A5%E5%85%B7%E4%BD%BF%E7%94%A8/"/>
-    
-    
-    <category term="burp" scheme="https://micgo.top/tags/burp/"/>
     
   </entry>
   
