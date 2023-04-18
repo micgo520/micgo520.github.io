@@ -6,7 +6,7 @@
   <link href="https://micgo.top/atom.xml" rel="self"/>
   
   <link href="https://micgo.top/"/>
-  <updated>2023-04-15T13:12:31.450Z</updated>
+  <updated>2023-04-18T07:31:12.905Z</updated>
   <id>https://micgo.top/</id>
   
   <author>
@@ -17,11 +17,36 @@
   <generator uri="https://hexo.io/">Hexo</generator>
   
   <entry>
+    <title>ctfshow——RealWorld渗透赛</title>
+    <link href="https://micgo.top/%E6%B8%97%E9%80%8F/ctfshow%E2%80%94realworld%E6%B8%97%E9%80%8F%E8%B5%9B/"/>
+    <id>https://micgo.top/%E6%B8%97%E9%80%8F/ctfshow%E2%80%94realworld%E6%B8%97%E9%80%8F%E8%B5%9B/</id>
+    <published>2023-04-17T16:00:00.000Z</published>
+    <updated>2023-04-18T07:31:12.905Z</updated>
+    
+    
+      
+      
+        
+        
+    <summary type="html"></summary>
+        
+      
+    
+    
+    
+    <category term="渗透" scheme="https://micgo.top/categories/%E6%B8%97%E9%80%8F/"/>
+    
+    
+    <category term="渗透" scheme="https://micgo.top/tags/%E6%B8%97%E9%80%8F/"/>
+    
+  </entry>
+  
+  <entry>
     <title>红日靶场一</title>
     <link href="https://micgo.top/%E6%B8%97%E9%80%8F/%E7%BA%A2%E6%97%A5%E4%B8%80/"/>
     <id>https://micgo.top/%E6%B8%97%E9%80%8F/%E7%BA%A2%E6%97%A5%E4%B8%80/</id>
     <published>2023-04-14T16:00:00.000Z</published>
-    <updated>2023-04-15T13:12:31.450Z</updated>
+    <updated>2023-04-15T14:14:23.239Z</updated>
     
     
       
@@ -480,31 +505,6 @@
     
     
     
-    
-  </entry>
-  
-  <entry>
-    <title>Log4j漏洞分析</title>
-    <link href="https://micgo.top/java-security/log4j/"/>
-    <id>https://micgo.top/java-security/log4j/</id>
-    <published>2023-02-26T16:00:00.000Z</published>
-    <updated>2023-02-27T05:15:22.045Z</updated>
-    
-    
-      
-      
-        
-        
-    <summary type="html"></summary>
-        
-      
-    
-    
-    
-    <category term="java security" scheme="https://micgo.top/categories/java-security/"/>
-    
-    
-    <category term="log4j" scheme="https://micgo.top/tags/log4j/"/>
     
   </entry>
   
