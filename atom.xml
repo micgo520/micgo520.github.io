@@ -6,7 +6,7 @@
   <link href="https://micgo.top/atom.xml" rel="self"/>
   
   <link href="https://micgo.top/"/>
-  <updated>2023-04-18T07:31:12.905Z</updated>
+  <updated>2023-04-23T03:09:36.266Z</updated>
   <id>https://micgo.top/</id>
   
   <author>
@@ -15,6 +15,31 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>红日靶场二</title>
+    <link href="https://micgo.top/%E6%B8%97%E9%80%8F/%E7%BA%A2%E6%97%A5%E4%BA%8C/"/>
+    <id>https://micgo.top/%E6%B8%97%E9%80%8F/%E7%BA%A2%E6%97%A5%E4%BA%8C/</id>
+    <published>2023-04-22T16:00:00.000Z</published>
+    <updated>2023-04-23T03:09:36.266Z</updated>
+    
+    
+      
+      
+        
+        
+    <summary type="html"></summary>
+        
+      
+    
+    
+    
+    <category term="渗透" scheme="https://micgo.top/categories/%E6%B8%97%E9%80%8F/"/>
+    
+    
+    <category term="红日" scheme="https://micgo.top/tags/%E7%BA%A2%E6%97%A5/"/>
+    
+  </entry>
   
   <entry>
     <title>ctfshow——RealWorld渗透赛</title>
@@ -490,21 +515,6 @@
     
     
     <category term="动态代理" scheme="https://micgo.top/tags/%E5%8A%A8%E6%80%81%E4%BB%A3%E7%90%86/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>加密文章</title>
-    <link href="https://micgo.top/uncategorized/%E5%8A%A0%E5%AF%86%E6%96%87%E7%AB%A0/"/>
-    <id>https://micgo.top/uncategorized/%E5%8A%A0%E5%AF%86%E6%96%87%E7%AB%A0/</id>
-    <published>2023-02-28T16:00:00.000Z</published>
-    <updated>2023-03-08T09:07:02.436Z</updated>
-    
-    
-    <summary type="html">Here&#39;s something encrypted, password is required to continue reading.</summary>
-    
-    
-    
     
   </entry>
   
