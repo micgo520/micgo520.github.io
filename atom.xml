@@ -6,7 +6,7 @@
   <link href="https://micgo.top/atom.xml" rel="self"/>
   
   <link href="https://micgo.top/"/>
-  <updated>2023-04-23T03:09:36.266Z</updated>
+  <updated>2023-04-25T12:02:40.848Z</updated>
   <id>https://micgo.top/</id>
   
   <author>
@@ -15,6 +15,31 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>红日靶场三</title>
+    <link href="https://micgo.top/%E6%B8%97%E9%80%8F/%E7%BA%A2%E6%97%A5%E4%B8%89/"/>
+    <id>https://micgo.top/%E6%B8%97%E9%80%8F/%E7%BA%A2%E6%97%A5%E4%B8%89/</id>
+    <published>2023-04-24T16:00:00.000Z</published>
+    <updated>2023-04-25T12:02:40.848Z</updated>
+    
+    
+      
+      
+        
+        
+    <summary type="html"></summary>
+        
+      
+    
+    
+    
+    <category term="渗透" scheme="https://micgo.top/categories/%E6%B8%97%E9%80%8F/"/>
+    
+    
+    <category term="红日" scheme="https://micgo.top/tags/%E7%BA%A2%E6%97%A5/"/>
+    
+  </entry>
   
   <entry>
     <title>红日靶场二</title>
@@ -490,31 +515,6 @@
     
     
     <category term="URLDNS" scheme="https://micgo.top/tags/URLDNS/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>JDK动态代理</title>
-    <link href="https://micgo.top/java-security/JDK%E5%8A%A8%E6%80%81%E4%BB%A3%E7%90%86/"/>
-    <id>https://micgo.top/java-security/JDK%E5%8A%A8%E6%80%81%E4%BB%A3%E7%90%86/</id>
-    <published>2023-03-04T16:00:00.000Z</published>
-    <updated>2023-03-10T00:24:26.618Z</updated>
-    
-    
-      
-      
-        
-        
-    <summary type="html"></summary>
-        
-      
-    
-    
-    
-    <category term="java security" scheme="https://micgo.top/categories/java-security/"/>
-    
-    
-    <category term="动态代理" scheme="https://micgo.top/tags/%E5%8A%A8%E6%80%81%E4%BB%A3%E7%90%86/"/>
     
   </entry>
   
