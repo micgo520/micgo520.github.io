@@ -71,23 +71,6 @@
   </entry>
   
   <entry>
-    <title>红日靶场六</title>
-    <link href="https://micgo.top/%E6%B8%97%E9%80%8F/%E7%BA%A2%E6%97%A5%E5%85%AD/"/>
-    <id>https://micgo.top/%E6%B8%97%E9%80%8F/%E7%BA%A2%E6%97%A5%E5%85%AD/</id>
-    <published>2023-04-27T16:00:00.000Z</published>
-    <updated>2023-04-27T15:47:57.022Z</updated>
-    
-    
-    
-    
-    <category term="渗透" scheme="https://micgo.top/categories/%E6%B8%97%E9%80%8F/"/>
-    
-    
-    <category term="红日" scheme="https://micgo.top/tags/%E7%BA%A2%E6%97%A5/"/>
-    
-  </entry>
-  
-  <entry>
     <title>红日靶场四</title>
     <link href="https://micgo.top/%E6%B8%97%E9%80%8F/%E7%BA%A2%E6%97%A5%E5%9B%9B/"/>
     <id>https://micgo.top/%E6%B8%97%E9%80%8F/%E7%BA%A2%E6%97%A5%E5%9B%9B/</id>
@@ -495,6 +478,31 @@
     <id>https://micgo.top/java-security/CC3/</id>
     <published>2023-03-12T16:00:00.000Z</published>
     <updated>2023-03-19T14:19:31.864Z</updated>
+    
+    
+      
+      
+        
+        
+    <summary type="html"></summary>
+        
+      
+    
+    
+    
+    <category term="java security" scheme="https://micgo.top/categories/java-security/"/>
+    
+    
+    <category term="Common Collections" scheme="https://micgo.top/tags/Common-Collections/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>java反序列化——CC6链</title>
+    <link href="https://micgo.top/java-security/CC6/"/>
+    <id>https://micgo.top/java-security/CC6/</id>
+    <published>2023-03-11T16:00:00.000Z</published>
+    <updated>2023-03-12T12:13:23.888Z</updated>
     
     
       
