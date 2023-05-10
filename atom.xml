@@ -6,7 +6,7 @@
   <link href="https://micgo.top/atom.xml" rel="self"/>
   
   <link href="https://micgo.top/"/>
-  <updated>2023-04-27T16:02:01.220Z</updated>
+  <updated>2023-05-10T15:28:23.441Z</updated>
   <id>https://micgo.top/</id>
   
   <author>
@@ -15,6 +15,35 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>JNDI注入</title>
+    <link href="https://micgo.top/java-security/JNDI%E6%B3%A8%E5%85%A5/"/>
+    <id>https://micgo.top/java-security/JNDI%E6%B3%A8%E5%85%A5/</id>
+    <published>2023-05-09T16:00:00.000Z</published>
+    <updated>2023-05-10T15:28:23.441Z</updated>
+    
+    
+      
+      
+        
+        
+    <summary type="html"></summary>
+        
+      
+    
+    
+    
+    <category term="java security" scheme="https://micgo.top/categories/java-security/"/>
+    
+    
+    <category term="JNDI" scheme="https://micgo.top/tags/JNDI/"/>
+    
+    <category term="RMI" scheme="https://micgo.top/tags/RMI/"/>
+    
+    <category term="LDAP" scheme="https://micgo.top/tags/LDAP/"/>
+    
+  </entry>
   
   <entry>
     <title>红日靶场五</title>
@@ -466,31 +495,6 @@
     <id>https://micgo.top/java-security/CC3/</id>
     <published>2023-03-12T16:00:00.000Z</published>
     <updated>2023-03-19T14:19:31.864Z</updated>
-    
-    
-      
-      
-        
-        
-    <summary type="html"></summary>
-        
-      
-    
-    
-    
-    <category term="java security" scheme="https://micgo.top/categories/java-security/"/>
-    
-    
-    <category term="Common Collections" scheme="https://micgo.top/tags/Common-Collections/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>java反序列化——CC6链</title>
-    <link href="https://micgo.top/java-security/CC6/"/>
-    <id>https://micgo.top/java-security/CC6/</id>
-    <published>2023-03-11T16:00:00.000Z</published>
-    <updated>2023-03-12T12:13:23.888Z</updated>
     
     
       
