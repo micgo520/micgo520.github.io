@@ -6,7 +6,7 @@
   <link href="https://micgo.top/atom.xml" rel="self"/>
   
   <link href="https://micgo.top/"/>
-  <updated>2023-05-10T15:54:57.536Z</updated>
+  <updated>2023-05-11T13:41:46.739Z</updated>
   <id>https://micgo.top/</id>
   
   <author>
@@ -15,6 +15,31 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>FastJson反序列化</title>
+    <link href="https://micgo.top/java-security/fastjson%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96/"/>
+    <id>https://micgo.top/java-security/fastjson%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96/</id>
+    <published>2023-05-10T16:00:00.000Z</published>
+    <updated>2023-05-11T13:41:46.739Z</updated>
+    
+    
+      
+      
+        
+        
+    <summary type="html"></summary>
+        
+      
+    
+    
+    
+    <category term="java security" scheme="https://micgo.top/categories/java-security/"/>
+    
+    
+    <category term="FastJson" scheme="https://micgo.top/tags/FastJson/"/>
+    
+  </entry>
   
   <entry>
     <title>JNDI注入</title>
@@ -474,31 +499,6 @@
     <id>https://micgo.top/java-security/CC3/</id>
     <published>2023-03-12T16:00:00.000Z</published>
     <updated>2023-03-19T14:19:31.864Z</updated>
-    
-    
-      
-      
-        
-        
-    <summary type="html"></summary>
-        
-      
-    
-    
-    
-    <category term="java security" scheme="https://micgo.top/categories/java-security/"/>
-    
-    
-    <category term="Common Collections" scheme="https://micgo.top/tags/Common-Collections/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>java反序列化——CC6链</title>
-    <link href="https://micgo.top/java-security/CC6/"/>
-    <id>https://micgo.top/java-security/CC6/</id>
-    <published>2023-03-11T16:00:00.000Z</published>
-    <updated>2023-03-12T12:13:23.888Z</updated>
     
     
       
