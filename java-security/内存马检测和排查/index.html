@@ -1,0 +1,199 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="dark"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"><title>内存马检测与排查 | micgo's blog</title><meta name="keywords" content="内存马"><meta name="author" content="micgo"><meta name="copyright" content="micgo"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#0d0d0d"><meta name="description" content="内存马检测与排查源码检测在java中，只有被JVM加载后的类才能被调用，或者在需要时通过反射通知JVM加载。所以特征都在内存中，表现形式为被加载的class。需要通过某种方法获取到JVM的运行时内存中已加载的类， Java本身提供了Instrumentation类来实现运行时注入代码并执行，因此产生一个检测思路：注入jar包-&gt; dump已加载class字节码-&gt;反编译成java代码-">
+<meta property="og:type" content="article">
+<meta property="og:title" content="内存马检测与排查">
+<meta property="og:url" content="https://micgo.top/java-security/%E5%86%85%E5%AD%98%E9%A9%AC%E6%A3%80%E6%B5%8B%E5%92%8C%E6%8E%92%E6%9F%A5/index.html">
+<meta property="og:site_name" content="micgo&#39;s blog">
+<meta property="og:description" content="内存马检测与排查源码检测在java中，只有被JVM加载后的类才能被调用，或者在需要时通过反射通知JVM加载。所以特征都在内存中，表现形式为被加载的class。需要通过某种方法获取到JVM的运行时内存中已加载的类， Java本身提供了Instrumentation类来实现运行时注入代码并执行，因此产生一个检测思路：注入jar包-&gt; dump已加载class字节码-&gt;反编译成java代码-">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://my-blog-1309286065.cos.ap-guangzhou.myqcloud.com/img/20201009112151822.jpg">
+<meta property="article:published_time" content="2023-05-18T16:00:00.000Z">
+<meta property="article:modified_time" content="2023-05-20T00:28:26.153Z">
+<meta property="article:author" content="micgo">
+<meta property="article:tag" content="内存马">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://my-blog-1309286065.cos.ap-guangzhou.myqcloud.com/img/20201009112151822.jpg"><link rel="shortcut icon" href="https://my-blog-1309286065.cos.ap-guangzhou.myqcloud.com/img/%E5%BE%AE%E4%BF%A1%E5%9B%BE%E7%89%87_20230225215514.jpg"><link rel="canonical" href="https://micgo.top/java-security/%E5%86%85%E5%AD%98%E9%A9%AC%E6%A3%80%E6%B5%8B%E5%92%8C%E6%8E%92%E6%9F%A5/"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  date_suffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  source: {
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '内存马检测与排查',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2023-05-20 08:28:26'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+    const detectApple = () => {
+      if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+    })(window)</script><meta name="generator" content="Hexo 6.3.0"><link rel="alternate" href="/atom.xml" title="micgo's blog" type="application/atom+xml">
+</head><body><div id="web_bg"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="https://my-blog-1309286065.cos.ap-guangzhou.myqcloud.com/img/%E5%BE%AE%E4%BF%A1%E5%9B%BE%E7%89%87_20230225215514.jpg" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">40</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">29</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">8</div></a></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url('https://my-blog-1309286065.cos.ap-guangzhou.myqcloud.com/img/20201009112151822.jpg')"><nav id="nav"><span id="blog_name"><a id="site-name" href="/">micgo's blog</a></span><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div><div id="toggle-menu"><a class="site-page"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">内存马检测与排查</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2023-05-18T16:00:00.000Z" title="发表于 2023-05-19 00:00:00">2023-05-19</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2023-05-20T00:28:26.153Z" title="更新于 2023-05-20 08:28:26">2023-05-20</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/java-security/">java security</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="内存马检测与排查"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><h2 id="内存马检测与排查"><a href="#内存马检测与排查" class="headerlink" title="内存马检测与排查"></a>内存马检测与排查</h2><h3 id="源码检测"><a href="#源码检测" class="headerlink" title="源码检测"></a>源码检测</h3><p>在java中，只有被JVM加载后的类才能被调用，或者在需要时通过反射通知JVM加载。所以特征都在内存中，表现形式为被加载的class。需要通过某种方法获取到JVM的运行时内存中已加载的类， Java本身提供了Instrumentation类来实现运行时注入代码并执行，因此产生一个检测思路：注入jar包-&gt; dump已加载class字节码-&gt;反编译成java代码-&gt; 源码webshell检测<br>这样检测比较消耗性能，我们可以缩小需要进行源码检测的类的范围，通过如下的筛选条件组合使用筛选类进行检测：<br>①新增的或修改的<br>②没有对应class文件的<br>③xml配置中没注册的<br>④冰蝎等常见工具使用的<br>⑤filterchain中排第一的filter类</p>
+<p>还有一些比较弱的特征可以用来辅助检测，比如类名称中包含shell或者为随机名，使用不常见的classloader加载的类等等</p>
+<p>另外，有一些工具可以辅助检测内存马，如<a target="_blank" rel="noopener" href="https://github.com/c0ny1/java-memshell-scanner">java-memshell-scanner</a>是通过jsp扫描应用中所有的filter和servlet，然后通过名称、对应的class是否存在来判断是否是内存马</p>
+<p><img src="https://my-blog-1309286065.cos.ap-guangzhou.myqcloud.com/img/image-20230515161128350.png" alt="image-20230515161128350"></p>
+<h3 id="内存马排查"><a href="#内存马排查" class="headerlink" title="内存马排查"></a>内存马排查</h3><p>如果通过检测工具或者其他手段发现了一些内存马的痕迹，需要有一个排查的思路来进行跟踪分析，根据各类型的原理，列出一个排查思路</p>
+<blockquote>
+<p>如果是filter或者listener类型，可能会有较多的404但是带有参数的请求，或者大量请求不同url但带有相同的参数，或者页面并不存在但返回200</p>
+<p>如果是jsp注入，日志中排查可疑jsp的访问请求</p>
+<p>如果是代码执行漏洞，排查中间件的error.log，查看是否有可疑的报错，判断注入时间和方法</p>
+<p>根据业务使用的组件排查是否可能存在java代码执行漏洞以及是否存在过webshell，排查框架漏洞、反序列化漏洞</p>
+<p>如果是servlet或者spring controller类型，根据上报webshell的url查找日志</p>
+</blockquote>
+<p>在动态注册组件的时候不管是注册的是Servlet还是Filter、Listener、Controller，其都要创建新的类并继承相应组件的父类，新创建的类加载到jvm内存中之后，可以通过java tools中的Instrumentation.getAllLoadedClasses()获取到，所以可以<strong>通过javaagent技术来实现查杀</strong>；查杀agent型内存马的时候，通过<strong>检查常见通用类的字节码实现是否发生了改变</strong>来实现内存马的排查</p>
+<p>1、首先先判断加载到内存中的类，从类继承的角度去判断是否继承了如javax.servlet.Servlet、javax.servlet.Filter、javax.servlet.ServletRequestListener接口</p>
+<p>2、对于1中匹配到的类，因为正常实现的组件都会匹配到，所以我们还要进一步的检测内存马的特征：</p>
+<ul>
+<li>类名关键词检测，检测类名是否存在如：shell、memshell、noshell、cmd等敏感词</li>
+<li>对关键方法字节码实现关使用键词检测，检测类关键方法(Filter类里面的doFilter方法，Servlet里面的services方法)字节码实现中是否存在一些敏感词：如cmd、shell、exec</li>
+<li>命令执行类检测，检测器字节码实现中是否存在调用Runtime、ProcessBuilder类可以用来执行命令的类</li>
+</ul>
+<h3 id="查找目前服务器上的内存马"><a href="#查找目前服务器上的内存马" class="headerlink" title="查找目前服务器上的内存马"></a>查找目前服务器上的内存马</h3><p>多个维度的判断方式，配合 JavaAgent 技术来进行内存马的查杀</p>
+<h3 id="防御内存马的添加与访问"><a href="#防御内存马的添加与访问" class="headerlink" title="防御内存马的添加与访问"></a>防御内存马的添加与访问</h3><p>对应接口 Hook，以监听者模式监控系统关键属性</p>
+<h3 id="杀掉目前存在的内存马"><a href="#杀掉目前存在的内存马" class="headerlink" title="杀掉目前存在的内存马"></a>杀掉目前存在的内存马</h3><p>对于非Agent马两种思路：</p>
+<ul>
+<li>从系统中移除该对象(推荐)</li>
+<li>访问时抛异常(或跳过调用)，中断此次调用</li>
+</ul>
+<p>对于Agent马：retransform</p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="https://micgo.top">micgo</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="https://micgo.top/java-security/%E5%86%85%E5%AD%98%E9%A9%AC%E6%A3%80%E6%B5%8B%E5%92%8C%E6%8E%92%E6%9F%A5/">https://micgo.top/java-security/%E5%86%85%E5%AD%98%E9%A9%AC%E6%A3%80%E6%B5%8B%E5%92%8C%E6%8E%92%E6%9F%A5/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用<meta name="referrer" content="no-referrer"> <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="https://micgo.top" target="_blank">micgo's blog</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/%E5%86%85%E5%AD%98%E9%A9%AC/">内存马</a></div><div class="post_share"><div class="social-share" data-image="https://my-blog-1309286065.cos.ap-guangzhou.myqcloud.com/img/20201009112151822.jpg" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="next-post pull-full"><a href="/java-security/Spring%E5%86%85%E5%AD%98%E9%A9%AC/"><img class="next-cover" src="https://my-blog-1309286065.cos.ap-guangzhou.myqcloud.com/img/20201009112151822.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">Spring内存马</div></div></a></div></nav><hr/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> 评论</span></div></div><div class="comment-wrap"><div><div class="vcomment" id="vcomment"></div></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src="https://my-blog-1309286065.cos.ap-guangzhou.myqcloud.com/img/%E5%BE%AE%E4%BF%A1%E5%9B%BE%E7%89%87_20230225215514.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">micgo</div><div class="author-info__description"></div></div><div class="card-info-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">40</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">29</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">8</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/micgo520"><i class="fab fa-github"></i><span>Follow Me</span></a></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content is-expand"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%86%85%E5%AD%98%E9%A9%AC%E6%A3%80%E6%B5%8B%E4%B8%8E%E6%8E%92%E6%9F%A5"><span class="toc-number">1.</span> <span class="toc-text">内存马检测与排查</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%BA%90%E7%A0%81%E6%A3%80%E6%B5%8B"><span class="toc-number">1.1.</span> <span class="toc-text">源码检测</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%86%85%E5%AD%98%E9%A9%AC%E6%8E%92%E6%9F%A5"><span class="toc-number">1.2.</span> <span class="toc-text">内存马排查</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%9F%A5%E6%89%BE%E7%9B%AE%E5%89%8D%E6%9C%8D%E5%8A%A1%E5%99%A8%E4%B8%8A%E7%9A%84%E5%86%85%E5%AD%98%E9%A9%AC"><span class="toc-number">1.3.</span> <span class="toc-text">查找目前服务器上的内存马</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%98%B2%E5%BE%A1%E5%86%85%E5%AD%98%E9%A9%AC%E7%9A%84%E6%B7%BB%E5%8A%A0%E4%B8%8E%E8%AE%BF%E9%97%AE"><span class="toc-number">1.4.</span> <span class="toc-text">防御内存马的添加与访问</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%9D%80%E6%8E%89%E7%9B%AE%E5%89%8D%E5%AD%98%E5%9C%A8%E7%9A%84%E5%86%85%E5%AD%98%E9%A9%AC"><span class="toc-number">1.5.</span> <span class="toc-text">杀掉目前存在的内存马</span></a></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/java-security/%E5%86%85%E5%AD%98%E9%A9%AC%E6%A3%80%E6%B5%8B%E5%92%8C%E6%8E%92%E6%9F%A5/" title="内存马检测与排查">内存马检测与排查</a><time datetime="2023-05-18T16:00:00.000Z" title="发表于 2023-05-19 00:00:00">2023-05-19</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/java-security/Spring%E5%86%85%E5%AD%98%E9%A9%AC/" title="Spring内存马">Spring内存马</a><time datetime="2023-05-16T16:00:00.000Z" title="发表于 2023-05-17 00:00:00">2023-05-17</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/java-security/Tomcat%E5%86%85%E5%AD%98%E9%A9%AC/" title="Tomcat内存马">Tomcat内存马</a><time datetime="2023-05-15T16:00:00.000Z" title="发表于 2023-05-16 00:00:00">2023-05-16</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/java-security/fastjson%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96/" title="FastJson反序列化">FastJson反序列化</a><time datetime="2023-05-10T16:00:00.000Z" title="发表于 2023-05-11 00:00:00">2023-05-11</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/java-security/JNDI%E6%B3%A8%E5%85%A5/" title="JNDI注入">JNDI注入</a><time datetime="2023-05-09T16:00:00.000Z" title="发表于 2023-05-10 00:00:00">2023-05-10</time></div></div></div></div></div></div></main><footer id="footer" style="background-image: url('https://my-blog-1309286065.cos.ap-guangzhou.myqcloud.com/img/20201009112151822.jpg')"><div id="footer-wrap"><div class="copyright">&copy;2020 - 2023 By micgo</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><a id="to_comment" href="#post-comment" title="直达评论"><i class="fas fa-comments"></i></a><button id="go-up" type="button" title="回到顶部"><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox.umd.min.js"></script><div class="js-pjax"><script>function loadValine () {
+  function initValine () {
+    const valine = new Valine(Object.assign({
+      el: '#vcomment',
+      appId: '2t5fYJ95Y61Dyi4xHc3dWgxl-gzGzoHsz',
+      appKey: 'UNfGz5zfJGeNX6LS5OyiymLm',
+      avatar: 'monsterid',
+      serverURLs: 'https://2t5fyj95.lc-cn-n1-shared.com',
+      emojiMaps: "",
+      path: window.location.pathname,
+      visitor: false
+    }, null))
+  }
+
+  if (typeof Valine === 'function') initValine() 
+  else getScript('https://cdn.jsdelivr.net/npm/valine/dist/Valine.min.js').then(initValine)
+}
+
+if ('Valine' === 'Valine' || !false) {
+  if (false) btf.loadComment(document.getElementById('vcomment'),loadValine)
+  else setTimeout(loadValine, 0)
+} else {
+  function loadOtherComment () {
+    loadValine()
+  }
+}</script></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>

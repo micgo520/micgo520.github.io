@@ -6,7 +6,7 @@
   <link href="https://micgo.top/atom.xml" rel="self"/>
   
   <link href="https://micgo.top/"/>
-  <updated>2023-05-18T03:55:14.369Z</updated>
+  <updated>2023-05-20T00:28:26.153Z</updated>
   <id>https://micgo.top/</id>
   
   <author>
@@ -15,6 +15,31 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>内存马检测与排查</title>
+    <link href="https://micgo.top/java-security/%E5%86%85%E5%AD%98%E9%A9%AC%E6%A3%80%E6%B5%8B%E5%92%8C%E6%8E%92%E6%9F%A5/"/>
+    <id>https://micgo.top/java-security/%E5%86%85%E5%AD%98%E9%A9%AC%E6%A3%80%E6%B5%8B%E5%92%8C%E6%8E%92%E6%9F%A5/</id>
+    <published>2023-05-18T16:00:00.000Z</published>
+    <updated>2023-05-20T00:28:26.153Z</updated>
+    
+    
+      
+      
+        
+        
+    <summary type="html"></summary>
+        
+      
+    
+    
+    
+    <category term="java security" scheme="https://micgo.top/categories/java-security/"/>
+    
+    
+    <category term="内存马" scheme="https://micgo.top/tags/%E5%86%85%E5%AD%98%E9%A9%AC/"/>
+    
+  </entry>
   
   <entry>
     <title>Spring内存马</title>
@@ -496,31 +521,6 @@
     <category term="xxe" scheme="https://micgo.top/tags/xxe/"/>
     
     <category term="xml" scheme="https://micgo.top/tags/xml/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>MySQL注入写shell</title>
-    <link href="https://micgo.top/%E6%BC%8F%E6%B4%9E%E6%80%BB%E7%BB%93/MySQL%E6%B3%A8%E5%85%A5%E5%86%99shell/"/>
-    <id>https://micgo.top/%E6%BC%8F%E6%B4%9E%E6%80%BB%E7%BB%93/MySQL%E6%B3%A8%E5%85%A5%E5%86%99shell/</id>
-    <published>2023-03-21T16:00:00.000Z</published>
-    <updated>2023-04-01T16:26:09.753Z</updated>
-    
-    
-      
-      
-        
-        
-    <summary type="html"></summary>
-        
-      
-    
-    
-    
-    <category term="漏洞总结" scheme="https://micgo.top/categories/%E6%BC%8F%E6%B4%9E%E6%80%BB%E7%BB%93/"/>
-    
-    
-    <category term="shell" scheme="https://micgo.top/tags/shell/"/>
     
   </entry>
   
