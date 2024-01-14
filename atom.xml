@@ -6,7 +6,7 @@
   <link href="https://micgo.top/atom.xml" rel="self"/>
   
   <link href="https://micgo.top/"/>
-  <updated>2024-01-14T07:32:59.956Z</updated>
+  <updated>2024-01-14T07:58:04.860Z</updated>
   <id>https://micgo.top/</id>
   
   <author>
@@ -21,7 +21,7 @@
     <link href="https://micgo.top/%E7%BA%A2%E8%93%9D%E5%AF%B9%E6%8A%97/WiFi%E6%94%BB%E5%87%BB/"/>
     <id>https://micgo.top/%E7%BA%A2%E8%93%9D%E5%AF%B9%E6%8A%97/WiFi%E6%94%BB%E5%87%BB/</id>
     <published>2024-10-31T16:00:00.000Z</published>
-    <updated>2024-01-14T07:32:59.956Z</updated>
+    <updated>2024-01-14T07:58:04.860Z</updated>
     
     
       
@@ -38,27 +38,6 @@
     
     
     <category term="WiFi攻击" scheme="https://micgo.top/tags/WiFi%E6%94%BB%E5%87%BB/"/>
-    
-  </entry>
-  
-  <entry>
-    <title></title>
-    <link href="https://micgo.top/uncategorized/%E9%80%BB%E8%BE%91%E6%BC%8F%E6%B4%9E%E6%B5%8B%E8%AF%95/"/>
-    <id>https://micgo.top/uncategorized/%E9%80%BB%E8%BE%91%E6%BC%8F%E6%B4%9E%E6%B5%8B%E8%AF%95/</id>
-    <published>2024-01-14T07:29:31.954Z</published>
-    <updated>2024-01-08T14:19:26.047Z</updated>
-    
-    
-      
-      
-        
-        
-    <summary type="html"></summary>
-        
-      
-    
-    
-    
     
   </entry>
   
@@ -92,7 +71,7 @@
     <link href="https://micgo.top/%E6%9D%82/%E4%BB%A3%E7%90%86%20/"/>
     <id>https://micgo.top/%E6%9D%82/%E4%BB%A3%E7%90%86%20/</id>
     <published>2023-10-01T16:00:00.000Z</published>
-    <updated>2024-01-14T07:33:14.669Z</updated>
+    <updated>2024-01-14T07:57:47.874Z</updated>
     
     
       
@@ -109,6 +88,31 @@
     
     
     <category term="代理" scheme="https://micgo.top/tags/%E4%BB%A3%E7%90%86/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>逻辑漏洞测试</title>
+    <link href="https://micgo.top/%E6%B8%97%E9%80%8F/%E9%80%BB%E8%BE%91%E6%BC%8F%E6%B4%9E%E6%B5%8B%E8%AF%95/"/>
+    <id>https://micgo.top/%E6%B8%97%E9%80%8F/%E9%80%BB%E8%BE%91%E6%BC%8F%E6%B4%9E%E6%B5%8B%E8%AF%95/</id>
+    <published>2023-09-27T16:00:00.000Z</published>
+    <updated>2024-01-14T07:59:01.989Z</updated>
+    
+    
+      
+      
+        
+        
+    <summary type="html"></summary>
+        
+      
+    
+    
+    
+    <category term="渗透" scheme="https://micgo.top/categories/%E6%B8%97%E9%80%8F/"/>
+    
+    
+    <category term="逻辑漏洞" scheme="https://micgo.top/tags/%E9%80%BB%E8%BE%91%E6%BC%8F%E6%B4%9E/"/>
     
   </entry>
   
