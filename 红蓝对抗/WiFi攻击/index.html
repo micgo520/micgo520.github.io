@@ -1,0 +1,186 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="dark"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"><title>WiFi攻击 | micgo's blog</title><meta name="keywords" content="WiFi攻击"><meta name="author" content="micgo"><meta name="copyright" content="micgo"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#0d0d0d"><meta name="description" content="说到WiFi安全，就不能不说校验过程中涉及到的四路握手。四路握手的目的是为了安全地验证和交换秘钥，验证对端合法性，防止中间人攻击 WiFi攻击包括WiFi中断攻击，WiFi密码爆破，WiFi干扰、WiFi钓鱼等 WiFi中断攻击WiFi中断攻击是指通过发送取消认证报文让客户端以为路由器需要让自己断开连接从而断开WiFi，伪造路由器向客户端发送取消认证报文，使客户端主动断开WiFi连接。WiFi中断">
+<meta property="og:type" content="article">
+<meta property="og:title" content="WiFi攻击">
+<meta property="og:url" content="https://micgo.top/%E7%BA%A2%E8%93%9D%E5%AF%B9%E6%8A%97/WiFi%E6%94%BB%E5%87%BB/index.html">
+<meta property="og:site_name" content="micgo&#39;s blog">
+<meta property="og:description" content="说到WiFi安全，就不能不说校验过程中涉及到的四路握手。四路握手的目的是为了安全地验证和交换秘钥，验证对端合法性，防止中间人攻击 WiFi攻击包括WiFi中断攻击，WiFi密码爆破，WiFi干扰、WiFi钓鱼等 WiFi中断攻击WiFi中断攻击是指通过发送取消认证报文让客户端以为路由器需要让自己断开连接从而断开WiFi，伪造路由器向客户端发送取消认证报文，使客户端主动断开WiFi连接。WiFi中断">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://my-blog-1309286065.cos.ap-guangzhou.myqcloud.com/img/20201009112151822.jpg">
+<meta property="article:published_time" content="2024-10-31T16:00:00.000Z">
+<meta property="article:modified_time" content="2024-01-14T07:16:46.729Z">
+<meta property="article:author" content="micgo">
+<meta property="article:tag" content="WiFi攻击">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://my-blog-1309286065.cos.ap-guangzhou.myqcloud.com/img/20201009112151822.jpg"><link rel="shortcut icon" href="https://my-blog-1309286065.cos.ap-guangzhou.myqcloud.com/img/%E5%BE%AE%E4%BF%A1%E5%9B%BE%E7%89%87_20230225215514.jpg"><link rel="canonical" href="https://micgo.top/%E7%BA%A2%E8%93%9D%E5%AF%B9%E6%8A%97/WiFi%E6%94%BB%E5%87%BB/"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  date_suffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  source: {
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'WiFi攻击',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2024-01-14 15:16:46'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+    const detectApple = () => {
+      if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+    })(window)</script><meta name="generator" content="Hexo 6.3.0"><link rel="alternate" href="/atom.xml" title="micgo's blog" type="application/atom+xml">
+</head><body><div id="web_bg"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="https://my-blog-1309286065.cos.ap-guangzhou.myqcloud.com/img/%E5%BE%AE%E4%BF%A1%E5%9B%BE%E7%89%87_20230225215514.jpg" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">44</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">32</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">8</div></a></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url('https://my-blog-1309286065.cos.ap-guangzhou.myqcloud.com/img/20201009112151822.jpg')"><nav id="nav"><span id="blog_name"><a id="site-name" href="/">micgo's blog</a></span><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div><div id="toggle-menu"><a class="site-page"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">WiFi攻击</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2024-10-31T16:00:00.000Z" title="发表于 2024-11-01 00:00:00">2024-11-01</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2024-01-14T07:16:46.729Z" title="更新于 2024-01-14 15:16:46">2024-01-14</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E7%BA%A2%E8%93%9D%E5%AF%B9%E6%8A%97/">红蓝对抗</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="WiFi攻击"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><p>说到WiFi安全，就不能不说校验过程中涉及到的<strong>四路握手</strong>。四路握手的目的是为了安全地验证和交换秘钥，验证对端合法性，防止中间人攻击</p>
+<p>WiFi攻击包括WiFi中断攻击，WiFi密码爆破，WiFi干扰、WiFi钓鱼等</p>
+<h4 id="WiFi中断攻击"><a href="#WiFi中断攻击" class="headerlink" title="WiFi中断攻击"></a><strong>WiFi中断攻击</strong></h4><p>WiFi中断攻击是指通过发送取消认证报文让客户端以为路由器需要让自己断开连接从而断开WiFi，伪造路由器向客户端发送取消认证报文，使客户端主动断开WiFi连接。WiFi中断后有可能注入钓鱼，轻则泄露密码，重则攻击主机，需要用户注意安全防护</p>
+<h4 id="WiFi密码爆破"><a href="#WiFi密码爆破" class="headerlink" title="WiFi密码爆破"></a>WiFi密码爆破</h4><p>通过监听wifi的数据包 ，然后当有人连接wifi的时候，记录握手过程，然后通过字典进行对比，匹配出密码，当这个wifi已经有人连接的时候，没有办法抓到握手包，而现在的WiFi设备为了提供更好的用户体验都会再WiFi断线后尝试自动连接。在自动连接的过程中，手机等设备会重新向路由器发送加密过后的WiFi密码，当路由器接收到这些信息后会将这些信息同自己内部存储的WiFi密码经过相同加密方式后的数据进行对比， 比对成功就算认证通过，那么可以尝试将已经连接的用户踢下线，让他重新连接，当被踢下线的用户重新连接就能进行监听抓包了</p>
+<p>既然WiFi密码是PSK，使用预置共享的秘钥，那么就不可避免面临暴力破解的问题。当然这里说的暴力破解不是输密码连WiFi，提示密码错误了再不断尝试，那样效率太低了。实际中的暴力破解要高效得多，暴力破解的本质是获取PSK即PMK的明文，根据上面介绍握手的流程，作为一个未验证终端，我们实际能获取到的是ANonce、SNonce、Mac地址以及加密的内容和MIC，通过不断变换PSK&#x2F;PMK计算PTK并验证MIC从而寻找真实密码</p>
+<p>wifi中<strong>tcp第5次</strong>建立连接的握手包，然后根据里面加密数据，进行暴力破解，为什么要用到这个包呢？是因为在wifi中的一些特定的加密方式，我们运用这种方式可以更快的去暴力破解wifi密码</p>
+<p>kali中常用的工具有aircrack-ng wifite 等常见的工具，在CPU&#x2F;GPU足够给力的情况下，上百GB的字典可以在十几分钟跑完</p>
+<h4 id="WiFi干扰"><a href="#WiFi干扰" class="headerlink" title="WiFi干扰"></a>WiFi干扰</h4><p>所谓洪水攻击，换个通俗易懂的说法便是WiFi干扰。类似与ddos攻击。通过发送大量的请求去连接WiFi，导致路由器无法处理大量的连接请求，从而迫使正常用法断开连接无法使用网络<br>可以用aircrack-ng mdk3 等工具发送，也有基于 arduino 的 WiFi 测试项目(如利用esp8266攻击)</p>
+<img src="C:\Users\micgo\AppData\Roaming\Typora\typora-user-images\image-20240111145927514.png" alt="image-20240111145927514" style="zoom:77%;" />
+
+<h4 id="WiFi钓鱼"><a href="#WiFi钓鱼" class="headerlink" title="WiFi钓鱼"></a>WiFi钓鱼</h4><p>根据攻击者与受害者初始网络关系，可以分为两种钓鱼方式：同一局域网、不同局域网。无论哪种方式，最后都是劫持受害者网络，返回一个精心准备的钓鱼网页<br><strong>同一局域网钓鱼</strong><br>通常发生在连接公共 WiFi 时，通过 ARP 攻击冒充网关，向受害者返回钓鱼页面<br><strong>不同局域网钓鱼</strong><br>需要配合WiFi干扰与 Evil twins攻击。WiFi 干扰将目标 WiFi 全部设备踢下线，然后 Evil twins 复制出与目标一样的 SSID，被踢下线的设备连入复制 WiFi ，再向其发送钓鱼页面</p>
+<p><strong>攻击手段</strong><br>Fluxion<br><img src="C:\Users\micgo\AppData\Roaming\Typora\typora-user-images\image-20240111153314676.png" alt="image-20240111153314676" style="zoom:50%;" /><br><a target="_blank" rel="noopener" href="https://github.com/wifiphisher/wifiphisher">wifiphisher</a><br><img src="C:\Users\micgo\AppData\Roaming\Typora\typora-user-images\image-20240111151558754.png" alt="image-20240111151558754" style="zoom:50%;" /></p>
+<p><strong>防御与安全建议</strong><br>不定期更改WiFi密码，并加强密码强度<br>勿用万能钥匙等工具连接WiFi(会分享密码)<br>避免使用公共 WiFi<br>关闭设备自动连入 WiFi 功能，能够有效避免错误连入钓鱼 WiFi<br>不要连接来历不明的开放WiFi</p>
+<p>参考链接:</p>
+<p><a target="_blank" rel="noopener" href="https://www.ctfiot.com/5160.html">https://www.ctfiot.com/5160.html</a><br><a target="_blank" rel="noopener" href="https://www.bilibili.com/read/cv19053990/">https://www.bilibili.com/read/cv19053990/</a></p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="https://micgo.top">micgo</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="https://micgo.top/%E7%BA%A2%E8%93%9D%E5%AF%B9%E6%8A%97/WiFi%E6%94%BB%E5%87%BB/">https://micgo.top/%E7%BA%A2%E8%93%9D%E5%AF%B9%E6%8A%97/WiFi%E6%94%BB%E5%87%BB/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用<meta name="referrer" content="no-referrer"> <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="https://micgo.top" target="_blank">micgo's blog</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/WiFi%E6%94%BB%E5%87%BB/">WiFi攻击</a></div><div class="post_share"><div class="social-share" data-image="https://my-blog-1309286065.cos.ap-guangzhou.myqcloud.com/img/20201009112151822.jpg" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="next-post pull-full"><a href="/uncategorized/%E9%98%B2%E6%BA%AF%E6%BA%90/"><img class="next-cover" src="https://my-blog-1309286065.cos.ap-guangzhou.myqcloud.com/img/20201009112151822.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info"></div></div></a></div></nav><hr/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> 评论</span></div></div><div class="comment-wrap"><div><div class="vcomment" id="vcomment"></div></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src="https://my-blog-1309286065.cos.ap-guangzhou.myqcloud.com/img/%E5%BE%AE%E4%BF%A1%E5%9B%BE%E7%89%87_20230225215514.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">micgo</div><div class="author-info__description"></div></div><div class="card-info-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">44</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">32</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">8</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/micgo520"><i class="fab fa-github"></i><span>Follow Me</span></a></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content is-expand"><ol class="toc"><li class="toc-item toc-level-4"><a class="toc-link" href="#WiFi%E4%B8%AD%E6%96%AD%E6%94%BB%E5%87%BB"><span class="toc-number">1.</span> <span class="toc-text">WiFi中断攻击</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#WiFi%E5%AF%86%E7%A0%81%E7%88%86%E7%A0%B4"><span class="toc-number">2.</span> <span class="toc-text">WiFi密码爆破</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#WiFi%E5%B9%B2%E6%89%B0"><span class="toc-number">3.</span> <span class="toc-text">WiFi干扰</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#WiFi%E9%92%93%E9%B1%BC"><span class="toc-number">4.</span> <span class="toc-text">WiFi钓鱼</span></a></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/%E7%BA%A2%E8%93%9D%E5%AF%B9%E6%8A%97/WiFi%E6%94%BB%E5%87%BB/" title="WiFi攻击">WiFi攻击</a><time datetime="2024-10-31T16:00:00.000Z" title="发表于 2024-11-01 00:00:00">2024-11-01</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/uncategorized/%E9%98%B2%E6%BA%AF%E6%BA%90/" title="无题">无题</a><time datetime="2024-01-08T14:19:24.824Z" title="发表于 2024-01-08 22:19:24">2024-01-08</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/%E7%BA%A2%E8%93%9D%E5%AF%B9%E6%8A%97/ARP%E6%94%BB%E5%87%BB/" title="ARP攻击">ARP攻击</a><time datetime="2023-11-04T16:00:00.000Z" title="发表于 2023-11-05 00:00:00">2023-11-05</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/%E6%9D%82/%E4%BB%A3%E7%90%86%20/" title="正向代理与反向代理">正向代理与反向代理</a><time datetime="2023-10-01T16:00:00.000Z" title="发表于 2023-10-02 00:00:00">2023-10-02</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/java-security/%E5%86%85%E5%AD%98%E9%A9%AC%E6%A3%80%E6%B5%8B%E5%92%8C%E6%8E%92%E6%9F%A5/" title="内存马检测与排查">内存马检测与排查</a><time datetime="2023-05-18T16:00:00.000Z" title="发表于 2023-05-19 00:00:00">2023-05-19</time></div></div></div></div></div></div></main><footer id="footer" style="background-image: url('https://my-blog-1309286065.cos.ap-guangzhou.myqcloud.com/img/20201009112151822.jpg')"><div id="footer-wrap"><div class="copyright">&copy;2020 - 2024 By micgo</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><a id="to_comment" href="#post-comment" title="直达评论"><i class="fas fa-comments"></i></a><button id="go-up" type="button" title="回到顶部"><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox.umd.min.js"></script><div class="js-pjax"><script>function loadValine () {
+  function initValine () {
+    const valine = new Valine(Object.assign({
+      el: '#vcomment',
+      appId: '2t5fYJ95Y61Dyi4xHc3dWgxl-gzGzoHsz',
+      appKey: 'UNfGz5zfJGeNX6LS5OyiymLm',
+      avatar: 'monsterid',
+      serverURLs: 'https://2t5fyj95.lc-cn-n1-shared.com',
+      emojiMaps: "",
+      path: window.location.pathname,
+      visitor: false
+    }, null))
+  }
+
+  if (typeof Valine === 'function') initValine() 
+  else getScript('https://cdn.jsdelivr.net/npm/valine/dist/Valine.min.js').then(initValine)
+}
+
+if ('Valine' === 'Valine' || !false) {
+  if (false) btf.loadComment(document.getElementById('vcomment'),loadValine)
+  else setTimeout(loadValine, 0)
+} else {
+  function loadOtherComment () {
+    loadValine()
+  }
+}</script></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>
