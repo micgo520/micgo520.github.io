@@ -44,6 +44,35 @@
   </entry>
   
   <entry>
+    <title>app渗透测试 - 渗透</title>
+    <link href="https://micgo.top/uncategorized/app%E6%B5%8B%E8%AF%95/"/>
+    <id>https://micgo.top/uncategorized/app%E6%B5%8B%E8%AF%95/</id>
+    <published>2023-12-27T16:00:00.000Z</published>
+    <updated>2024-03-14T14:37:19.857Z</updated>
+    
+    
+      
+      
+        
+        
+    <summary type="html"></summary>
+        
+      
+    
+    
+    
+    
+    <category term="app抓包" scheme="https://micgo.top/tags/app%E6%8A%93%E5%8C%85/"/>
+    
+    <category term="ssl pinning" scheme="https://micgo.top/tags/ssl-pinning/"/>
+    
+    <category term="frida" scheme="https://micgo.top/tags/frida/"/>
+    
+    <category term="hook" scheme="https://micgo.top/tags/hook/"/>
+    
+  </entry>
+  
+  <entry>
     <title>ARP攻击</title>
     <link href="https://micgo.top/%E7%BA%A2%E8%93%9D%E5%AF%B9%E6%8A%97/ARP%E6%94%BB%E5%87%BB/"/>
     <id>https://micgo.top/%E7%BA%A2%E8%93%9D%E5%AF%B9%E6%8A%97/ARP%E6%94%BB%E5%87%BB/</id>
@@ -480,31 +509,6 @@
     <id>https://micgo.top/%E5%86%85%E7%BD%91%E6%B8%97%E9%80%8F/%E5%86%85%E7%BD%91%E6%B8%97%E9%80%8F(7)/</id>
     <published>2023-04-06T16:00:00.000Z</published>
     <updated>2023-04-07T03:36:57.084Z</updated>
-    
-    
-      
-      
-        
-        
-    <summary type="html"></summary>
-        
-      
-    
-    
-    
-    <category term="内网渗透" scheme="https://micgo.top/categories/%E5%86%85%E7%BD%91%E6%B8%97%E9%80%8F/"/>
-    
-    
-    <category term="内网" scheme="https://micgo.top/tags/%E5%86%85%E7%BD%91/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>内网渗透体系建设——权限维持</title>
-    <link href="https://micgo.top/%E5%86%85%E7%BD%91%E6%B8%97%E9%80%8F/%E5%86%85%E7%BD%91%E6%B8%97%E9%80%8F(6)/"/>
-    <id>https://micgo.top/%E5%86%85%E7%BD%91%E6%B8%97%E9%80%8F/%E5%86%85%E7%BD%91%E6%B8%97%E9%80%8F(6)/</id>
-    <published>2023-04-04T16:00:00.000Z</published>
-    <updated>2023-04-05T13:32:37.483Z</updated>
     
     
       
